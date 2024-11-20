@@ -2,7 +2,7 @@
 ## pythonの仮想環境をアクティブにする
 ディレクトリを移動
 ```bash
-cd env/Scriopts
+cd venv/Scripts
 ```
 仮想環境をアクティブにする
 ```bash
