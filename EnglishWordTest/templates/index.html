@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>英単語テスト作成</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .container {
+            border: 2px solid #333333;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .header {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .description {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+            .form-group label {
+                display: block;
+                margin-bottom: 5px;
+            }
+
+            .form-group input, .form-group select {
+                width: 100%;
+                padding: 8px;
+                box-sizing: border-box;
+            }
+
+                .form-group input[type="checkbox"] {
+                    width: auto;
+                }
+
+            .form-group button {
+                padding: 10px 20px;
+                background-color: #333333;
+                color: #ffffff;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+        .advanced-options {
+            display: none;
+            margin-top: 20px;
+            border-top: 1px solid #333333;
+            padding-top: 20px;
+        }
+
+        .toggle-button {
+            background-color: #555555;
+            color: #ffffff;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+            .tooltip .tooltiptext {
+                visibility: hidden;
+                width: 200px;
+                background-color: #555;
+                color: #fff;
+                text-align: center;
+                border-radius: 5px;
+                padding: 5px;
+                position: absolute;
+                z-index: 1;
+                bottom: 125%; /* Tooltipの位置 */
+                left: 50%;
+                margin-left: -100px;
+                opacity: 0;
+                transition: opacity 0.3s;
+            }
+
+            .tooltip:hover .tooltiptext {
+                visibility: visible;
+                opacity: 1;
+            }
+    </style>
+    <script>
+        window.onload = function () {
+            var selectElement = document.getElementById('mySelect');
+            var startNumberElement = document.getElementById('startNumber');
+            var endNumberElement = document.getElementById('endNumber');
+            var toggleButton = document.getElementById('toggleAdvancedOptions');
+            var advancedOptions = document.getElementById('advancedOptions');
+
+            selectElement.onchange = function () {
+                switch (this.value) {
+                    case 'option1':
+                        startNumberElement.min = 1;
+                        endNumberElement.max = 1000;
+                        break;
+                    case 'option2':
+                        startNumberElement.min = 1;
+                        endNumberElement.max = 2027;
+                        break;
+                    case 'option3':
+                        startNumberElement.min = 1;
+                        endNumberElement.max = 1900;
+                        break;
+                    case 'option4':
+                        startNumberElement.min = 1;
+                        endNumberElement.max = 690;
+                        break;
+                    case 'option5':
+                        startNumberElement.min = 1;
+                        endNumberElement.max = 800;
+                        break;
+                    case 'option6':
+                        startNumberElement.min = 1;
+                        endNumberElement.max = 1300;
+                        break;
+                    case 'option7':
+                        startNumberElement.min = 1;
+                        endNumberElement.max = 1632;
+                        break;
+                    case 'option8':
+                        startNumberElement.min = 1;
+                        endNumberElement.max = 1838;
+                        break;
+                    default:
+                        startNumberElement.min = 1;
+                        endNumberElement.max = 1000;
+                }
+            };
+
+            toggleButton.onclick = function () {
+                if (advancedOptions.style.display === "none") {
+                    advancedOptions.style.display = "block";
+                } else {
+                    advancedOptions.style.display = "none";
+                }
+            };
+        };
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div>英単語テスト作成</div>
+            <form method="GET" action="{% url 'search' %}">
+                <input type="text" name="q" placeholder="単語を検索">
+                <button type="submit">検索</button>
+            </form>
+        </div>
+        <div class="description">
+            <p>単語の範囲:</p>
+            <ul>
+                <li>中学英単語10000 : 1～1000</li>
+                <li>システム英単語 : 1～2027</li>
+                <li>ターゲット1900 : 1～1900</li>
+                <li>でる順5級 : 1～690</li>
+                <li>でる順4級 : 1～800</li>
+                <li>でる順3級 : 1～1300</li>
+                <li>でる順準2級 : 1～1632</li>
+                <li>でる順2級 : 1～1838</li>
+            </ul>
+        </div>
+        <form method="POST">
+            <div class="form-group">
+                <label for="mySelect">指定する教材:</label>
+                <select id="mySelect" name="mySelect">
+                    <option value="option1">中学英単語1000</option>
+                    <option value="option2">システム英単語</option>
+                    <option value="option3">ターゲット1900</option>
+                    <option value="option4">でる順5級</option>
+                    <option value="option5">でる順4級</option>
+                    <option value="option6">でる順3級</option>
+                    <option value="option7">でる順準2級</option>
+                    <option value="option8">でる順2級</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="startNumber">作成する範囲 (開始):</label>
+                <input type="number" id="startNumber" name="startNumber" min="1">
+            </div>
+            <div class="form-group">
+                <label for="endNumber">作成する範囲 (終了):</label>
+                <input type="number" id="endNumber" name="endNumber" max="1000">
+            </div>
+            <div class="form-group">
+                <input type="checkbox" id="myCheckbox1" name="myCheckbox1"> 日本語→英語 <br>
+                <input type="checkbox" id="myCheckbox2" name="myCheckbox2"> 英語→日本語<br>
+            </div>
+            <div class="form-group">
+                <button id="myButton" type="submit">作成</button>
+            </div>
+            <button type="button" id="toggleAdvancedOptions" class="toggle-button">高度なオプションを表示</button>
+            <div id="advancedOptions" class="advanced-options">
+                <div class="form-group">
+                    <label for="questionCount">問題数の変更:</label>
+                    <input type="number" id="questionCount" name="questionCount" min="1" max="50">
+                </div>
+                <div class="form-group tooltip">
+                    <input type="checkbox" id="fillInTheBlanks" name="fillInTheBlanks"> 穴埋め問題
+                    <span class="tooltiptext">穴埋め問題は、文中の単語を空欄にして解答する形式です。<br>人工知能Geminiを使用しています。</span>
+                </div>
+                <div class="form-group">
+                    <label for="mandatoryWords">追加する単語:</label>
+                    <input type="text" id="mandatoryWords" name="mandatoryWords">
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
