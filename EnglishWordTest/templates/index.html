@@ -97,6 +97,7 @@
             margin-top: 20px;
             border-top: 1px solid #333333;
             padding-top: 20px;
+            margin-bottom: 20px; /* 高度なオプションの下に余白を追加 */
         }
 
         .toggle-button {
@@ -217,7 +218,8 @@
                 <li>でる順2級 : 1～1838</li>
             </ul>
         </div>
-        <form method="POST">
+        <form method="POST" action="{% url 'generate_words' %}">
+            {% csrf_token %}
             <div class="form-group">
                 <label for="mySelect">指定する教材:</label>
                 <select id="mySelect" name="mySelect">
@@ -239,13 +241,6 @@
                 <label for="endNumber">作成する範囲 (終了):</label>
                 <input type="number" id="endNumber" name="endNumber" max="1000">
             </div>
-            <div class="form-group">
-                <input type="checkbox" id="myCheckbox1" name="myCheckbox1"> 日本語→英語 <br>
-                <input type="checkbox" id="myCheckbox2" name="myCheckbox2"> 英語→日本語<br>
-            </div>
-            <div class="form-group">
-                <button id="myButton" type="submit">作成</button>
-            </div>
             <button type="button" id="toggleAdvancedOptions" class="toggle-button">高度なオプションを表示</button>
             <div id="advancedOptions" class="advanced-options">
                 <div class="form-group">
@@ -260,6 +255,9 @@
                     <label for="mandatoryWords">追加する単語:</label>
                     <input type="text" id="mandatoryWords" name="mandatoryWords">
                 </div>
+            </div>
+            <div class="form-group" style="margin-top: 20px;">
+                <button id="myButton" type="submit">作成</button>
             </div>
         </form>
     </div>

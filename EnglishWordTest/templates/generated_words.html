@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>生成された英単語</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact;
+                color-adjust: exact;
+            }
+
+            .print-area {
+                page-break-after: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>生成された英単語</h1>
+    <div class="print-area">
+        <table>
+            <tr>
+                <th>番号</th>
+                <th>〇/×</th>
+                <th>単語</th>
+                <th>意味</th>
+            </tr>
+            {% for word in words %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td></td>
+                <td>{{ word.word }}</td>
+                <td>{{ word.meaning }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <p>{{ selected_text }}</p>
+        <p>範囲 {{ start_range }} ～ {{ end_range }}</p>
+        <p> / {{ question_count }}</p>
+    </div>
+    <button onclick="printContent()">印刷</button>
+    <a href="{% url 'index' %}">戻る</a>
+
+    <script>
+        function printContent() {
+            const printArea = document.querySelector('.print-area');
+            const printWindow = window.open('', '', 'height=842,width=595');
+            printWindow.document.write('<html><head><title>印刷</title>');
+            printWindow.document.write('<style>@media print { body { -webkit-print-color-adjust: exact; color-adjust: exact; } }</style>');
+            printWindow.document.write('</head><body >');
+            printWindow.document.write(printArea.innerHTML);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.focus();
+            printWindow.print();
+            printWindow.close();
+        }
+    </script>
+</body>
+</html>
