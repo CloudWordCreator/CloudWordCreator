@@ -3,25 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <title>英単語テスト作成</title>
+    {% load static %}
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
         }
 
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #ffffff;
+            border-bottom: 2px solid #333333;
+            padding: 10px 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+            .header form {
+                display: flex;
+                width: 100%;
+                max-width: 600px; /* フォームの最大幅を設定 */
+            }
+
+            .header input[type="text"] {
+                flex: 1;
+                padding: 8px;
+                font-size: 16px;
+                border: 1px solid #ccc;
+                border-radius: 4px 0 0 4px;
+            }
+
+            .header button {
+                padding: 0;
+                border: none;
+                background: none;
+                cursor: pointer;
+            }
+
+                .header button img {
+                    width: 32px; /* 画像の幅を設定 */
+                    height: 32px; /* 画像の高さを設定 */
+                    border-radius: 0 4px 4px 0;
+                }
+
         .container {
+            margin-top: 80px; /* ヘッダーの高さ分の余白を追加 */
             border: 2px solid #333333;
             padding: 20px;
             border-radius: 10px;
             margin-bottom: 20px;
-        }
-
-        .header {
-            font-size: 1.5em;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
 
         .description {
@@ -159,18 +195,19 @@
     </script>
 </head>
 <body>
+    <div class="header">
+        <form method="GET" action="{% url 'search' %}">
+            <input type="text" name="q" placeholder="単語を検索">
+            <button type="submit">
+                <img src="{% static 'images/searchicon.png' %}" alt="検索">
+            </button>
+        </form>
+    </div>
     <div class="container">
-        <div class="header">
-            <div>英単語テスト作成</div>
-            <form method="GET" action="{% url 'search' %}">
-                <input type="text" name="q" placeholder="単語を検索">
-                <button type="submit">検索</button>
-            </form>
-        </div>
         <div class="description">
             <p>単語の範囲:</p>
             <ul>
-                <li>中学英単語10000 : 1～1000</li>
+                <li>中学英単語1000 : 1～1000</li>
                 <li>システム英単語 : 1～2027</li>
                 <li>ターゲット1900 : 1～1900</li>
                 <li>でる順5級 : 1～690</li>
