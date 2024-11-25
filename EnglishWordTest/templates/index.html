@@ -144,6 +144,8 @@
             var endNumberElement = document.getElementById('endNumber');
             var toggleButton = document.getElementById('toggleAdvancedOptions');
             var advancedOptions = document.getElementById('advancedOptions');
+            var form = document.getElementById('generateForm');
+            var submitButton = document.getElementById('myButton');
 
             selectElement.onchange = function () {
                 switch (this.value) {
@@ -192,6 +194,30 @@
                     advancedOptions.style.display = "none";
                 }
             };
+
+            function validateForm() {
+                var startNumber = parseInt(startNumberElement.value);
+                var endNumber = parseInt(endNumberElement.value);
+                var min = parseInt(startNumberElement.min);
+                var max = parseInt(endNumberElement.max);
+
+                if (isNaN(startNumber) || isNaN(endNumber) || startNumber < min || endNumber > max || startNumber > endNumber) {
+                    submitButton.disabled = true;
+                } else {
+                    submitButton.disabled = false;
+                }
+            }
+
+            startNumberElement.oninput = validateForm;
+            endNumberElement.oninput = validateForm;
+
+            form.onsubmit = function (event) {
+                validateForm();
+                if (submitButton.disabled) {
+                    alert("範囲が正しくありません。開始番号と終了番号を確認してください。");
+                    event.preventDefault();
+                }
+            };
         };
     </script>
 </head>
@@ -218,7 +244,7 @@
                 <li>でる順2級 : 1～1838</li>
             </ul>
         </div>
-        <form method="POST" action="{% url 'generate_words' %}">
+        <form id="generateForm" method="POST" action="{% url 'generate_words' %}">
             {% csrf_token %}
             <div class="form-group">
                 <label for="mySelect">指定する教材:</label>
@@ -257,7 +283,7 @@
                 </div>
             </div>
             <div class="form-group" style="margin-top: 20px;">
-                <button id="myButton" type="submit">作成</button>
+                <button id="myButton" type="submit" disabled>作成</button>
             </div>
         </form>
     </div>

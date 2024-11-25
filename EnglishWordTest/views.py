@@ -79,12 +79,28 @@ def generate_words(request):
             ids = random.sample(range(start, end + 1), count)
             words = list(model.objects.filter(id__in=ids))
 
-            return render(request, 'generated_words.html', {
-                'words': words,
-                'selected_text': selected_text_jp,
-                'start_range': start,
-                'end_range': end,
-                'question_count': count
-            })
+            if count <= 25:
+                return render(request, 'generated_words1.html', {
+                    'words': words,
+                    'selected_text': selected_text_jp,
+                    'start_range': start,
+                    'end_range': end,
+                    'question_count': count
+                })
+            else:
+                words_first_half = words[:25]
+                words_second_half = words[25:]
+                number_first_half = [i for i in range(1, 26)]
+                number_secound_half = [i for i in range(26, 51)]
+                return render(request, 'generated_words2.html', {
+                    'words_first_half': words_first_half,
+                    'words_second_half': words_second_half,
+                    'number_first_half': number_first_half,
+                    'number_secound_half': number_secound_half,
+                    'amount_count': count,
+                    'selected_text': selected_text_jp,
+                    'start_range': start,
+                    'end_range': end,
+                })
 
     return render(request, 'index.html')

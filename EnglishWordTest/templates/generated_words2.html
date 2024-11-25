@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>生成された英単語</title>
+    <style>
+        .table-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        table {
+            width: 48%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact;
+                color-adjust: exact;
+            }
+
+            .print-area {
+                page-break-after: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>生成された英単語</h1>
+    <div class="print-area">
+        <div class="table-container">
+            <table id="first-half-table">
+                <tr>
+                    <th>番号</th>
+                    <th>単語</th>
+                    <th>意味</th>
+                </tr>
+                {% for word in words_first_half %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ word.word }}</td>
+                    <td>{{ word.meaning }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            <table id="second-half-table">
+                <tr>
+                    <th>番号</th>
+                    <th>単語</th>
+                    <th>意味</th>
+                </tr>
+                {% for word in words_second_half %}
+                <tr>
+                    <td></td>
+                    <td>{{ word.word }}</td>
+                    <td>{{ word.meaning }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <p>{{ selected_text }}</p>
+        <p>範囲 {{ start_range }} ～ {{ end_range }}</p>
+        <p> / {{ amount_count }}</p>
+    </div>
+    <button onclick="printContent()">印刷</button>
+    <a href="{% url 'index' %}">戻る</a>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const secondHalfTable = document.getElementById("second-half-table");
+            const rows = secondHalfTable.getElementsByTagName("tr");
+            for (let i = 1; i < rows.length; i++) { // Start from 1 to skip the header row
+                const cell = rows[i].getElementsByTagName("td")[0];
+                cell.textContent = i + 25;
+            }
+        });
+
+        function printContent() {
+            const printArea = document.querySelector('.print-area');
+            const printWindow = window.open('', '', 'height=842,width=595');
+            printWindow.document.write('<html><head><title>印刷</title>');
+            printWindow.document.write('<style>@media print { body { -webkit-print-color-adjust: exact; color-adjust: exact; } }</style>');
+            printWindow.document.write('</head><body >');
+            printWindow.document.write(printArea.innerHTML);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.focus();
+            printWindow.print();
+            printWindow.close();
+        }
+    </script>
+</body>
+</html>
