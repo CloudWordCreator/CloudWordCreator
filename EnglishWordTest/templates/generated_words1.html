@@ -4,43 +4,44 @@
     <title>生成された英単語</title>
     <style>
         table {
-            width: 40%;
+            width: 100%;
             border-collapse: collapse;
         }
-
         th, td {
             border: 1px solid black;
             padding: 8px;
             text-align: left;
-            width : 1%;
         }
         th:nth-child(1), td:nth-child(1) {
             width: 10%; /* 1列目の幅を10%に設定 */
         }
-
         th:nth-child(2), td:nth-child(2) {
-            width: 8%; /* 2列目の幅を5%に設定 */
+            width: 10%; /* 2列目の幅を10%に設定 */
         }
-
         th:nth-child(3), td:nth-child(3) {
             width: 40%; /* 3列目の幅を40%に設定 */
         }
-
         th:nth-child(4), td:nth-child(4) {
-            width: 45%; /* 4列目の幅を45%に設定 */
+            width: 40%; /* 4列目の幅を40%に設定 */
         }
-        /* フォントサイズとテキスト位置のクラスをここに追加 */
         .selected_text {
             font-size: 20px;
         }
-
         .test_range {
             font-size: 20px;
         }
-
         .score {
-            text-align: center;
+            text-align: right;
             font-size: 30px;
+            position: absolute;
+            right: 0;
+            bottom: 0;
+        }
+        .print-area {
+            border: 2px dashed #000; /* 印刷範囲を囲む線 */
+            width: 100%; /* 印刷範囲の幅を設定 */
+            margin: 0 auto; /* 中央揃え */
+            position: relative;
         }
         
         @media print {
@@ -48,54 +49,162 @@
                 -webkit-print-color-adjust: exact;
                 color-adjust: exact;
             }
-
             .print-area {
                 page-break-after: always;
+                border: none;
+                width: 100%; /* 印刷範囲の幅を設定 */
             }
+            table {
+                width: 100%;
+                font-size: 12px; /* フォントサイズを小さくしてA4に収める */
+            }
+            th, td {
+                padding: 4px; /* パディングを小さくしてA4に収める */
+            }
+        }
+        .button {
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        .button:focus {
+            outline: none;
+        }
+        .tab-buttons {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
     <h1>生成された英単語</h1>
+    <button id="english-to-japanese-button" class="button">英語→日本語</button>
+    <button id="japanese-to-english-button" class="button">日本語→英語</button>
     <div class="print-area">
-        <table>
-            <tr>
-                <th>番号</th>
-                <th>〇/×</th>
-                <th>単語</th>
-                <th>意味</th>
-            </tr>
-            {% for word in words %}
-            <tr>
-                <td>{{ forloop.counter }}</td>
-                <td></td>
-                <td>{{ word.word }}</td>
-                <td>{{ word.meaning }}</td>
-            </tr>
-            {% endfor %}
-        </table>
-        <p class="selected_text">{{ selected_text }}</p>
-        <p class="test_rang">範囲 {{ start_range }} ～ {{ end_range }}</p>
-        <p class="score"> / {{ question_count }}</p>
+        <div id ="english-to-japanese-content" class="tab">
+            <table>
+                <tr>
+                    <th>番号</th>
+                    <th>〇/×</th>
+                    <th>単語</th>
+                    <th>意味</th>
+                </tr>
+                {% for word in words %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td></td>
+                    <td>{{ word.word }}</td>
+                    <td></td>
+                </tr>
+                {% endfor %}
+            </table>
+            <p class="selected_text">{{ selected_text }}</p>
+            <p class="test_rang">範囲 {{ start_range }} ～ {{ end_range }}</p>
+            <p class="score"> / {{ question_count }}</p>
+        
+            <table>
+                <tr>
+                    <th>番号</th>
+                    <th>〇/×</th>
+                    <th>単語</th>
+                    <th>意味</th>
+                </tr>
+                {% for word in words %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td></td>
+                    <td>{{ word.word }}</td>
+                    <td>{{ word.meaning }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            <p class="selected_text">{{ selected_text }}</p>
+            <p class="test_rang">範囲 {{ start_range }} ～ {{ end_range }}</p>
+            <p class="score"> / {{ question_count }}</p>
+        </div>
+
+        <div id="japanese-to-english-content" class="tab" style="display: none;">
+            <table>
+                <tr>
+                    <th>番号</th>
+                    <th>〇/×</th>
+                    <th>日本語</th>
+                    <th>英語</th>
+                </tr>
+                {% for word in words %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td></td>
+                    <td>{{ word.meaning }}</td>
+                    <td></td>
+                </tr>
+                {% endfor %}
+            </table>
+            <p class="selected_text">{{ selected_text }}</p>
+            <p class="test_rang">範囲 {{ start_range }} ～ {{ end_range }}</p>
+            <p class="score"> / {{ question_count }}</p>
+
+            <table>
+                <tr>
+                    <th>番号</th>
+                    <th>〇/×</th>
+                    <th>日本語</th>
+                    <th>英語</th>
+                </tr>
+                {% for word in words %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td></td>
+                    <td>{{ word.meaning }}</td>
+                    <td>{{ word.word }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            <p class="selected_text">{{ selected_text }}</p>
+            <p class="test_rang">範囲 {{ start_range }} ～ {{ end_range }}</p>
+            <p class="score"> / {{ question_count }}</p>
         </div>
     </div>
-    <button onclick="printContent()">印刷</button>
+    <button onclick="printContent()" class="button">印刷</button>
     <a href="{% url 'index' %}">戻る</a>
 
     <script>
         function printContent() {
-            const printArea = document.querySelector('.print-area');
-            const printWindow = window.open('', '', 'height=842,width=595');
-            printWindow.document.write('<html><head><title>印刷</title>');
-            printWindow.document.write('<style>@media print { body { -webkit-print-color-adjust: exact; color-adjust: exact; } }</style>');
-            printWindow.document.write('</head><body >');
-            printWindow.document.write(printArea.innerHTML);
-            printWindow.document.write('</body></html>');
-            printWindow.document.close();
-            printWindow.focus();
-            printWindow.print();
-            printWindow.close();
+            const printArea = document.querySelector('.print-area').innerHTML;
+            const originalContent = document.body.innerHTML;
+            document.body.innerHTML = printArea;
+            window.print();
+            document.body.innerHTML = originalContent;
         }
+        
+        function showTab(tabId) {
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.style.display = 'none';
+            });
+            document.getElementById(tabId).style.display = 'block';
+        }
+
+        document.getElementById('english-to-japanese-button').addEventListener('click', function() {
+            showTab('english-to-japanese-content');
+        });
+
+        document.getElementById('japanese-to-english-button').addEventListener('click', function() {
+            showTab('japanese-to-english-content');
+        });
+
+        // 初期表示を設定
+        showTab('english-to-japanese-content');
     </script>
 </body>
 </html>

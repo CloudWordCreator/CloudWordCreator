@@ -29,8 +29,8 @@ def generate_words(request):
         # デフォルトの問題数
         default_counts = {
             'option1': 25,
-            'option2': 50,
-            'option3': 50,
+            'option2': 25,
+            'option3': 25,
             'option4': 25,
             'option5': 25,
             'option6': 25,
@@ -80,6 +80,9 @@ def generate_words(request):
             words = list(model.objects.filter(id__in=ids))
 
             if count <= 25:
+                while len(words) < 25:
+                    # 残りの空白を埋める。
+                    words.append("")
                 return render(request, 'generated_words1.html', {
                     'words': words,
                     'selected_text': selected_text_jp,
@@ -88,6 +91,9 @@ def generate_words(request):
                     'question_count': count
                 })
             else:
+                while len(words) < 50:
+                    # 残りの空白を埋める。
+                    words.append("")
                 words_first_half = words[:25]
                 words_second_half = words[25:]
                 number_first_half = [i for i in range(1, 26)]
