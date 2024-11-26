@@ -4,7 +4,7 @@
     <title>生成された英単語</title>
     <style>
         table {
-            width: 100%;
+            width: 40%;
             border-collapse: collapse;
         }
 
@@ -12,8 +12,37 @@
             border: 1px solid black;
             padding: 8px;
             text-align: left;
+            width : 1%;
+        }
+        th:nth-child(1), td:nth-child(1) {
+            width: 10%; /* 1列目の幅を10%に設定 */
         }
 
+        th:nth-child(2), td:nth-child(2) {
+            width: 8%; /* 2列目の幅を5%に設定 */
+        }
+
+        th:nth-child(3), td:nth-child(3) {
+            width: 40%; /* 3列目の幅を40%に設定 */
+        }
+
+        th:nth-child(4), td:nth-child(4) {
+            width: 45%; /* 4列目の幅を45%に設定 */
+        }
+        /* フォントサイズとテキスト位置のクラスをここに追加 */
+        .selected_text {
+            font-size: 20px;
+        }
+
+        .test_range {
+            font-size: 20px;
+        }
+
+        .score {
+            text-align: center;
+            font-size: 30px;
+        }
+        
         @media print {
             body {
                 -webkit-print-color-adjust: exact;
@@ -45,9 +74,10 @@
             </tr>
             {% endfor %}
         </table>
-        <p>{{ selected_text }}</p>
-        <p>範囲 {{ start_range }} ～ {{ end_range }}</p>
-        <p> / {{ question_count }}</p>
+        <p class="selected_text">{{ selected_text }}</p>
+        <p class="test_rang">範囲 {{ start_range }} ～ {{ end_range }}</p>
+        <p class="score"> / {{ question_count }}</p>
+        </div>
     </div>
     <button onclick="printContent()">印刷</button>
     <a href="{% url 'index' %}">戻る</a>
