@@ -92,6 +92,20 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
+        .loader {
+            border: 4px solid #f3f3f3; /* Light grey */
+            border-top: 4px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 2s linear infinite;
+            display: none; /* Initially hidden */
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -115,7 +129,8 @@
     </div>
     <button onclick="printContent()" class="button">印刷</button>
     <div class="button-container">
-        <button class="reload-button" onclick="location.reload()">再生成</button>
+        <button class="reload-button" onclick="reloadPage()">再生成</button>
+        <div id="loader" class="loader"></div>
         <a href="{% url 'index' %}" class="back-button">戻る</a>
     </div>
     <script>
@@ -125,6 +140,11 @@
             document.body.innerHTML = printArea;
             window.print();
             document.body.innerHTML = originalContent;
+        }
+
+        function reloadPage() {
+            document.getElementById('loader').style.display = 'inline-block';
+            location.reload();
         }
     </script>
 </body>

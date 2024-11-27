@@ -137,6 +137,21 @@
                 opacity: 1;
                 width: 500%;
             }
+
+        .loader {
+            border: 4px solid #f3f3f3; /* Light grey */
+            border-top: 4px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 2s linear infinite;
+            display: none; /* Initially hidden */
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
     <script>
         window.onload = function () {
@@ -149,6 +164,7 @@
             var submitButton = document.getElementById('myButton');
             var fillInTheBlanks = document.getElementById('fillInTheBlanks');
             var questionCountElement = document.getElementById('questionCount');
+            var loader = document.getElementById('loader');
 
             selectElement.onchange = function () {
                 switch (this.value) {
@@ -233,6 +249,7 @@
                     } else {
                         form.action = "{% url 'generate_words' %}";
                     }
+                    loader.style.display = "inline-block"; // Show the loader
                 }
             };
         };
@@ -286,10 +303,6 @@
             </div>
             <button type="button" id="toggleAdvancedOptions" class="toggle-button">高度なオプションを表示</button>
             <div id="advancedOptions" class="advanced-options">
-                <div class="form-group">
-                    <label for="questionCount">問題数の変更:</label>
-                    <input type="number" id="questionCount" name="questionCount" min="1" max="50">
-                </div>
                 <div class="form-group tooltip">
                     <input type="checkbox" id="fillInTheBlanks" name="fillInTheBlanks"> 穴埋め問題
                     <span class="tooltiptext">穴埋め問題は、文中の単語を空欄にして解答する形式です。<br>
@@ -298,12 +311,17 @@
                     </span>
                 </div>
                 <div class="form-group">
+                    <label for="questionCount">問題数の変更:</label>
+                    <input type="number" id="questionCount" name="questionCount" min="1" max="50">
+                </div>
+                <div class="form-group">
                     <label for="mandatoryWords">追加する単語:</label>
                     <input type="text" id="mandatoryWords" name="mandatoryWords">
                 </div>
             </div>
             <div class="form-group" style="margin-top: 20px;">
                 <button id="myButton" type="submit" disabled>作成</button>
+                <div id="loader" class="loader"></div>
             </div>
         </form>
     </div>
