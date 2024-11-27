@@ -283,6 +283,7 @@
                     japaneseMeaningInput.disabled = false;
                     addWordButton.disabled = false;
                 }
+                validateForm();
             };
 
             function validateForm() {
@@ -290,8 +291,10 @@
                 var endNumber = parseInt(endNumberElement.value);
                 var min = parseInt(startNumberElement.min);
                 var max = parseInt(endNumberElement.max);
+                var questionCount = parseInt(questionCountElement.value) || 25; // デフォルト値を25に設定
+                var addedWordsCount = addedWordsContainer.children.length;
 
-                if (isNaN(startNumber) || isNaN(endNumber) || startNumber < min || endNumber > max || startNumber > endNumber) {
+                if (isNaN(startNumber) || isNaN(endNumber) || startNumber < min || endNumber > max || startNumber > endNumber || questionCount <= addedWordsCount) {
                     submitButton.disabled = true;
                 } else {
                     submitButton.disabled = false;
@@ -300,11 +303,12 @@
 
             startNumberElement.oninput = validateForm;
             endNumberElement.oninput = validateForm;
+            questionCountElement.oninput = validateForm;
 
             form.onsubmit = function (event) {
                 validateForm();
                 if (submitButton.disabled) {
-                    alert("範囲が正しくありません。開始番号と終了番号を確認してください。");
+                    alert("範囲が正しくありません。開始番号と終了番号を確認してください。また、問題数は追加する単語の数より多くしてください。");
                     event.preventDefault();
                 } else {
                     if (fillInTheBlanks.checked) {
@@ -330,6 +334,7 @@
 
                     englishWordInput.value = '';
                     japaneseMeaningInput.value = '';
+                    validateForm();
                 }
             };
         };
@@ -337,6 +342,7 @@
         function removeWord(button) {
             var wordElement = button.parentElement;
             wordElement.parentElement.removeChild(wordElement);
+            validateForm();
         }
     </script>
 </head>

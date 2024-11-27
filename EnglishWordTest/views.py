@@ -41,7 +41,7 @@ def generate_words(request):
 
         # 高度なオプションで指定された場合はその値を使用
         count = int(question_count) if question_count else default_counts.get(text, 25)
-
+        count -= len(mandatory_words)
         # テキストに対応するモデルを選択
         model_map = {
             'option1': JuniorHighEnglish1000,
@@ -84,7 +84,7 @@ def generate_words(request):
                 english_word, japanese_meaning = mandatory_word.split(':')
                 words.append({'word': english_word, 'meaning': japanese_meaning})
 
-            random.shuffle(words)
+                random.shuffle(words)
 
             if count <= 25:
                 while len(words) < 25:
