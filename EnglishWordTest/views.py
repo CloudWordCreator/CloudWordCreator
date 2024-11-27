@@ -25,6 +25,7 @@ def generate_words(request):
         start = int(request.POST.get('startNumber'))
         end = int(request.POST.get('endNumber'))
         question_count = request.POST.get('questionCount')
+        mandatory_words = request.POST.getlist('mandatoryWords[]')
 
         # デフォルトの問題数
         default_counts = {
@@ -78,6 +79,12 @@ def generate_words(request):
             # 指定された範囲からランダムにIDを選択
             ids = random.sample(range(start, end + 1), count)
             words = list(model.objects.filter(id__in=ids))
+
+            for mandatory_word in mandatory_words:
+                english_word, japanese_meaning = mandatory_word.split(':')
+                words.append({'word': english_word, 'meaning': japanese_meaning})
+
+            random.shuffle(words)
 
             if count <= 25:
                 while len(words) < 25:

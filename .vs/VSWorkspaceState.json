@@ -1,9 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\CloudWordCreator",
-    "\\EnglishWordTest"
+    "\\EnglishWordTest",
+    "\\EnglishWordTest\\templates"
   ],
-  "SelectedNode": "\\EnglishWordTest\\__pycache__",
+  "SelectedNode": "\\EnglishWordTest\\templates\\search_results.html",
   "PreviewInSolutionExplorer": false
 }

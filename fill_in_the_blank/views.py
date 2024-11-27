@@ -71,7 +71,7 @@ def ai_prompt(word, question_count):
         "{"\
             '"number": 問題の番号,'\
             '"questionPhrase": "問題文",'\
-            '"ansewerWord": "答え",'\
+            '"ansewerWord": "答え(2つ以上ある場合はhello, wordの形式)",'\
             '"Japanese": "日本語訳"'\
         '},"'
     response = model.generate_content(prompt)

@@ -152,6 +152,59 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        .add-word-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .add-word-container input {
+            margin-right: 10px;
+            width: 150px; /* フォームの幅を短くする */
+        }
+
+        .add-word-container button {
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+
+        .added-words {
+            margin-top: 10px;
+        }
+
+        .added-word {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .added-word span {
+            margin-right: 10px;
+        }
+
+        .added-word button {
+            background-color: #f44336; /* Red */
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 50%;
+        }
     </style>
     <script>
         window.onload = function () {
@@ -165,6 +218,10 @@
             var fillInTheBlanks = document.getElementById('fillInTheBlanks');
             var questionCountElement = document.getElementById('questionCount');
             var loader = document.getElementById('loader');
+            var addWordButton = document.getElementById('addWordButton');
+            var addedWordsContainer = document.getElementById('addedWordsContainer');
+            var englishWordInput = document.getElementById('englishWord');
+            var japaneseMeaningInput = document.getElementById('japaneseMeaning');
 
             selectElement.onchange = function () {
                 switch (this.value) {
@@ -217,8 +274,14 @@
             fillInTheBlanks.onchange = function () {
                 if (fillInTheBlanks.checked) {
                     questionCountElement.disabled = true;
+                    englishWordInput.disabled = true;
+                    japaneseMeaningInput.disabled = true;
+                    addWordButton.disabled = true;
                 } else {
                     questionCountElement.disabled = false;
+                    englishWordInput.disabled = false;
+                    japaneseMeaningInput.disabled = false;
+                    addWordButton.disabled = false;
                 }
             };
 
@@ -252,7 +315,29 @@
                     loader.style.display = "inline-block"; // Show the loader
                 }
             };
+
+            addWordButton.onclick = function () {
+                var englishWord = englishWordInput.value;
+                var japaneseMeaning = japaneseMeaningInput.value;
+
+                if (englishWord && japaneseMeaning) {
+                    var wordElement = document.createElement('div');
+                    wordElement.className = 'added-word';
+                    wordElement.innerHTML = '<span>' + englishWord + ' | ' + japaneseMeaning + '</span>' +
+                                            '<button type="button" onclick="removeWord(this)">×</button>' +
+                                            '<input type="hidden" name="mandatoryWords[]" value="' + englishWord + ':' + japaneseMeaning + '">';
+                    addedWordsContainer.appendChild(wordElement);
+
+                    englishWordInput.value = '';
+                    japaneseMeaningInput.value = '';
+                }
+            };
         };
+
+        function removeWord(button) {
+            var wordElement = button.parentElement;
+            wordElement.parentElement.removeChild(wordElement);
+        }
     </script>
 </head>
 <body>
@@ -315,8 +400,13 @@
                     <input type="number" id="questionCount" name="questionCount" min="1" max="50">
                 </div>
                 <div class="form-group">
-                    <label for="mandatoryWords">追加する単語:</label>
-                    <input type="text" id="mandatoryWords" name="mandatoryWords">
+                    <label>追加する単語:</label>
+                    <div class="add-word-container">
+                        <input type="text" id="englishWord" placeholder="英語">
+                        <input type="text" id="japaneseMeaning" placeholder="日本語の意味">
+                        <button type="button" id="addWordButton">+</button>
+                    </div>
+                    <div id="addedWordsContainer" class="added-words"></div>
                 </div>
             </div>
             <div class="form-group" style="margin-top: 20px;">
