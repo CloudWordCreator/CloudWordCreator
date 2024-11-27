@@ -3,20 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\sabax\\source\\repos\\CloudWordCreator\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sabax\\source\\repos\\CloudWordCreator\\EnglishWordTest\\templates\\generated_words2.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:EnglishWordTest\\templates\\generated_words2.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sabax\\source\\repos\\CloudWordCreator\\EnglishWordTest\\templates\\generated_words.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:EnglishWordTest\\templates\\generated_words.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sabax\\source\\repos\\CloudWordCreator\\EnglishWordTest\\templates\\index.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:EnglishWordTest\\templates\\index.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sabax\\source\\repos\\CloudWordCreator\\EnglishWordTest\\templates\\generated_words1.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:EnglishWordTest\\templates\\generated_words1.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sabax\\source\\repos\\CloudWordCreator\\EnglishWordTest\\views.py||{8B382828-6202-11D1-8870-0000F87579D2}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:EnglishWordTest\\views.py||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sabax\\source\\repos\\CloudWordCreator\\EnglishWordTest\\templates\\testsheet_2.html||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:EnglishWordTest\\templates\\testsheet_2.html||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sabax\\source\\repos\\CloudWordCreator\\EnglishWordTest\\urls.py||{8B382828-6202-11D1-8870-0000F87579D2}",
@@ -44,35 +44,9 @@
               "RelativeDocumentMoniker": "EnglishWordTest\\templates\\index.html",
               "ToolTip": "C:\\Users\\sabax\\source\\repos\\CloudWordCreator\\EnglishWordTest\\templates\\index.html",
               "RelativeToolTip": "EnglishWordTest\\templates\\index.html",
-              "ViewState": "AgIAANIAAAAAAAAAAAAIwOcAAAAKAAAAAAAAAA==",
+              "ViewState": "AgIAAOIAAAAAAAAAAAAAAAkBAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
-              "WhenOpened": "2024-11-25T16:42:55.583Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "generated_words1.html",
-              "DocumentMoniker": "C:\\Users\\sabax\\source\\repos\\CloudWordCreator\\EnglishWordTest\\templates\\generated_words1.html",
-              "RelativeDocumentMoniker": "EnglishWordTest\\templates\\generated_words1.html",
-              "ToolTip": "C:\\Users\\sabax\\source\\repos\\CloudWordCreator\\EnglishWordTest\\templates\\generated_words1.html",
-              "RelativeToolTip": "EnglishWordTest\\templates\\generated_words1.html",
-              "ViewState": "AgIAAAcAAAAAAAAAAAAUwDEAAAAmAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
-              "WhenOpened": "2024-11-24T04:58:22.297Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "views.py",
-              "DocumentMoniker": "C:\\Users\\sabax\\source\\repos\\CloudWordCreator\\EnglishWordTest\\views.py",
-              "RelativeDocumentMoniker": "EnglishWordTest\\views.py",
-              "ToolTip": "C:\\Users\\sabax\\source\\repos\\CloudWordCreator\\EnglishWordTest\\views.py",
-              "RelativeToolTip": "EnglishWordTest\\views.py",
-              "ViewState": "AgIAADIAAAAAAAAAAAAiwFkAAAARAAAAAAAAAA==",
-              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAHeSURBVDhPpVMxa1NRFP7ebZLSlgaltNpSVCySRUxL0NAh4FJpHWpxcZAUBEPG/AKHDsVBN5eGrCnoYKCDoDiUCKKBjtZBUZtJ2ojYJr40ue\u002B\u002B47k3VzD0hQr94OOed8853/k47z2cCETk2NAgk8mQDQMhhFjK5/Mb9vEotIDruoEsFovEzVvZbPaWLTcQ9uxCpVLp4l\u002Bk0\u002BlEPB5/wIPm7RVC9uxCMpm0UTdKpRKi0WiCQy3wUt8FCvw7VSNxbRapG4voDwucGgyjXC7bzH84ePt1HysbH/GhWoNstzA1OoSFhZuxQqFg8sfu4FutAd\u002BT8KSEYm7v7GJ0YnLClgYLaAcjU9N4Vx9Dda8OBz7OjwywSNsIXY39vEL7TxWpxv2eO3hWHUZ19xc8ti25UdvXzdpNWH0BDj8JiLOrPXfweOu9mRgRhOXUEPr7IiBfYeacB9HaBNRvQH4f6\u002BlgMERwGxJP7grEoq9shj9Uz\u002BVGpmIi4vXcwdzlcePgzLAuZPiSGw869Jg\u002Biw1Mvw50oLGcuoh71y8h1HwB1Js8UfFLnwScNnBhdYVLWsy1IwK5XM5GHaw9uu0LeSCMddZA32lz7zjOQxMcByK1SPU3O/Rjnai2fkjNz8/5L77TyQJ/AJc67LNf3QeWAAAAAElFTkSuQmCC",
-              "WhenOpened": "2024-11-24T03:01:25.585Z",
+              "WhenOpened": "2024-11-24T11:47:27.646Z",
               "EditorCaption": ""
             },
             {
@@ -87,6 +61,19 @@
               "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAHeSURBVDhPpVMxa1NRFP7ebZLSlgaltNpSVCySRUxL0NAh4FJpHWpxcZAUBEPG/AKHDsVBN5eGrCnoYKCDoDiUCKKBjtZBUZtJ2ojYJr40ue\u002B\u002B47k3VzD0hQr94OOed8853/k47z2cCETk2NAgk8mQDQMhhFjK5/Mb9vEotIDruoEsFovEzVvZbPaWLTcQ9uxCpVLp4l\u002Bk0\u002BlEPB5/wIPm7RVC9uxCMpm0UTdKpRKi0WiCQy3wUt8FCvw7VSNxbRapG4voDwucGgyjXC7bzH84ePt1HysbH/GhWoNstzA1OoSFhZuxQqFg8sfu4FutAd\u002BT8KSEYm7v7GJ0YnLClgYLaAcjU9N4Vx9Dda8OBz7OjwywSNsIXY39vEL7TxWpxv2eO3hWHUZ19xc8ti25UdvXzdpNWH0BDj8JiLOrPXfweOu9mRgRhOXUEPr7IiBfYeacB9HaBNRvQH4f6\u002BlgMERwGxJP7grEoq9shj9Uz\u002BVGpmIi4vXcwdzlcePgzLAuZPiSGw869Jg\u002Biw1Mvw50oLGcuoh71y8h1HwB1Js8UfFLnwScNnBhdYVLWsy1IwK5XM5GHaw9uu0LeSCMddZA32lz7zjOQxMcByK1SPU3O/Rjnai2fkjNz8/5L77TyQJ/AJc67LNf3QeWAAAAAElFTkSuQmCC",
               "WhenOpened": "2024-11-24T03:01:07.182Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "testsheet_2.html",
+              "DocumentMoniker": "C:\\Users\\sabax\\source\\repos\\CloudWordCreator\\EnglishWordTest\\templates\\testsheet_2.html",
+              "RelativeDocumentMoniker": "EnglishWordTest\\templates\\testsheet_2.html",
+              "ToolTip": "C:\\Users\\sabax\\source\\repos\\CloudWordCreator\\EnglishWordTest\\templates\\testsheet_2.html",
+              "RelativeToolTip": "EnglishWordTest\\templates\\testsheet_2.html",
+              "ViewState": "AgIAAMYAAAAAAAAAAAAAAL4AAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2024-11-24T04:09:34.323Z",
+              "EditorCaption": ""
             }
           ]
         },
@@ -97,14 +84,27 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "generated_words2.html",
-              "DocumentMoniker": "C:\\Users\\sabax\\source\\repos\\CloudWordCreator\\EnglishWordTest\\templates\\generated_words2.html",
-              "RelativeDocumentMoniker": "EnglishWordTest\\templates\\generated_words2.html",
-              "ToolTip": "C:\\Users\\sabax\\source\\repos\\CloudWordCreator\\EnglishWordTest\\templates\\generated_words2.html",
-              "RelativeToolTip": "EnglishWordTest\\templates\\generated_words2.html",
-              "ViewState": "AgIAAD8AAAAAAAAAAAAAAGAAAAANAAAAAAAAAA==",
+              "Title": "generated_words.html",
+              "DocumentMoniker": "C:\\Users\\sabax\\source\\repos\\CloudWordCreator\\EnglishWordTest\\templates\\generated_words.html",
+              "RelativeDocumentMoniker": "EnglishWordTest\\templates\\generated_words.html",
+              "ToolTip": "C:\\Users\\sabax\\source\\repos\\CloudWordCreator\\EnglishWordTest\\templates\\generated_words.html",
+              "RelativeToolTip": "EnglishWordTest\\templates\\generated_words.html",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAAB0AAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
-              "WhenOpened": "2024-11-25T14:59:37.071Z",
+              "WhenOpened": "2024-11-24T04:58:22.297Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "views.py",
+              "DocumentMoniker": "C:\\Users\\sabax\\source\\repos\\CloudWordCreator\\EnglishWordTest\\views.py",
+              "RelativeDocumentMoniker": "EnglishWordTest\\views.py",
+              "ToolTip": "C:\\Users\\sabax\\source\\repos\\CloudWordCreator\\EnglishWordTest\\views.py",
+              "RelativeToolTip": "EnglishWordTest\\views.py",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAAAAAAAAAAAA==",
+              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAHeSURBVDhPpVMxa1NRFP7ebZLSlgaltNpSVCySRUxL0NAh4FJpHWpxcZAUBEPG/AKHDsVBN5eGrCnoYKCDoDiUCKKBjtZBUZtJ2ojYJr40ue\u002B\u002B47k3VzD0hQr94OOed8853/k47z2cCETk2NAgk8mQDQMhhFjK5/Mb9vEotIDruoEsFovEzVvZbPaWLTcQ9uxCpVLp4l\u002Bk0\u002BlEPB5/wIPm7RVC9uxCMpm0UTdKpRKi0WiCQy3wUt8FCvw7VSNxbRapG4voDwucGgyjXC7bzH84ePt1HysbH/GhWoNstzA1OoSFhZuxQqFg8sfu4FutAd\u002BT8KSEYm7v7GJ0YnLClgYLaAcjU9N4Vx9Dda8OBz7OjwywSNsIXY39vEL7TxWpxv2eO3hWHUZ19xc8ti25UdvXzdpNWH0BDj8JiLOrPXfweOu9mRgRhOXUEPr7IiBfYeacB9HaBNRvQH4f6\u002BlgMERwGxJP7grEoq9shj9Uz\u002BVGpmIi4vXcwdzlcePgzLAuZPiSGw869Jg\u002Biw1Mvw50oLGcuoh71y8h1HwB1Js8UfFLnwScNnBhdYVLWsy1IwK5XM5GHaw9uu0LeSCMddZA32lz7zjOQxMcByK1SPU3O/Rjnai2fkjNz8/5L77TyQJ/AJc67LNf3QeWAAAAAElFTkSuQmCC",
+              "WhenOpened": "2024-11-24T03:01:25.585Z",
               "EditorCaption": ""
             }
           ]

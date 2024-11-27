@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>穴埋め問題結果</title>
+    <style>
+        .question {
+            margin-bottom: 20px;
+        }
+        .question-number {
+            font-weight: bold;
+        }
+        .question-phrase, .answer-word, .japanese {
+            margin-left: 20px;
+        }
+        .error-message {
+            color: red;
+            font-weight: bold;
+        }
+        .button-container {
+            margin-top: 20px;
+        }
+        .reload-button {
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 12px;
+            transition-duration: 0.4s;
+        }
+        .reload-button:hover {
+            background-color: white;
+            color: black;
+            border: 2px solid #4CAF50;
+        }
+        .back-button {
+            background-color: #008CBA; /* Blue */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 12px;
+            transition-duration: 0.4s;
+        }
+        .back-button:hover {
+            background-color: white;
+            color: black;
+            border: 2px solid #008CBA;
+        }
+        .print-area {
+            border: 2px dashed #000; /* 印刷範囲を囲む線 */
+            width: 100%; /* 印刷範囲の幅を設定 */
+            margin: 0 auto; /* 中央揃え */
+            position: relative;
+        }
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact;
+                color-adjust: exact;
+            }
+            .print-area {
+                page-break-after: always;
+                border: none;
+                width: 100%; /* 印刷範囲の幅を設定 */
+            }
+            table {
+                width: 100%;
+                font-size: 12px; /* フォントサイズを小さくしてA4に収める */
+            }
+            th, td {
+                padding: 4px; /* パディングを小さくしてA4に収める */
+            }
+        }
+        .button {
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <h1>穴埋め問題結果</h1>
+    <div class="print-area">
+        <p>{{ text }}</p>
+        <p>{{start_number}} - {{end_number}}</p>
+        {% if fill_in_the_blank.error %}
+        <div class="error-message">{{ fill_in_the_blank.error }}</div>
+        <pre>{{ fill_in_the_blank.response_text }}</pre>
+    {% else %}
+        {% for item in fill_in_the_blank %}
+        <div class="question">
+            <div class="question-number">問題番号: {{ item.number }}</div>
+            <div class="question-phrase">問題本文: {{ item.questionPhrase }}</div>
+            <div class="answer-word">答えの単語: {{ item.answerWord }}</div>
+            <div class="japanese">日本語訳: {{ item.Japanese }}</div>
+        </div>
+        {% endfor %}
+    {% endif %}
+    </div>
+    <button onclick="printContent()" class="button">印刷</button>
+    <div class="button-container">
+        <button class="reload-button" onclick="location.reload()">再生成</button>
+        <a href="{% url 'index' %}" class="back-button">戻る</a>
+    </div>
+    <script>
+        function printContent() {
+            const printArea = document.querySelector('.print-area').innerHTML;
+            const originalContent = document.body.innerHTML;
+            document.body.innerHTML = printArea;
+            window.print();
+            document.body.innerHTML = originalContent;
+        }
+    </script>
+</body>
+</html>

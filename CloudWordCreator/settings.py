@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'EnglishWordTest',
+    'fill_in_the_blank',
 ]
 
 MIDDLEWARE = [

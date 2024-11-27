@@ -135,6 +135,7 @@
             .tooltip:hover .tooltiptext {
                 visibility: visible;
                 opacity: 1;
+                width: 500%;
             }
     </style>
     <script>
@@ -146,6 +147,8 @@
             var advancedOptions = document.getElementById('advancedOptions');
             var form = document.getElementById('generateForm');
             var submitButton = document.getElementById('myButton');
+            var fillInTheBlanks = document.getElementById('fillInTheBlanks');
+            var questionCountElement = document.getElementById('questionCount');
 
             selectElement.onchange = function () {
                 switch (this.value) {
@@ -195,6 +198,14 @@
                 }
             };
 
+            fillInTheBlanks.onchange = function () {
+                if (fillInTheBlanks.checked) {
+                    questionCountElement.disabled = true;
+                } else {
+                    questionCountElement.disabled = false;
+                }
+            };
+
             function validateForm() {
                 var startNumber = parseInt(startNumberElement.value);
                 var endNumber = parseInt(endNumberElement.value);
@@ -216,6 +227,12 @@
                 if (submitButton.disabled) {
                     alert("範囲が正しくありません。開始番号と終了番号を確認してください。");
                     event.preventDefault();
+                } else {
+                    if (fillInTheBlanks.checked) {
+                        form.action = "{% url 'generate_fill_in_the_blank' %}";
+                    } else {
+                        form.action = "{% url 'generate_words' %}";
+                    }
                 }
             };
         };
@@ -275,7 +292,10 @@
                 </div>
                 <div class="form-group tooltip">
                     <input type="checkbox" id="fillInTheBlanks" name="fillInTheBlanks"> 穴埋め問題
-                    <span class="tooltiptext">穴埋め問題は、文中の単語を空欄にして解答する形式です。<br>人工知能Geminiを使用しています。</span>
+                    <span class="tooltiptext">穴埋め問題は、文中の単語を空欄にして解答する形式です。<br>
+                        人工知能Gemini 1.5 Flashを使用しています。<br>
+                        動作が不安定・難易度調節が難しい場合があります。その場合は最初から再度作成してください。</span>
+                    </span>
                 </div>
                 <div class="form-group">
                     <label for="mandatoryWords">追加する単語:</label>

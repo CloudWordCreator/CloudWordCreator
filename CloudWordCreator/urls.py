@@ -16,9 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-import EnglishWordTest.views as EnglishWordTest
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('info/', include('EnglishWordTest.urls'))
+    path('info/', include('EnglishWordTest.urls')),
+    path('fill_in_the_blank/', include('fill_in_the_blank.urls')),
 ]

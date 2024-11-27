@@ -38,12 +38,6 @@ pip --version
 python -m pip install --upgrade pip
 ```
 
-## pipのバージョンを確認する
-
-```bash
-pip --version
-```
-
 ## pipのインストール済みパッケージを確認する
 
 ```bash
