@@ -57,11 +57,14 @@ def generate_fill_in_the_blank(request):
             ids = random.sample(range(start, end + 1), count)
             words = list(model.objects.filter(id__in=ids))
             phrase = ai_prompt(words, question_count)
+            options = words.copy()
+            random.shuffle(options)
             return render(request, 'result.html',{
                 'fill_in_the_blank': phrase,
                 'text' : selected_text_jp,
                 'start_number': start,
                 'end_number': end,
+                'options': options,
             })
 
 def ai_prompt(word, question_count):

@@ -106,26 +106,75 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        .tab {
+            display: none;
+        }
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .option-item {
+            border: 1px solid #333;
+            padding: 10px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
     <h1>穴埋め問題結果</h1>
+    <button id="japanese-available-button" class="button">日本語あり選択肢無し</button>
+    <button id="japanese-unavailable-button" class="button">日本語なし選択肢有り</button>
     <div class="print-area">
-        <p>{{ text }}</p>
-        <p>{{start_number}} - {{end_number}}</p>
-        {% if fill_in_the_blank.error %}
-        <div class="error-message">{{ fill_in_the_blank.error }}</div>
-        <pre>{{ fill_in_the_blank.response_text }}</pre>
-    {% else %}
-        {% for item in fill_in_the_blank %}
-        <div class="question">
-            <div class="question-number">問題番号: {{ item.number }}</div>
-            <div class="question-phrase">問題本文: {{ item.questionPhrase }}</div>
-            <div class="answer-word">答えの単語: {{ item.answerWord }}</div>
-            <div class="japanese">日本語訳: {{ item.Japanese }}</div>
+        <div id="japanese-available-content" class="tab">
+            <p>{{ text }}</p>
+            <p>{{start_number}} - {{end_number}}</p>
+            {% if fill_in_the_blank.error %}
+            <div class="error-message">{{ fill_in_the_blank.error }}</div>
+            <pre>{{ fill_in_the_blank.response_text }}</pre>
+            {% else %}
+                {% for item in fill_in_the_blank %}
+                <div class="question">
+                    <div class="question-number">{{ item.number }}</div>
+                    <div class="japanese">{{ item.Japanese }}</div>
+                    <div class="question-phrase">{{ item.questionPhrase }}</div>
+                </div>
+                {% endfor %}
+            {% endif %}
+            <p>解答</p>
+            {% for item in fill_in_the_blank %}
+                <div class="question-number">{{ item.number }}</div>
+                <div class="answer-word">{{ item.answerWord }}</div>
+            {% endfor %}
+            </div>
+        <div id="japanese-unavailable-content" class="tab">
+            <p>{{ text }}</p>
+            <p>{{start_number}} - {{end_number}}</p>
+            <p>選択肢</p>
+            <div class="options-grid">
+                {% for option in options %}
+                    <div class="option-item">{{ option.word }}</div>
+                {% endfor %}
+            </div>
+            {% if fill_in_the_blank.error %}
+            <div class="error-message">{{ fill_in_the_blank.error }}</div>
+            <pre>{{ fill_in_the_blank.response_text }}</pre>
+            {% else %}
+                {% for item in fill_in_the_blank %}
+                <div class="question">
+                    <div class="question-number">{{ item.number }}</div>
+                    <div class="question-phrase">{{ item.questionPhrase }}</div>
+                </div>
+                {% endfor %}
+            {% endif %}
+            <p>解答</p>
+            {% for item in fill_in_the_blank %}
+                <div class="question-number">{{ item.number }}</div>
+                <div class="japanese">{{ item.Japanese }}</div>
+                <div class="answer-word">{{ item.answerWord }}</div>
+            {% endfor %}
         </div>
-        {% endfor %}
-    {% endif %}
     </div>
     <button onclick="printContent()" class="button">印刷</button>
     <div class="button-container">
@@ -146,6 +195,25 @@
             document.getElementById('loader').style.display = 'inline-block';
             location.reload();
         }
+
+        function showTab(tabId) {
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.style.display = 'none';
+            });
+            document.getElementById(tabId).style.display = 'block';
+        }
+
+        document.getElementById('japanese-available-button').addEventListener('click', function() {
+            showTab('japanese-available-content');
+        });
+
+        document.getElementById('japanese-unavailable-button').addEventListener('click', function() {
+            showTab('japanese-unavailable-content');
+        });
+
+        // 初期状態で表示するタブを設定
+        showTab('japanese-available-content');
     </script>
 </body>
 </html>
