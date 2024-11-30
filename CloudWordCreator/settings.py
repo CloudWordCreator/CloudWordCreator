@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'EnglishWordTest',
+    'fill_in_the_blank',
 ]
 
 MIDDLEWARE = [
@@ -115,7 +117,18 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+# settings.py
+
+# 静的ファイルのURL
+STATIC_URL = '/static/'
+
+# 静的ファイルのディレクトリ
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+
+# 静的ファイルの収集先ディレクトリ
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

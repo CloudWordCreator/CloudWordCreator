@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>英単語テスト作成</title>
+    {% load static %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #ffffff;
+            border-bottom: 2px solid #333333;
+            padding: 10px 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+            .header form {
+                display: flex;
+                width: 100%;
+                max-width: 600px; /* フォームの最大幅を設定 */
+            }
+
+            .header input[type="text"] {
+                flex: 1;
+                padding: 8px;
+                font-size: 16px;
+                border: 1px solid #ccc;
+                border-radius: 4px 0 0 4px;
+            }
+
+            .header button {
+                padding: 0;
+                border: none;
+                background: none;
+                cursor: pointer;
+            }
+
+                .header button img {
+                    width: 32px; /* 画像の幅を設定 */
+                    height: 32px; /* 画像の高さを設定 */
+                    border-radius: 0 4px 4px 0;
+                }
+
+        .container {
+            margin-top: 80px; /* ヘッダーの高さ分の余白を追加 */
+            border: 2px solid #333333;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .description {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+            .form-group label {
+                display: block;
+                margin-bottom: 5px;
+            }
+
+            .form-group input, .form-group select {
+                width: 100%;
+                padding: 8px;
+                box-sizing: border-box;
+            }
+
+                .form-group input[type="checkbox"] {
+                    width: auto;
+                }
+
+            .form-group button {
+                padding: 10px 20px;
+                background-color: #333333;
+                color: #ffffff;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+        .advanced-options {
+            display: none;
+            margin-top: 20px;
+            border-top: 1px solid #333333;
+            padding-top: 20px;
+            margin-bottom: 20px; /* 高度なオプションの下に余白を追加 */
+        }
+
+        .toggle-button {
+            background-color: #555555;
+            color: #ffffff;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+            .tooltip .tooltiptext {
+                visibility: hidden;
+                width: 200px;
+                background-color: #555;
+                color: #fff;
+                text-align: center;
+                border-radius: 5px;
+                padding: 5px;
+                position: absolute;
+                z-index: 1;
+                bottom: 125%; /* Tooltipの位置 */
+                left: 50%;
+                margin-left: -100px;
+                opacity: 0;
+                transition: opacity 0.3s;
+            }
+
+            .tooltip:hover .tooltiptext {
+                visibility: visible;
+                opacity: 1;
+                width: 500%;
+            }
+
+        .loader {
+            border: 4px solid #f3f3f3; /* Light grey */
+            border-top: 4px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 2s linear infinite;
+            display: none; /* Initially hidden */
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .add-word-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .add-word-container input {
+            margin-right: 10px;
+            width: 150px; /* フォームの幅を短くする */
+        }
+
+        .add-word-container button {
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+
+        .added-words {
+            margin-top: 10px;
+        }
+
+        .added-word {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .added-word span {
+            margin-right: 10px;
+        }
+
+        .added-word button {
+            background-color: #f44336; /* Red */
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+    </style>
+    <script>
+        window.onload = function () {
+            var selectElement = document.getElementById('mySelect');
+            var startNumberElement = document.getElementById('startNumber');
+            var endNumberElement = document.getElementById('endNumber');
+            var toggleButton = document.getElementById('toggleAdvancedOptions');
+            var advancedOptions = document.getElementById('advancedOptions');
+            var form = document.getElementById('generateForm');
+            var submitButton = document.getElementById('myButton');
+            var fillInTheBlanks = document.getElementById('fillInTheBlanks');
+            var questionCountElement = document.getElementById('questionCount');
+            var loader = document.getElementById('loader');
+            var addWordButton = document.getElementById('addWordButton');
+            var addedWordsContainer = document.getElementById('addedWordsContainer');
+            var englishWordInput = document.getElementById('englishWord');
+            var japaneseMeaningInput = document.getElementById('japaneseMeaning');
+
+            selectElement.onchange = function () {
+                switch (this.value) {
+                    case 'option1':
+                        startNumberElement.min = 1;
+                        endNumberElement.max = 1000;
+                        break;
+                    case 'option2':
+                        startNumberElement.min = 1;
+                        endNumberElement.max = 2027;
+                        break;
+                    case 'option3':
+                        startNumberElement.min = 1;
+                        endNumberElement.max = 1900;
+                        break;
+                    case 'option4':
+                        startNumberElement.min = 1;
+                        endNumberElement.max = 690;
+                        break;
+                    case 'option5':
+                        startNumberElement.min = 1;
+                        endNumberElement.max = 800;
+                        break;
+                    case 'option6':
+                        startNumberElement.min = 1;
+                        endNumberElement.max = 1300;
+                        break;
+                    case 'option7':
+                        startNumberElement.min = 1;
+                        endNumberElement.max = 1632;
+                        break;
+                    case 'option8':
+                        startNumberElement.min = 1;
+                        endNumberElement.max = 1838;
+                        break;
+                    default:
+                        startNumberElement.min = 1;
+                        endNumberElement.max = 1000;
+                }
+            };
+
+            toggleButton.onclick = function () {
+                if (advancedOptions.style.display === "none") {
+                    advancedOptions.style.display = "block";
+                } else {
+                    advancedOptions.style.display = "none";
+                }
+            };
+
+            fillInTheBlanks.onchange = function () {
+                if (fillInTheBlanks.checked) {
+                    questionCountElement.disabled = true;
+                    englishWordInput.disabled = true;
+                    japaneseMeaningInput.disabled = true;
+                    addWordButton.disabled = true;
+                } else {
+                    questionCountElement.disabled = false;
+                    englishWordInput.disabled = false;
+                    japaneseMeaningInput.disabled = false;
+                    addWordButton.disabled = false;
+                }
+                validateForm();
+            };
+
+            function validateForm() {
+                var startNumber = parseInt(startNumberElement.value);
+                var endNumber = parseInt(endNumberElement.value);
+                var min = parseInt(startNumberElement.min);
+                var max = parseInt(endNumberElement.max);
+                var questionCount = parseInt(questionCountElement.value) || 25; // デフォルト値を25に設定
+                var addedWordsCount = addedWordsContainer.children.length;
+
+                if (isNaN(startNumber) || isNaN(endNumber) || startNumber < min || endNumber > max || startNumber > endNumber || questionCount <= addedWordsCount) {
+                    submitButton.disabled = true;
+                } else {
+                    submitButton.disabled = false;
+                }
+            }
+
+            startNumberElement.oninput = validateForm;
+            endNumberElement.oninput = validateForm;
+            questionCountElement.oninput = validateForm;
+
+            form.onsubmit = function (event) {
+                validateForm();
+                if (submitButton.disabled) {
+                    alert("範囲が正しくありません。開始番号と終了番号を確認してください。また、問題数は追加する単語の数より多くしてください。");
+                    event.preventDefault();
+                } else {
+                    if (fillInTheBlanks.checked) {
+                        form.action = "{% url 'generate_fill_in_the_blank' %}";
+                    } else {
+                        form.action = "{% url 'generate_words' %}";
+                    }
+                    loader.style.display = "inline-block"; // Show the loader
+                }
+            };
+
+            addWordButton.onclick = function () {
+                var englishWord = englishWordInput.value;
+                var japaneseMeaning = japaneseMeaningInput.value;
+
+                if (englishWord && japaneseMeaning) {
+                    var wordElement = document.createElement('div');
+                    wordElement.className = 'added-word';
+                    wordElement.innerHTML = '<span>' + englishWord + ' | ' + japaneseMeaning + '</span>' +
+                                            '<button type="button" onclick="removeWord(this)">×</button>' +
+                                            '<input type="hidden" name="mandatoryWords[]" value="' + englishWord + ':' + japaneseMeaning + '">';
+                    addedWordsContainer.appendChild(wordElement);
+
+                    englishWordInput.value = '';
+                    japaneseMeaningInput.value = '';
+                    validateForm();
+                }
+            };
+        };
+
+        function removeWord(button) {
+            var wordElement = button.parentElement;
+            wordElement.parentElement.removeChild(wordElement);
+            validateForm();
+        }
+    </script>
+</head>
+<body>
+    <div class="header">
+        <form method="GET" action="{% url 'search' %}">
+            <input type="text" name="q" placeholder="単語を検索">
+            <button type="submit">
+                <img src="{% static 'images/searchicon.png' %}" alt="検索">
+            </button>
+        </form>
+    </div>
+    <div class="container">
+        <div class="description">
+            <p>単語の範囲:</p>
+            <ul>
+                <li>中学英単語1000 : 1～1000</li>
+                <li>システム英単語 : 1～2027</li>
+                <li>ターゲット1900 : 1～1900</li>
+                <li>でる順5級 : 1～690</li>
+                <li>でる順4級 : 1～800</li>
+                <li>でる順3級 : 1～1300</li>
+                <li>でる順準2級 : 1～1632</li>
+                <li>でる順2級 : 1～1838</li>
+            </ul>
+        </div>
+        <form id="generateForm" method="POST" action="{% url 'generate_words' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="mySelect">指定する教材:</label>
+                <select id="mySelect" name="mySelect">
+                    <option value="option1">中学英単語1000</option>
+                    <option value="option2">システム英単語</option>
+                    <option value="option3">ターゲット1900</option>
+                    <option value="option4">でる順5級</option>
+                    <option value="option5">でる順4級</option>
+                    <option value="option6">でる順3級</option>
+                    <option value="option7">でる順準2級</option>
+                    <option value="option8">でる順2級</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="startNumber">作成する範囲 (開始):</label>
+                <input type="number" id="startNumber" name="startNumber" min="1">
+            </div>
+            <div class="form-group">
+                <label for="endNumber">作成する範囲 (終了):</label>
+                <input type="number" id="endNumber" name="endNumber" max="1000">
+            </div>
+            <button type="button" id="toggleAdvancedOptions" class="toggle-button">高度なオプションを表示</button>
+            <div id="advancedOptions" class="advanced-options">
+                <div class="form-group tooltip">
+                    <input type="checkbox" id="fillInTheBlanks" name="fillInTheBlanks"> 穴埋め問題
+                    <span class="tooltiptext">穴埋め問題は、文中の単語を空欄にして解答する形式です。<br>
+                        人工知能Gemini 1.5 Flashを使用しています。<br>
+                        動作が不安定・難易度調節が難しい場合があります。その場合は最初から再度作成してください。</span>
+                    </span>
+                </div>
+                <div class="form-group">
+                    <label for="questionCount">問題数の変更:</label>
+                    <input type="number" id="questionCount" name="questionCount" min="1" max="50">
+                </div>
+                <div class="form-group">
+                    <label>追加する単語:</label>
+                    <div class="add-word-container">
+                        <input type="text" id="englishWord" placeholder="英語">
+                        <input type="text" id="japaneseMeaning" placeholder="日本語の意味">
+                        <button type="button" id="addWordButton">+</button>
+                    </div>
+                    <div id="addedWordsContainer" class="added-words"></div>
+                </div>
+            </div>
+            <div class="form-group" style="margin-top: 20px;">
+                <button id="myButton" type="submit" disabled>作成</button>
+                <div id="loader" class="loader"></div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

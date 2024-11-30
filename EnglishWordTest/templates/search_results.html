@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>検索結果</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #333333;
+            padding: 5px;
+        }
+
+        th {
+            background-color: #333333;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <h1>検索結果</h1>
+    <table border="1">
+        <tr>
+            <th>テキスト</th>
+            <th>番号</th>
+            <th>単語</th>
+            <th>意味</th>
+        </tr>
+        {% for result in results %}
+        <tr>
+            <td>{{ result.text }}</td>
+            <td>{{ result.data.id }}</td>
+            <td>{{ result.data.word }}</td>
+            <td>{{ result.data.meaning }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

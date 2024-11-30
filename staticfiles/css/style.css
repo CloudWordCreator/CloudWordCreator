@@ -1,0 +1,10 @@
+/*印刷用のcss*/
+@page {
+	margin: 0mm 5mm;
+	size: A4 portrait;
+}
+.printer-setting {
+	padding-top: 5mm;
+	width: 210mm;
+	height: 297mm;
+}
