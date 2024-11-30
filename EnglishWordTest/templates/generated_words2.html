@@ -2,6 +2,8 @@
 <html>
 <head>
     <title>生成された英単語</title>
+    {% load static %}
+    <link href="{% static 'css/style.css' %}" media="print" rel="stylesheet" type="text/css">
     <style>
         .table-container {
             display: flex;
@@ -34,9 +36,6 @@
         .score {
             text-align: right;
             font-size: 30px;
-            position: absolute;
-            right: 0;
-            bottom: 0;
         }
         .print-area {
             border: 2px dashed #000; /* 印刷範囲を囲む線 */
@@ -94,140 +93,148 @@
     </div>
     <div class="print-area">
         <div id="english-to-japanese-content" class="tab">
-            <div class="table-container">
-                <table id="first-half-table">
-                    <tr>
-                        <th>番号</th>
-                        <th>単語</th>
-                        <th>意味</th>
-                    </tr>
-                    {% for word in words_first_half %}
-                    <tr>
-                        <td>{{ forloop.counter }}</td>
-                        <td>{{ word.word }}</td>
-                        <td></td>
-                    </tr>
-                    {% endfor %}
-                </table>
-                <table id="second-half-table">
-                    <tr>
-                        <th>番号</th>
-                        <th>単語</th>
-                        <th>意味</th>
-                    </tr>
-                    {% for word in words_second_half %}
-                    <tr>
-                        <td>{{ forloop.counter|add:25 }}</td>
-                        <td>{{ word.word }}</td>
-                        <td></td>
-                    </tr>
-                    {% endfor %}
-                </table>
+            <div class="printer-setting">
+                <div class="table-container">
+                    <table id="first-half-table">
+                        <tr>
+                            <th>番号</th>
+                            <th>単語</th>
+                            <th>意味</th>
+                        </tr>
+                        {% for word in words_first_half %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ word.word }}</td>
+                            <td></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    <table id="second-half-table">
+                        <tr>
+                            <th>番号</th>
+                            <th>単語</th>
+                            <th>意味</th>
+                        </tr>
+                        {% for word in words_second_half %}
+                        <tr>
+                            <td>{{ forloop.counter|add:25 }}</td>
+                            <td>{{ word.word }}</td>
+                            <td></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                <p class="selected_text">{{ selected_text }}</p>
+                <p class="test_rang">範囲 {{ start_range }} ～ {{ end_range }}</p>
+                <p class="score"> / {{ amount_count }}</p>
             </div>
-            <p class="selected_text">{{ selected_text }}</p>
-            <p class="test_rang">範囲 {{ start_range }} ～ {{ end_range }}</p>
-            <p class="score"> / {{ amount_count }}</p>
-            <div class="table-container">
-                <table id="first-half-table">
-                    <tr>
-                        <th>番号</th>
-                        <th>単語</th>
-                        <th>意味</th>
-                    </tr>
-                    {% for word in words_first_half %}
-                    <tr>
-                        <td>{{ forloop.counter }}</td>
-                        <td>{{ word.word }}</td>
-                        <td>{{ word.meaning }}</td>
-                    </tr>
-                    {% endfor %}
-                </table>
-                <table id="second-half-table">
-                    <tr>
-                        <th>番号</th>
-                        <th>単語</th>
-                        <th>意味</th>
-                    </tr>
-                    {% for word in words_second_half %}
-                    <tr>
-                        <td>{{ forloop.counter|add:25 }}</td>
-                        <td>{{ word.word }}</td>
-                        <td>{{ word.meaning }}</td>
-                    </tr>
-                    {% endfor %}
-                </table>
+            <div class="printer-setting">
+                <div class="table-container">
+                    <table id="first-half-table">
+                        <tr>
+                            <th>番号</th>
+                            <th>単語</th>
+                            <th>意味</th>
+                        </tr>
+                        {% for word in words_first_half %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ word.word }}</td>
+                            <td>{{ word.meaning }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    <table id="second-half-table">
+                        <tr>
+                            <th>番号</th>
+                            <th>単語</th>
+                            <th>意味</th>
+                        </tr>
+                        {% for word in words_second_half %}
+                        <tr>
+                            <td>{{ forloop.counter|add:25 }}</td>
+                            <td>{{ word.word }}</td>
+                            <td>{{ word.meaning }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                <p class="selected_text">{{ selected_text }}</p>
+                <p class="test_rang">範囲 {{ start_range }} ～ {{ end_range }}</p>
+                <p class="score"> / {{ amount_count }}</p>
             </div>
-            <p class="selected_text">{{ selected_text }}</p>
-            <p class="test_rang">範囲 {{ start_range }} ～ {{ end_range }}</p>
-            <p class="score"> / {{ amount_count }}</p>
         </div>
         <div id="japanese-to-english-content" class="tab" style="display: none;">
-            <div class="table-container">
-                <table id="first-half-table">
-                    <tr>
-                        <th>番号</th>
-                        <th>日本語</th>
-                        <th>英語</th>
-                    </tr>
-                    {% for word in words_first_half %}
-                    <tr>
-                        <td>{{ forloop.counter }}</td>
-                        <td>{{ word.meaning }}</td>
-                        <td></td>
-                    </tr>
-                    {% endfor %}
-                </table>
-                <table id="second-half-table">
-                    <tr>
-                        <th>番号</th>
-                        <th>日本語</th>
-                        <th>英語</th>
-                    </tr>
-                    {% for word in words_second_half %}
-                    <tr>
-                        <td>{{ forloop.counter|add:25 }}</td>
-                        <td>{{ word.meaning }}</td>
-                        <td></td>
-                    </tr>
-                    {% endfor %}
-                </table>
+            <div class="printer-setting">
+                <div class="table-container">
+                    <table id="first-half-table">
+                        <tr>
+                            <th>番号</th>
+                            <th>日本語</th>
+                            <th>英語</th>
+                        </tr>
+                        {% for word in words_first_half %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ word.meaning }}</td>
+                            <td></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    <table id="second-half-table">
+                        <tr>
+                            <th>番号</th>
+                            <th>日本語</th>
+                            <th>英語</th>
+                        </tr>
+                        {% for word in words_second_half %}
+                        <tr>
+                            <td>{{ forloop.counter|add:25 }}</td>
+                            <td>{{ word.meaning }}</td>
+                            <td></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                <p class="selected_text">{{ selected_text }}</p>
+                <p class="test_rang">範囲 {{ start_range }} ～ {{ end_range }}</p>
+                <p class="score"> / {{ amount_count }}</p>
             </div>
-            <p class="selected_text">{{ selected_text }}</p>
-            <p class="test_rang">範囲 {{ start_range }} ～ {{ end_range }}</p>
-            <p class="score"> / {{ amount_count }}</p>
-            <div class="table-container">
-                <table id="first-half-table">
-                    <tr>
-                        <th>番号</th>
-                        <th>日本語</th>
-                        <th>英語</th>
-                    </tr>
-                    {% for word in words_first_half %}
-                    <tr>
-                        <td>{{ forloop.counter }}</td>
-                        <td>{{ word.meaning }}</td>
-                        <td>{{ word.word }}</td>
-                    </tr>
-                    {% endfor %}
-                </table>
-                <table id="second-half-table">
-                    <tr>
-                        <th>番号</th>
-                        <th>日本語</th>
-                        <th>英語</th>
-                    </tr>
-                    {% for word in words_second_half %}
-                    <tr>
-                        <td>{{ forloop.counter|add:25 }}</td>
-                        <td>{{ word.meaning }}</td>
-                        <td>{{ word.word }}</td>
-                    </tr>
-                    {% endfor %}
-                </table>
+            <div class="printer-setting">
+                <div class="table-container">
+                    <table id="first-half-table">
+                        <tr>
+                            <th>番号</th>
+                            <th>日本語</th>
+                            <th>英語</th>
+                        </tr>
+                        {% for word in words_first_half %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ word.meaning }}</td>
+                            <td>{{ word.word }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    <table id="second-half-table">
+                        <tr>
+                            <th>番号</th>
+                            <th>日本語</th>
+                            <th>英語</th>
+                        </tr>
+                        {% for word in words_second_half %}
+                        <tr>
+                            <td>{{ forloop.counter|add:25 }}</td>
+                            <td>{{ word.meaning }}</td>
+                            <td>{{ word.word }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                <p class="selected_text">{{ selected_text }}</p>
+                <p class="test_rang">範囲 {{ start_range }} ～ {{ end_range }}</p>
+                <p class="score"> / {{ amount_count }}</p>
             </div>
-            <p class="selected_text">{{ selected_text }}</p>
-            <p class="test_rang">範囲 {{ start_range }} ～ {{ end_range }}</p>
-            <p class="score"> / {{ amount_count }}</p>
         </div>
     </div>
     <button onclick="printContent()" class="button">印刷</button>
@@ -239,6 +246,13 @@
             document.body.innerHTML = printArea;
             window.print();
             document.body.innerHTML = originalContent;
+            document.body.innerHTML = originalContent;
+            document.getElementById('english-to-japanese-button').addEventListener('click', function() {
+                showTab('english-to-japanese-content');
+            });
+            document.getElementById('japanese-to-english-button').addEventListener('click', function() {
+                showTab('japanese-to-english-content');
+            });
         }
         
         function showTab(tabId) {

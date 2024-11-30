@@ -2,6 +2,8 @@
 <html>
 <head>
     <title>生成された英単語</title>
+    {% load static %}
+    <link href="{% static 'css/style.css' %}" media="print" rel="stylesheet" type="text/css">
     <style>
         table {
             width: 100%;
@@ -33,9 +35,6 @@
         .score {
             text-align: right;
             font-size: 30px;
-            position: absolute;
-            right: 0;
-            bottom: 0;
         }
         .print-area {
             border: 2px dashed #000; /* 印刷範囲を囲む線 */
@@ -92,87 +91,93 @@
     <button id="japanese-to-english-button" class="button">日本語→英語</button>
     <div class="print-area">
         <div id ="english-to-japanese-content" class="tab">
-            <table>
-                <tr>
-                    <th>番号</th>
-                    <th>〇/×</th>
-                    <th>単語</th>
-                    <th>意味</th>
-                </tr>
-                {% for word in words %}
-                <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td></td>
-                    <td>{{ word.word }}</td>
-                    <td></td>
-                </tr>
-                {% endfor %}
-            </table>
-            <p class="selected_text">{{ selected_text }}</p>
-            <p class="test_rang">範囲 {{ start_range }} ～ {{ end_range }}</p>
-            <p class="score"> / {{ question_count }}</p>
-        
-            <table>
-                <tr>
-                    <th>番号</th>
-                    <th>〇/×</th>
-                    <th>単語</th>
-                    <th>意味</th>
-                </tr>
-                {% for word in words %}
-                <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td></td>
-                    <td>{{ word.word }}</td>
-                    <td>{{ word.meaning }}</td>
-                </tr>
-                {% endfor %}
-            </table>
-            <p class="selected_text">{{ selected_text }}</p>
-            <p class="test_rang">範囲 {{ start_range }} ～ {{ end_range }}</p>
-            <p class="score"> / {{ question_count }}</p>
+            <div class="printer-setting">
+                    <table>
+                        <tr>
+                            <th>番号</th>
+                            <th>〇/×</th>
+                            <th>単語</th>
+                            <th>意味</th>
+                        </tr>
+                        {% for word in words %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td></td>
+                            <td>{{ word.word }}</td>
+                            <td></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    <p class="selected_text">{{ selected_text }}</p>
+                    <p class="test_rang">範囲 {{ start_range }} ～ {{ end_range }}</p>
+                    <p class="score"> / {{ question_count }}</p>
+            </div>
+            <div class="printer-setting">
+                <table>
+                    <tr>
+                        <th>番号</th>
+                        <th>〇/×</th>
+                        <th>単語</th>
+                        <th>意味</th>
+                    </tr>
+                    {% for word in words %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td></td>
+                        <td>{{ word.word }}</td>
+                        <td>{{ word.meaning }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                <p class="selected_text">{{ selected_text }}</p>
+                <p class="test_rang">範囲 {{ start_range }} ～ {{ end_range }}</p>
+                <p class="score"> / {{ question_count }}</p>
+            </div>
         </div>
 
         <div id="japanese-to-english-content" class="tab" style="display: none;">
-            <table>
-                <tr>
-                    <th>番号</th>
-                    <th>〇/×</th>
-                    <th>日本語</th>
-                    <th>英語</th>
-                </tr>
-                {% for word in words %}
-                <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td></td>
-                    <td>{{ word.meaning }}</td>
-                    <td></td>
-                </tr>
-                {% endfor %}
-            </table>
-            <p class="selected_text">{{ selected_text }}</p>
-            <p class="test_rang">範囲 {{ start_range }} ～ {{ end_range }}</p>
-            <p class="score"> / {{ question_count }}</p>
-
-            <table>
-                <tr>
-                    <th>番号</th>
-                    <th>〇/×</th>
-                    <th>日本語</th>
-                    <th>英語</th>
-                </tr>
-                {% for word in words %}
-                <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td></td>
-                    <td>{{ word.meaning }}</td>
-                    <td>{{ word.word }}</td>
-                </tr>
-                {% endfor %}
-            </table>
-            <p class="selected_text">{{ selected_text }}</p>
-            <p class="test_rang">範囲 {{ start_range }} ～ {{ end_range }}</p>
-            <p class="score"> / {{ question_count }}</p>
+            <div class="printer-setting">
+                <table>
+                    <tr>
+                        <th>番号</th>
+                        <th>〇/×</th>
+                        <th>日本語</th>
+                        <th>英語</th>
+                    </tr>
+                    {% for word in words %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td></td>
+                        <td>{{ word.meaning }}</td>
+                        <td></td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                <p class="selected_text">{{ selected_text }}</p>
+                <p class="test_rang">範囲 {{ start_range }} ～ {{ end_range }}</p>
+                <p class="score"> / {{ question_count }}</p>    
+            </div>
+            <div class="printer-setting">
+                <table>
+                    <tr>
+                        <th>番号</th>
+                        <th>〇/×</th>
+                        <th>日本語</th>
+                        <th>英語</th>
+                    </tr>
+                    {% for word in words %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td></td>
+                        <td>{{ word.meaning }}</td>
+                        <td>{{ word.word }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                <p class="selected_text">{{ selected_text }}</p>
+                <p class="test_rang">範囲 {{ start_range }} ～ {{ end_range }}</p>
+                <p class="score"> / {{ question_count }}</p>
+            </div>
         </div>
     </div>
     <button onclick="printContent()" class="button">印刷</button>
@@ -185,6 +190,13 @@
             document.body.innerHTML = printArea;
             window.print();
             document.body.innerHTML = originalContent;
+            document.body.innerHTML = originalContent;
+            document.getElementById('english-to-japanese-button').addEventListener('click', function() {
+                showTab('english-to-japanese-content');
+            });
+            document.getElementById('japanese-to-english-button').addEventListener('click', function() {
+                showTab('japanese-to-english-content');
+            });
         }
         
         function showTab(tabId) {
