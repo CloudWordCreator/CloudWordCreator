@@ -138,3 +138,9 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# CSVファイルの保存ディレクトリ
+CSV_UPLOAD_DIR = os.path.join(BASE_DIR, 'csv_uploads')
+
+# ディレクトリが存在しない場合は作成
+if not os.path.exists(CSV_UPLOAD_DIR):
+    os.makedirs(CSV_UPLOAD_DIR)
