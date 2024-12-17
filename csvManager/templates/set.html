@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSVファイルアップロード</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .card-header {
+            background-color: #007bff;
+            color: white;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        table {
+            border-collapse: collapse;
+            border: 2px solid rgb(140 140 140);
+            font-family: sans-serif;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            width: 100%;
+            margin-top: 20px;
+        }
+        caption {
+            caption-side: bottom;
+            padding: 10px;
+            font-weight: bold;
+        }
+        thead,
+        tfoot {
+            background-color: rgb(228 240 245);
+        }
+        th,
+        td {
+            border: 1px solid rgb(160 160 160);
+            padding: 8px 10px;
+        }
+        td:last-of-type {
+            text-align: center;
+        }
+        tbody > tr:nth-of-type(even) {
+            background-color: rgb(237 238 242);
+        }
+        tfoot th {
+            text-align: right;
+        }
+        tfoot td {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-header text-center">
+                <h2>CSVファイルアップロード</h2>
+            </div>
+            <div class="card-body">
+                <p>例1</p>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>unit</th>
+                            <th>英語</th>
+                            <th>日本語</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>unit1-1</td>
+                            <td>apple</td>
+                            <td>りんご</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>unit1-2</td>
+                            <td>banana</td>
+                            <td>バナナ</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>unit2-1</td>
+                            <td>orange</td>
+                            <td>オレンジ</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>例2</p>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>英語</th>
+                            <th>日本語</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>apple</td>
+                            <td>りんご</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>banana</td>
+                            <td>バナナ</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>orange</td>
+                            <td>オレンジ</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <form action="{% url 'upload_csv' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="csv_file">CSVファイルを選択:</label>
+                        <input type="file" class="form-control-file" id="csv_file" name="csv_file" accept=".csv">
+                    </div>
+                    <div class="form-group">
+                        <label for="csv_type">CSVタイプを選択:</label>
+                        <select class="form-control" id="csv_type" name="csv_type">
+                            <option value="unit">Unit付き</option>
+                            <option value="word">Unitなし</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">アップロード</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

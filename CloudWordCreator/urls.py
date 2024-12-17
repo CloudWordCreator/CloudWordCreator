@@ -21,4 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('info/', include('EnglishWordTest.urls')),
     path('fill_in_the_blank/', include('fill_in_the_blank.urls')),
+    path('csv_set/', include('csvManager.urls')),
 ]
