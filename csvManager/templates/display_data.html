@@ -22,18 +22,18 @@
         <ul id="textList">
             {% for text in texts %}
                 <li>
-                    <input type="checkbox" class="text-checkbox" data-id="text-{{ text.id }}">
-                    <button class="btn btn-link" onclick="toggleVisibility('text-{{ text.id }}')">{{ text.name }}</button>
+                    <input type="checkbox" class="text-checkbox" data-id="text-{{ text.id }}" id="text-checkbox-{{ text.id }}" name="text-checkbox-{{ text.id }}">
+                    <button class="btn btn-link text-toggle" data-id="text-{{ text.id }}">{{ text.name }}</button>
                     <ul id="text-{{ text.id }}" class="nested">
                         {% for parent in units_by_text|get_item:text.id %}
                             <li>
-                                <input type="checkbox" class="unit-checkbox" data-id="unit-{{ parent.id }}">
-                                <button class="btn btn-link" onclick="toggleVisibility('unit-{{ parent.id }}')">{{ parent.name }}</button>
+                                <input type="checkbox" class="unit-checkbox" data-id="unit-{{ parent.id }}" id="unit-checkbox-{{ parent.id }}" name="unit-checkbox-{{ parent.id }}">
+                                <button class="btn btn-link unit-toggle" data-id="unit-{{ parent.id }}">{{ parent.name }}</button>
                                 <ul id="unit-{{ parent.id }}" class="nested">
                                     {% for unit in parent.subunits.all %}
                                         <li>
-                                            <input type="checkbox" class="unit-checkbox" data-id="unit-{{ unit.id }}">
-                                            <button class="btn btn-link" onclick="toggleVisibility('unit-{{ unit.id }}')">{{ unit.name }}</button>
+                                            <input type="checkbox" class="unit-checkbox" data-id="unit-{{ unit.id }}" id="unit-checkbox-{{ unit.id }}" name="unit-checkbox-{{ unit.id }}">
+                                            <button class="btn btn-link unit-toggle" data-id="unit-{{ unit.id }}">{{ unit.name }}</button>
                                             <ul id="unit-{{ unit.id }}" class="nested">
                                                 <table class="table table-bordered">
                                                     <thead>
@@ -50,7 +50,7 @@
                                                                 <td>{{ word.no }}</td>
                                                                 <td>{{ word.english }}</td>
                                                                 <td>{{ word.japanese }}</td>
-                                                                <td><input type="checkbox" class="word-checkbox" data-id="word-{{ word.id }}"></td>
+                                                                <td><input type="checkbox" class="word-checkbox" data-id="word-{{ word.id }}" id="word-checkbox-{{ word.id }}" name="word-checkbox-{{ word.id }}"></td>
                                                             </tr>
                                                         {% endfor %}
                                                     </tbody>
@@ -73,6 +73,7 @@
     <script>
         function toggleVisibility(id) {
             var element = document.getElementById(id);
+
             if (element.classList.contains('active')) {
                 element.classList.remove('active');
             } else {
@@ -81,6 +82,20 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.text-toggle').forEach(function(button) {
+                button.addEventListener('click', function() {
+                    var id = this.getAttribute('data-id');
+                    toggleVisibility(id);
+                });
+            });
+
+            document.querySelectorAll('.unit-toggle').forEach(function(button) {
+                button.addEventListener('click', function() {
+                    var id = this.getAttribute('data-id');
+                    toggleVisibility(id);
+                });
+            });
+
             document.querySelectorAll('.text-checkbox').forEach(function(checkbox) {
                 checkbox.addEventListener('change', function() {
                     var id = this.getAttribute('data-id');
@@ -99,13 +114,11 @@
                     document.querySelectorAll('#' + id + ' .word-checkbox').forEach(function(wordCheckbox) {
                         wordCheckbox.checked = isChecked;
                     });
-                });
-            });
 
-            document.querySelectorAll('.btn-link').forEach(function(button) {
-                button.addEventListener('click', function() {
-                    var id = this.getAttribute('onclick').match(/'([^']+)'/)[1];
-                    toggleVisibility(id);
+                    // 子ユニットのチェックボックスを親ユニットのチェックボックスに連動させる
+                    document.querySelectorAll('#' + id + ' .unit-checkbox').forEach(function(subunitCheckbox) {
+                        subunitCheckbox.checked = isChecked;
+                    });
                 });
             });
         });
