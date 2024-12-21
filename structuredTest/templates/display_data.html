@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>データ表示</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .nested {
+            display: none;
+        }
+        .active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    {% load custom_filters %}
+    <div class="container">
+        <h1 class="mt-5">データ表示 (Unit付き)</h1>
+        <ul id="textList">
+            {% for text in texts %}
+                <li>
+                    <input type="checkbox" class="text-checkbox" data-id="text-{{ text.id }}" id="text-checkbox-{{ text.id }}" name="text-checkbox-{{ text.id }}">
+                    <button class="btn btn-link text-toggle" data-id="text-{{ text.id }}">{{ text.name }}</button>
+                    <ul id="text-{{ text.id }}" class="nested">
+                        {% for parent in units_by_text|get_item:text.id %}
+                            <li>
+                                <input type="checkbox" class="unit-checkbox" data-id="unit-{{ parent.id }}" id="unit-checkbox-{{ parent.id }}" name="unit-checkbox-{{ parent.id }}">
+                                <button class="btn btn-link unit-toggle" data-id="unit-{{ parent.id }}">{{ parent.name }}</button>
+                                <ul id="unit-{{ parent.id }}" class="nested">
+                                    {% for unit in parent.subunits.all %}
+                                        <li>
+                                            <input type="checkbox" class="unit-checkbox" data-id="unit-{{ unit.id }}" id="unit-checkbox-{{ unit.id }}" name="unit-checkbox-{{ unit.id }}">
+                                            <button class="btn btn-link unit-toggle" data-id="unit-{{ unit.id }}">{{ unit.name }}</button>
+                                            <ul id="unit-{{ unit.id }}" class="nested">
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>No</th>
+                                                            <th>英語</th>
+                                                            <th>日本語</th>
+                                                            <th>選択</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for word in unit.words.all %}
+                                                            <tr>
+                                                                <td>{{ word.no }}</td>
+                                                                <td>{{ word.english }}</td>
+                                                                <td>{{ word.japanese }}</td>
+                                                                <td><input type="checkbox" class="word-checkbox" data-id="word-{{ word.id }}" id="word-checkbox-{{ word.id }}" name="word-checkbox-{{ word.id }}"></td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </ul>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function toggleVisibility(id) {
+            var element = document.getElementById(id);
+
+            if (element.classList.contains('active')) {
+                element.classList.remove('active');
+            } else {
+                element.classList.add('active');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.text-toggle').forEach(function(button) {
+                button.addEventListener('click', function() {
+                    var id = this.getAttribute('data-id');
+                    toggleVisibility(id);
+                });
+            });
+
+            document.querySelectorAll('.unit-toggle').forEach(function(button) {
+                button.addEventListener('click', function() {
+                    var id = this.getAttribute('data-id');
+                    toggleVisibility(id);
+                });
+            });
+
+            document.querySelectorAll('.text-checkbox').forEach(function(checkbox) {
+                checkbox.addEventListener('change', function() {
+                    var id = this.getAttribute('data-id');
+                    var isChecked = this.checked;
+                    document.querySelectorAll('#' + id + ' .unit-checkbox').forEach(function(unitCheckbox) {
+                        unitCheckbox.checked = isChecked;
+                        unitCheckbox.dispatchEvent(new Event('change'));
+                    });
+                });
+            });
+
+            document.querySelectorAll('.unit-checkbox').forEach(function(checkbox) {
+                checkbox.addEventListener('change', function() {
+                    var id = this.getAttribute('data-id');
+                    var isChecked = this.checked;
+                    document.querySelectorAll('#' + id + ' .word-checkbox').forEach(function(wordCheckbox) {
+                        wordCheckbox.checked = isChecked;
+                    });
+
+                    // 子ユニットのチェックボックスを親ユニットのチェックボックスに連動させる
+                    document.querySelectorAll('#' + id + ' .unit-checkbox').forEach(function(subunitCheckbox) {
+                        subunitCheckbox.checked = isChecked;
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
