@@ -4,6 +4,15 @@
     {% load static %}
     <link href="{% static 'css/style.css' %}" media="print" rel="stylesheet" type="text/css">
     <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
         .button {
             padding: 10px 20px;
             margin: 10px;
@@ -32,6 +41,9 @@
             margin: 0 auto; /* 中央揃え */
             position: relative;
         }
+        .selected_text {
+            font-size: 20px;
+        }
         
         @media print {
             body {
@@ -55,75 +67,147 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>テスト</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <button id="english-to-japanese-button" class="button">英語→日本語</button>
     <button id="japanese-to-english-button" class="button">日本語→英語</button>
     <div class="print-area">
         <div id ="english-to-japanese-content" class="tab">
+            <!-- 英語→日本語の問題 -->
             <div class="printer-setting">
-                <!-- 英語→日本語の問題 -->
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Unit</th>
-                            <th>英語</th>
-                            <th>日本語</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for word in words %}
-                            <tr>
-                                <td>{{ word.no }}</td>
-                                <td>
-                                    {% if word.unit %}
-                                        {{ word.unit.name }}
-                                    {% else %}
-                                        なし
-                                    {% endif %}
-                                </td>
-                                <td>{{ word.english }}</td>
-                                <td></td>
-                            </tr>
+                {% for text in selected_texts %}
+                    <p class="selected_text">{{ text.name }}</p>
+                {% endfor %}
+                {% for unit in units %}
+                    {% if not unit.parent %}
+                        {% for subunit in unit.subunits.all %}
+                            <h3>{{ subunit.name }}</h3>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>英語</th>
+                                        <th>日本語</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for word in words %}
+                                        {% if word.unit.id == subunit.id %}
+                                            <tr>
+                                                <td>{{ word.english }}</td>
+                                                <td></td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
                         {% endfor %}
-                    </tbody>
-                </table>
+                    {% endif %}
+                {% endfor %}
             </div>
             <!-- 英語→日本語の解答 -->
             <div class="printer-setting">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Unit</th>
-                            <th>英語</th>
-                            <th>日本語</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for word in words %}
-                            <tr>
-                                <td>{{ word.no }}</td>
-                                <td>
-                                    {% if word.unit %}
-                                        {{ word.unit.name }}
-                                    {% else %}
-                                        なし
-                                    {% endif %}
-                                </td>
-                                <td>{{ word.english }}</td>
-                                <td>{{ word.japanese }}</td>
-                            </tr>
+                {% for text in selected_texts %}
+                    <p class="selected_text">{{ text.name }}</p>
+                {% endfor %}
+                {% for unit in units %}
+                    {% if not unit.parent %}
+                        {% for subunit in unit.subunits.all %}
+                            <h3>{{ subunit.name }}</h3>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>英語</th>
+                                        <th>日本語</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for word in words %}
+                                        {% if word.unit.id == subunit.id %}
+                                            <tr>
+                                                <td>{{ word.english }}</td>
+                                                <td>{{ word.japanese }}</td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
                         {% endfor %}
-                    </tbody>
-                </table>
+                    {% endif %}
+                {% endfor %}
             </div>
         </div>
         <div id="japanese-to-english-content" class="tab" style="display: none;">
+            <!-- 日本語→英語の問題 -->
             <div class="printer-setting">
-                <!-- 日本語→英語の問題 -->
+                {% for text in selected_texts %}
+                    <p class="selected_text">{{ text.name }}</p>
+                {% endfor %}
+                {% for unit in units %}
+                    {% if not unit.parent %}
+                        {% for subunit in unit.subunits.all %}
+                            <h3>{{ subunit.name }}</h3>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>日本語</th>
+                                        <th>英語</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for word in words %}
+                                        {% if word.unit.id == subunit.id %}
+                                            <tr>
+                                                <td>{{ word.japanese }}</td>
+                                                <td></td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <!-- 日本語→英語の解答 -->
+            <div class="printer-setting">
+                {% for text in selected_texts %}
+                    <p class="selected_text">{{ text.name }}</p>
+                {% endfor %}
+                {% for unit in units %}
+                    {% if not unit.parent %}
+                        {% for subunit in unit.subunits.all %}
+                            <h3>{{ subunit.name }}</h3>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>日本語</th>
+                                        <th>英語</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for word in words %}
+                                        {% if word.unit.id == subunit.id %}
+                                            <tr>
+                                                <td>{{ word.japanese }}</td>
+                                                <td>{{ word.english }}</td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+        </div>
+        <div id="japanese-to-english-content" class="tab" style="display: none;">
+            <!-- 日本語→英語の問題 -->
+            <div class="printer-setting">
+                {% for text in selected_texts %}
+                        <p class="selected_text">{{ text.name }}</p>
+                {% endfor %}
                 <table class="table table-bordered">
                     <thead>
                         <tr>
@@ -151,8 +235,11 @@
                     </tbody>
                 </table>
             </div>
+            <!-- 日本語→英語の解答 -->
             <div class="printer-setting">
-                <!-- 日本語→英語の解答 -->
+                {% for text in selected_texts %}
+                        <p class="selected_text">{{ text.name }}</p>
+                {% endfor %}
                 <table class="table table-bordered">
                     <thead>
                         <tr>
