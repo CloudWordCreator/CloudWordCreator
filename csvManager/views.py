@@ -21,12 +21,6 @@ def upload_csv(request):
 def success(request):
     return render(request, 'success.html')
 
-def display_data(request):
-    """unitを持つテキストの表示 """
-    texts_with_units = Text.objects.filter(units__isnull=False).distinct()
-    units_by_text = {text.id: text.units.filter(parent__isnull=True) for text in texts_with_units}
-    return render(request, 'display_data.html', {'texts': texts_with_units, 'units_by_text': units_by_text})
-
 def display_data_none_unit(request):
     texts_without_units = Text.objects.filter(units__isnull=True).distinct()
     words = NoUnitWord.objects.all()

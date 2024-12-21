@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ja">
+{% load static %}
+<link href="{% static 'css/style.css' %}" media="print" rel="stylesheet" type="text/css">
+<style>
+    .button {
+        padding: 10px 20px;
+        margin: 10px;
+        font-size: 16px;
+        color: #fff;
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+</style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>テスト</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">テスト問題</h1>
+        <h2 class="mt-4">単語リスト</h2>
+        <div class="print-area">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Unit</th>
+                        <th>英語</th>
+                        <th>日本語</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for word in words %}
+                        <tr>
+                            <td>{{ word.no }}</td>
+                            <td>
+                                {% if word.unit %}
+                                    {{ word.unit.name }}
+                                {% else %}
+                                    なし
+                                {% endif %}
+                            </td>
+                            <td>{{ word.english }}</td>
+                            <td>{{ word.japanese }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <button onclick="printContent()" class="button">印刷</button>
+        <a href="{% url 'display_data' %}" class="btn btn-secondary mt-3">戻る</a>
+    </div>
+</body>
+<script>
+    function printContent() {
+        const printArea = document.querySelector('.print-area').innerHTML;
+        const originalContent = document.body.innerHTML;
+        document.body.innerHTML = printArea;
+        window.print();
+        document.body.innerHTML = originalContent;
+        document.body.innerHTML = originalContent;
+        document.getElementById('english-to-japanese-button').addEventListener('click', function() {
+            showTab('english-to-japanese-content');
+        });
+        document.getElementById('japanese-to-english-button').addEventListener('click', function() {
+            showTab('japanese-to-english-content');
+        });
+    }
+</script>
+</html>
