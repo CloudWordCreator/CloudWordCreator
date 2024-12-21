@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'EnglishWordTest',
     'fill_in_the_blank',
     'csvManager',
+    'flatTestMaker',
+    'structuredTest'
 ]
 
 MIDDLEWARE = [
