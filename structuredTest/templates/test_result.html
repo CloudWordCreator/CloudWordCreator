@@ -1,61 +1,189 @@
 <!DOCTYPE html>
 <html lang="ja">
-{% load static %}
-<link href="{% static 'css/style.css' %}" media="print" rel="stylesheet" type="text/css">
-<style>
-    .button {
-        padding: 10px 20px;
-        margin: 10px;
-        font-size: 16px;
-        color: #fff;
-        background-color: #007bff;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-</style>
 <head>
+    {% load static %}
+    <link href="{% static 'css/style.css' %}" media="print" rel="stylesheet" type="text/css">
+    <style>
+        .button {
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        .button:focus {
+            outline: none;
+        }
+        .tab-buttons {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .print-area {
+            border: 2px dashed #000; /* 印刷範囲を囲む線 */
+            width: 100%; /* 印刷範囲の幅を設定 */
+            margin: 0 auto; /* 中央揃え */
+            position: relative;
+        }
+        
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact;
+                color-adjust: exact;
+            }
+            .print-area {
+                page-break-after: always;
+                border: none;
+                width: 100%; /* 印刷範囲の幅を設定 */
+            }
+            table {
+                width: 100%;
+                font-size: 12px; /* フォントサイズを小さくしてA4に収める */
+            }
+            th, td {
+                padding: 4px; /* パディングを小さくしてA4に収める */
+            }
+        }
+    </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>テスト</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <h1 class="mt-5">テスト問題</h1>
-        <h2 class="mt-4">単語リスト</h2>
-        <div class="print-area">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Unit</th>
-                        <th>英語</th>
-                        <th>日本語</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for word in words %}
+    <button id="english-to-japanese-button" class="button">英語→日本語</button>
+    <button id="japanese-to-english-button" class="button">日本語→英語</button>
+    <div class="print-area">
+        <div id ="english-to-japanese-content" class="tab">
+            <div class="printer-setting">
+                <!-- 英語→日本語の問題 -->
+                <table class="table table-bordered">
+                    <thead>
                         <tr>
-                            <td>{{ word.no }}</td>
-                            <td>
-                                {% if word.unit %}
-                                    {{ word.unit.name }}
-                                {% else %}
-                                    なし
-                                {% endif %}
-                            </td>
-                            <td>{{ word.english }}</td>
-                            <td>{{ word.japanese }}</td>
+                            <th>No</th>
+                            <th>Unit</th>
+                            <th>英語</th>
+                            <th>日本語</th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {% for word in words %}
+                            <tr>
+                                <td>{{ word.no }}</td>
+                                <td>
+                                    {% if word.unit %}
+                                        {{ word.unit.name }}
+                                    {% else %}
+                                        なし
+                                    {% endif %}
+                                </td>
+                                <td>{{ word.english }}</td>
+                                <td></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <!-- 英語→日本語の解答 -->
+            <div class="printer-setting">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Unit</th>
+                            <th>英語</th>
+                            <th>日本語</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for word in words %}
+                            <tr>
+                                <td>{{ word.no }}</td>
+                                <td>
+                                    {% if word.unit %}
+                                        {{ word.unit.name }}
+                                    {% else %}
+                                        なし
+                                    {% endif %}
+                                </td>
+                                <td>{{ word.english }}</td>
+                                <td>{{ word.japanese }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <button onclick="printContent()" class="button">印刷</button>
-        <a href="{% url 'display_data' %}" class="btn btn-secondary mt-3">戻る</a>
+        <div id="japanese-to-english-content" class="tab" style="display: none;">
+            <div class="printer-setting">
+                <!-- 日本語→英語の問題 -->
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Unit</th>
+                            <th>日本語</th>
+                            <th>英語</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for word in words %}
+                            <tr>
+                                <td>{{ word.no }}</td>
+                                <td>
+                                    {% if word.unit %}
+                                        {{ word.unit.name }}
+                                    {% else %}
+                                        なし
+                                    {% endif %}
+                                </td>
+                                <td>{{ word.japanese }}</td>
+                                <td></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="printer-setting">
+                <!-- 日本語→英語の解答 -->
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Unit</th>
+                            <th>日本語</th>
+                            <th>英語</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for word in words %}
+                            <tr>
+                                <td>{{ word.no }}</td>
+                                <td>
+                                    {% if word.unit %}
+                                        {{ word.unit.name }}
+                                    {% else %}
+                                        なし
+                                    {% endif %}
+                                </td>
+                                <td>{{ word.japanese }}</td>
+                                <td>{{ word.english }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
+    <button onclick="printContent()" class="button">印刷</button>
+    <a href="{% url 'display_data' %}">戻る</a>
 </body>
 <script>
     function printContent() {
@@ -72,5 +200,24 @@
             showTab('japanese-to-english-content');
         });
     }
+
+    function showTab(tabId) {
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            tab.style.display = 'none';
+        });
+        document.getElementById(tabId).style.display = 'block';
+    }
+
+    document.getElementById('english-to-japanese-button').addEventListener('click', function() {
+        showTab('english-to-japanese-content');
+    });
+
+    document.getElementById('japanese-to-english-button').addEventListener('click', function() {
+        showTab('japanese-to-english-content');
+    });
+
+    // 初期表示を設定
+    showTab('english-to-japanese-content');
 </script>
 </html>
