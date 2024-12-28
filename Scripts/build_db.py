@@ -3,9 +3,10 @@ import sqlite3
 import os
 
 # CSVファイルのディレクトリ
-CSV_DIR = r'C:\Users\sabax\source\repos\CloudWordCreator\Scripts\csv_data'
-DB_FILE = 'db.sqlite3'
+CSV_DIR = r'C:\Users\sabax\Repositories\CloudWordCreator\Scripts\csv_data'
+DB_FILE = r'C:\Users\sabax\Repositories\CloudWordCreator\db.sqlite3'
 
+# データベース接続
 conn = sqlite3.connect(DB_FILE)
 cur = conn.cursor()
 
@@ -21,32 +22,41 @@ csv_to_table = {
     'でる順2級.csv': 'DeruJun2'
 }
 
+# データベース初期化
+for table_name in csv_to_table.values():
+    cur.execute(f'DROP TABLE IF EXISTS {table_name}')
+    print(f'Table {table_name} dropped.')
+
+# CSVデータを挿入
 for csv_file, table_name in csv_to_table.items():
     file_path = os.path.join(CSV_DIR, csv_file)
     if not os.path.exists(file_path):
         print(f'File not found: {file_path}')
         continue
     
-    # テーブルを作成
+    # テーブルを再作成
     cur.execute(f'''
-        CREATE TABLE IF NOT EXISTS {table_name} (
+        CREATE TABLE {table_name} (
             id INTEGER PRIMARY KEY,
             meaning TEXT,
             word TEXT
         )
     ''')
+    print(f'Table {table_name} created.')
     
-    # CSVファイルを読み込み、データを挿入（上書き保存）
+    # CSVファイルを読み込み、データを挿入
     with open(file_path, 'r', encoding='utf-8') as f:
         reader = csv.reader(f)
         data = [row for row in reader]
         
-        # 上書き保存用に `INSERT OR REPLACE` を使用
+        # データを挿入
         cur.executemany(
-            f'INSERT OR REPLACE INTO {table_name} (id, meaning, word) VALUES (?, ?, ?)', 
+            f'INSERT INTO {table_name} (id, meaning, word) VALUES (?, ?, ?)', 
             data
         )
-        print(f'Inserted or replaced data into table: {table_name}')
+        print(f'Inserted data into table: {table_name}')
 
+# 変更をコミットして接続を閉じる
 conn.commit()
 conn.close()
+print('Database initialized and CSV data inserted successfully.')
