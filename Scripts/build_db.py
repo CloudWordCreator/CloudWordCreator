@@ -4,7 +4,7 @@ import os
 
 # CSVファイルのディレクトリ
 CSV_DIR = r'C:\Users\sabax\source\repos\CloudWordCreator\Scripts\csv_data'
-DB_FILE = 'db.sqlite3'
+DB_FILE = r'C:\Users\sabax\source\repos\CloudWordCreator\db.sqlite3'
 
 conn = sqlite3.connect(DB_FILE)
 cur = conn.cursor()
@@ -36,12 +36,17 @@ for csv_file, table_name in csv_to_table.items():
         )
     ''')
     
-    # CSVファイルを読み込み、データを挿入
+    # CSVファイルを読み込み、データを挿入（上書き保存）
     with open(file_path, 'r', encoding='utf-8') as f:
         reader = csv.reader(f)
         data = [row for row in reader]
-        cur.executemany(f'INSERT INTO {table_name} (id, meaning, word) VALUES (?, ?, ?)', data)
-        print(f'Inserted data into table: {table_name}')
+        
+        # 上書き保存用に `INSERT OR REPLACE` を使用
+        cur.executemany(
+            f'INSERT OR REPLACE INTO {table_name} (id, meaning, word) VALUES (?, ?, ?)', 
+            data
+        )
+        print(f'Inserted or replaced data into table: {table_name}')
 
 conn.commit()
 conn.close()
