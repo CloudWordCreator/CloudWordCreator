@@ -45,38 +45,7 @@
                         <ul id="text-{{ text.id }}" class="nested">
                             {% for parent in units_by_text|get_item:text.id %}
                                 <li>
-                                    <input type="checkbox" class="unit-checkbox" data-id="unit-{{ parent.id }}" id="unit-checkbox-{{ parent.id }}" name="selected_units" value="{{ parent.id }}">
-                                    <button type="button" class="btn btn-link unit-toggle" data-id="unit-{{ parent.id }}">{{ parent.name }}</button>
-                                    <ul id="unit-{{ parent.id }}" class="nested">
-                                        {% for unit in parent.subunits.all %}
-                                            <li>
-                                                <input type="checkbox" class="unit-checkbox" data-id="unit-{{ unit.id }}" id="unit-checkbox-{{ unit.id }}" name="selected_units" value="{{ unit.id }}">
-                                                <button type="button" class="btn btn-link unit-toggle" data-id="unit-{{ unit.id }}">{{ unit.name }}</button>
-                                                <ul id="unit-{{ unit.id }}" class="nested">
-                                                    <table class="table table-bordered">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>No</th>
-                                                                <th>英語</th>
-                                                                <th>日本語</th>
-                                                                <th>選択</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            {% for word in unit.words.all %}
-                                                                <tr>
-                                                                    <td>{{ word.no }}</td>
-                                                                    <td>{{ word.english }}</td>
-                                                                    <td>{{ word.japanese }}</td>
-                                                                    <td><input type="checkbox" class="word-checkbox" data-id="word-{{ word.id }}" id="word-checkbox-{{ word.id }}" name="selected_words" value="{{ word.id }}"></td>
-                                                                </tr>
-                                                            {% endfor %}
-                                                        </tbody>
-                                                    </table>
-                                                </ul>
-                                            </li>
-                                        {% endfor %}
-                                    </ul>
+                                    <input type="checkbox" class="unit-checkbox" data-id="unit-{{ parent.id }}" id="unit-checkbox-{{ parent.id }}" name="selected_units" value="{{ parent.id }}"> {{ parent.name }} </checkbox>
                                 </li>
                             {% endfor %}
                         </ul>
