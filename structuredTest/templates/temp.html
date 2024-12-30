@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    {% load static %}
+    <link href="{% static 'css/style.css' %}" media="print" rel="stylesheet" type="text/css">
+    <style>
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .column {
+            width: 50%;
+            box-sizing: border-box;
+            padding: 10px;
+        }
+        .unit-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 4px;
+            text-align: left;
+        }
+        .answer-section {
+            margin-top: 40px;
+            border-top: 2px solid #000;
+            padding-top: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>テスト</title>
+</head>
+<body>
+    <button onclick="printContent()" class="button">印刷</button>
+    <a href="{% url 'display_data' %}">戻る</a>
+
+    <h1>テスト</h1>
+    {% for text in selected_texts %}
+        <p class="selected_text">{{ text.name }}</p>
+    {% endfor %}
+
+    {% for unit in units %}
+        <div class="unit-title">{{ unit.name }}</div>
+        <div class="container">
+            <div class="column">
+                <h3>{{ unit.name }} 左側 (1～50問)</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>英語</th>
+                            <th>日本語</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for word in words %}
+                            {% if word.unit.id == unit.id and forloop.counter <= 50 %}
+                                <tr>
+                                    <td>{{ word.no }}</td>
+                                    <td>{{ word.english }}</td>
+                                    <td></td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {% if words|length > 50 %}
+            <div class="column">
+                <h3>{{ unit.name }} 右側 (51問目～)</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>英語</th>
+                            <th>日本語</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for word in words %}
+                            {% if word.unit.id == unit.id and forloop.counter > 50 %}
+                                <tr>
+                                    <td>{{ word.no }}</td>
+                                    <td>{{ word.english }}</td>
+                                    <td></td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+
+    <div class="answer-section">
+        <h2>解答</h2>
+        {% for unit in units %}
+            <div class="unit-title">{{ unit.name }} - 解答</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>英語</th>
+                        <th>日本語</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for word in words %}
+                        {% if word.unit.id == unit.id %}
+                            <tr>
+                                <td>{{ word.no }}</td>
+                                <td>{{ word.english }}</td>
+                                <td>{{ word.japanese }}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endfor %}
+    </div>
+
+    <script>
+        function printContent() {
+            const printArea = document.body.innerHTML;
+            window.print();
+        }
+    </script>
+</body>
+</html>
