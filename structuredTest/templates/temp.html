@@ -56,7 +56,6 @@
                     <h3>{{ subunit.name }}</h3>
                     <div class="container">
                         <div class="column">
-                            <h4>{{ subunit.name }} 1～50問</h4>
                             <table>
                                 <thead>
                                     <tr>
@@ -67,57 +66,7 @@
                                 </thead>
                                 <tbody>
                                     {% for word in words %}
-                                        {% if word.unit.id == subunit.id and forloop.counter <= 50 %}
-                                            <tr>
-                                                <td>{{ forloop.counter }}</td>
-                                                <td>{{ word.english }}</td>
-                                                <td>{{ word.japanese }}</td>
-                                            </tr>
-                                        {% endif %}
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div class="column">
-                            <h4>{{ subunit.name }} 51～100問</h4>
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>英語</th>
-                                        <th>日本語</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for word in words %}
-                                        {% if word.unit.id == subunit.id and forloop.counter > 50 and forloop.counter <= 100 %}
-                                            <tr>
-                                                <td>{{ forloop.counter }}</td>
-                                                <td>{{ word.english }}</td>
-                                                <td>{{ word.japanese }}</td>
-                                            </tr>
-                                        {% endif %}
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="printer-setting">
-                        <div class="column">
-                            <h4>{{ subunit.name }} 101～150問</h4>
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>英語</th>
-                                        <th>日本語</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for word in words %}
-                                        {% if word.unit.id == subunit.id and forloop.counter > 100 %}
+                                        {% if word.unit.id == subunit.id and forloop.counter < 51 %}
                                             <tr>
                                                 <td>{{ forloop.counter }}</td>
                                                 <td>{{ word.english }}</td>
