@@ -128,54 +128,42 @@
     <h1>穴埋め問題結果</h1>
     <button id="japanese-available-button" class="button">日本語あり選択肢無し</button>
     <button id="japanese-unavailable-button" class="button">日本語なし選択肢有り</button>
+    <button onclick="printContent()" class="button">印刷</button>
+    <div class="button-container">
+        <button class="reload-button" onclick="reloadPage()">再生成</button>
+        <a href="{% url 'index' %}" class="back-button">戻る</a>
+    </div>
+
     <div class="print-area">
+        <!-- 日本語あり -->
         <div id="japanese-available-content" class="tab">
-            <div class="printer-setting">
-                <p>{{ text }}</p>
-                <p>{{start_number}} ～ {{end_number}}</p>
-                {% if fill_in_the_blank.error %}
+            <p>{{ text }}</p>
+            <p>{{ start_number }} ～ {{ end_number }}</p>
+            
+            {% if fill_in_the_blank.error %}
                 <div class="error-message">{{ fill_in_the_blank.error }}</div>
                 <pre>{{ fill_in_the_blank.response_text }}</pre>
-                {% else %}
-                    {% for item in fill_in_the_blank %}
-                    <div class="question">
-                        <div class="question-number">{{ item.number }}</div>
-                        <div class="japanese">{{ item.Japanese }}</div>
-                        <div class="question-phrase">{{ item.questionPhrase }}</div>
-                    </div>
-                    {% endfor %}
-                {% endif %}
-            </div>
-            <div class="printer-setting">
-                <p>解答</p>
+            {% else %}
+                <!-- 問題部分: 5問ごとに分割 -->
                 {% for item in fill_in_the_blank %}
-                    <div class="question-number">{{ item.number }}</div>
-                    <div class="answer-word">{{ item.answerWord }}</div>
+                    {% if forloop.counter0|divisibleby:5 %}
+                        {% if not forloop.first %}
+                            </div>
+                        {% endif %}
+                        <div class="printer-setting">
+                    {% endif %}
+                        <div class="question">
+                            <div class="question-number">{{ item.number }}</div>
+                            <div class="japanese">{{ item.Japanese }}</div>
+                            <div class="question-phrase">{{ item.questionPhrase }}</div>
+                        </div>
+                    {% if forloop.last %}
+                        </div>
+                    {% endif %}
                 {% endfor %}
-            </div>
-        </div>
-        <div id="japanese-unavailable-content" class="tab">
-            <div class="printer-setting">
-                <p>{{ text }}</p>
-                <p>{{start_number}} ～ {{end_number}}</p>
-                <p>選択肢</p>
-                <div class="options-grid">
-                    {% for option in options %}
-                        <div class="option-item">{{ option.word }}</div>
-                    {% endfor %}
-                </div>
-                {% if fill_in_the_blank.error %}
-                <div class="error-message">{{ fill_in_the_blank.error }}</div>
-                <pre>{{ fill_in_the_blank.response_text }}</pre>
-                {% else %}
-                    {% for item in fill_in_the_blank %}
-                    <div class="question">
-                        <div class="question-number">{{ item.number }}</div>
-                        <div class="question-phrase">{{ item.questionPhrase }}</div>
-                    </div>
-                    {% endfor %}
-                {% endif %}
-            </div>
+            {% endif %}
+
+            <!-- 解答部分: 分割せず1枚にまとめる -->
             <div class="printer-setting">
                 <p>解答</p>
                 {% for item in fill_in_the_blank %}
@@ -185,12 +173,50 @@
                 {% endfor %}
             </div>
         </div>
-    </div>
-    <button onclick="printContent()" class="button">印刷</button>
-    <div class="button-container">
-        <button class="reload-button" onclick="reloadPage()">再生成</button>
-        <div id="loader" class="loader"></div>
-        <a href="{% url 'index' %}" class="back-button">戻る</a>
+
+        <!-- 日本語なし -->
+        <div id="japanese-unavailable-content" class="tab">
+            <p>{{ text }}</p>
+            <p>{{ start_number }} ～ {{ end_number }}</p>
+            <p>選択肢</p>
+            <div class="options-grid">
+                {% for option in options %}
+                    <div class="option-item">{{ option.word }}</div>
+                {% endfor %}
+            </div>
+
+            {% if fill_in_the_blank.error %}
+                <div class="error-message">{{ fill_in_the_blank.error }}</div>
+                <pre>{{ fill_in_the_blank.response_text }}</pre>
+            {% else %}
+                <!-- 問題部分: 5問ごとに分割 -->
+                {% for item in fill_in_the_blank %}
+                    {% if forloop.counter0|divisibleby:5 %}
+                        {% if not forloop.first %}
+                            </div>
+                        {% endif %}
+                        <div class="printer-setting">
+                    {% endif %}
+                        <div class="question">
+                            <div class="question-number">{{ item.number }}</div>
+                            <div class="question-phrase">{{ item.questionPhrase }}</div>
+                        </div>
+                    {% if forloop.last %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+
+            <!-- 解答部分: 分割せず1枚にまとめる -->
+            <div class="printer-setting">
+                <p>解答</p>
+                {% for item in fill_in_the_blank %}
+                    <div class="question-number">{{ item.number }}</div>
+                    <div class="japanese">{{ item.Japanese }}</div>
+                    <div class="answer-word">{{ item.answerWord }}</div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
     <script>
         function printContent() {
@@ -209,7 +235,6 @@
         }
 
         function reloadPage() {
-            document.getElementById('loader').style.display = 'inline-block';
             location.reload();
         }
 
