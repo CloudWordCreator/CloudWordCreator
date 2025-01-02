@@ -176,47 +176,52 @@
 
         <!-- 日本語なし -->
         <div id="japanese-unavailable-content" class="tab">
-            <p>{{ text }}</p>
-            <p>{{ start_number }} ～ {{ end_number }}</p>
-            <p>選択肢</p>
-            <div class="options-grid">
-                {% for option in options %}
-                    <div class="option-item">{{ option.word }}</div>
-                {% endfor %}
-            </div>
-
-            {% if fill_in_the_blank.error %}
-                <div class="error-message">{{ fill_in_the_blank.error }}</div>
-                <pre>{{ fill_in_the_blank.response_text }}</pre>
-            {% else %}
-                <!-- 問題部分: 5問ごとに分割 -->
+            <!-- 1枚目: 選択肢 + 1～5問目 -->
+            <div class="printer-setting">
+                <p>{{ text }}</p>
+                <p>{{ start_number }} ～ {{ end_number }}</p>
+                <p>選択肢</p>
+                <div class="options-grid">
+                    {% for option in options %}
+                        <div class="option-item">{{ option.word }}</div>
+                    {% endfor %}
+                </div>
+        
                 {% for item in fill_in_the_blank %}
-                    {% if forloop.counter0|divisibleby:5 %}
-                        {% if not forloop.first %}
-                            </div>
-                        {% endif %}
-                        <div class="printer-setting">
-                    {% endif %}
+                    {% if forloop.counter <= 5 %}
                         <div class="question">
                             <div class="question-number">{{ item.number }}</div>
                             <div class="question-phrase">{{ item.questionPhrase }}</div>
                         </div>
-                    {% if forloop.last %}
+                    {% endif %}
+                {% endfor %}
+            </div>
+        
+            <!-- 2枚目: 6～10問目 -->
+            {% if fill_in_the_blank|length > 5 %}
+            <div class="printer-setting">
+                {% for item in fill_in_the_blank %}
+                    {% if forloop.counter > 5 and forloop.counter <= 10 %}
+                        <div class="question">
+                            <div class="question-number">{{ item.number }}</div>
+                            <div class="question-phrase">{{ item.questionPhrase }}</div>
                         </div>
                     {% endif %}
                 {% endfor %}
+            </div>
             {% endif %}
-
-            <!-- 解答部分: 分割せず1枚にまとめる -->
+        
+            <!-- 3枚目: 解答 -->
             <div class="printer-setting">
                 <p>解答</p>
                 {% for item in fill_in_the_blank %}
-                    <div class="question-number">{{ item.number }}</div>
-                    <div class="japanese">{{ item.Japanese }}</div>
-                    <div class="answer-word">{{ item.answerWord }}</div>
+                    <div class="question">
+                        <div class="question-number">{{ item.number }}</div>
+                        <div class="answer-word">{{ item.answerWord }}</div>
+                    </div>
                 {% endfor %}
             </div>
-        </div>
+        </div>        
     </div>
     <script>
         function printContent() {
@@ -235,7 +240,6 @@
         }
 
         function reloadPage() {
-            document.getElementById('loader').style.display = 'inline-block';
             location.reload();
         }
 
