@@ -3,7 +3,7 @@
 <head>
     <title>検索結果</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'flatTestMaker/css/search_style.css' %}">
+    <link rel="stylesheet" href="{% static 'flatTestMaker/css/flatTest_search_style.css' %}">
 </head>
 <body>
     <h1>検索結果</h1>
@@ -17,9 +17,9 @@
         {% for result in results %}
         <tr>
             <td>{{ result.text }}</td>
-            <td>{{ result.data.id }}</td>
-            <td>{{ result.data.word }}</td>
-            <td>{{ result.data.meaning }}</td>
+            <td>{{ result.no }}</td>
+            <td>{{ result.english }}</td>
+            <td>{{ result.japanese }}</td>
         </tr>
         {% endfor %}
     </table>

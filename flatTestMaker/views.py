@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from csvManager.models import Text, NoUnitWord
+from django.db import models
 import random
-from django.db.models import Min, Max
 
 # デフォルトの問題数 
 DEFAULT_COUNTS = 25
@@ -28,7 +28,11 @@ def search(request):
     query = request.GET.get('q')
     results = []
     if query:
-        pass
+        results = NoUnitWord.objects.filter(
+            models.Q(english__icontains=query) | models.Q(japanese__icontains=query)
+        ).select_related('text')
+    
+    return render(request, 'flatTest_search_results.html', {'results': results})
 
 def generate_words(request):
     """
