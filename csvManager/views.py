@@ -25,3 +25,6 @@ def display_data_none_unit(request):
     texts_without_units = Text.objects.filter(units__isnull=True).distinct()
     words = NoUnitWord.objects.all()
     return render(request, 'display_data_NoneUnit.html', {'texts': texts_without_units, 'words': words})
+
+def failed(request):
+    return render(request, 'failed.html')
