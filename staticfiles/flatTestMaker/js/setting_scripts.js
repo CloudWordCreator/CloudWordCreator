@@ -12,45 +12,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const addedWordsContainer = document.getElementById('addedWordsContainer');
     const englishWordInput = document.getElementById('englishWord');
     const japaneseMeaningInput = document.getElementById('japaneseMeaning');
+
     const selectElement = document.getElementById('mySelect');
 
-    // **初期化処理**
-    startNumberElement.value = '';
-    endNumberElement.value = '';
-    questionCountElement.value = '';
-    startNumberElement.min = 1;
-    endNumberElement.max = 1000;
-
-
-    // **教材選択時に範囲を動的に設定**
+    // 教材選択時に範囲を動的に設定
     selectElement.addEventListener('change', function () {
         const selectedOption = this.value;
-    
+
         if (textData[selectedOption]) {
             startNumberElement.min = 1;
-            startNumberElement.value = ''; // デフォルト値を空にする
             endNumberElement.max = textData[selectedOption].count;
-            endNumberElement.value = ''; // デフォルト値を空にする
-            questionCountElement.value = ''; // 表示は空欄
-    
+            endNumberElement.value = textData[selectedOption].count;
+
             console.log(`選択された教材: ${textData[selectedOption].name}, 範囲: 1～${textData[selectedOption].count}`);
         } else {
             startNumberElement.min = 1;
             endNumberElement.max = 1000;
-            startNumberElement.value = '';
-            endNumberElement.value = '';
-            questionCountElement.value = '';
+            endNumberElement.value = 1000;
         }
-    
-        validateForm();
-    });    
+    });
 
-    // **高度なオプションの表示切り替え**
     toggleButton.onclick = () => {
         advancedOptions.style.display = (advancedOptions.style.display === "none") ? "block" : "none";
     };
 
-    // **穴埋め問題チェック**
     fillInTheBlanks.onchange = () => {
         const isChecked = fillInTheBlanks.checked;
         questionCountElement.disabled = isChecked;
@@ -61,45 +46,25 @@ document.addEventListener('DOMContentLoaded', () => {
         validateForm();
     };
 
-    // **フォームのバリデーション**
     function validateForm() {
-        const startNumber = parseInt(startNumberElement.value, 10);
-        const endNumber = parseInt(endNumberElement.value, 10);
-        const min = parseInt(startNumberElement.min, 10);
-        const max = parseInt(endNumberElement.max, 10);
-    
-        // **デフォルト問題数（内部変数で保持）**
-        let questionCount = parseInt(questionCountElement.value, 10);
-        if (isNaN(questionCount)) {
-            questionCount = 25; // 入力されていない場合はデフォルト値を使用
-        }
-    
+        const startNumber = parseInt(startNumberElement.value);
+        const endNumber = parseInt(endNumberElement.value);
+        const min = parseInt(startNumberElement.min);
+        const max = parseInt(endNumberElement.max);
+        const questionCount = parseInt(questionCountElement.value) || 25;
         const addedWordsCount = addedWordsContainer.querySelectorAll('.added-word').length;
-    
-        // **範囲のバリデーション**
-        const isValidRange = (
-            !isNaN(startNumber) &&
-            !isNaN(endNumber) &&
-            startNumber >= min &&
-            endNumber <= max &&
-            startNumber <= endNumber
+
+        submitButton.disabled = (
+            isNaN(startNumber) || isNaN(endNumber) ||
+            startNumber < min || endNumber > max ||
+            startNumber > endNumber || questionCount <= addedWordsCount
         );
-    
-        // **問題数のバリデーション**
-        const isValidQuestionCount = (
-            !isNaN(questionCount) &&
-            questionCount > 0 // 問題数は0以上であること
-        );
-    
-        // **最終的な判定**
-        submitButton.disabled = !isValidRange || !isValidQuestionCount;
-    }    
-    
+    }
+
     startNumberElement.oninput = validateForm;
     endNumberElement.oninput = validateForm;
     questionCountElement.oninput = validateForm;
 
-    // **フォーム送信時の確認**
     form.onsubmit = (event) => {
         validateForm();
         if (submitButton.disabled) {
@@ -109,9 +74,8 @@ document.addEventListener('DOMContentLoaded', () => {
             form.action = fillInTheBlanks.checked ? fillInTheBlankUrl : generateWordsUrl;
             loader.style.display = "inline-block";
         }
-    };    
+    };
 
-    // **単語追加ボタン**
     addWordButton.onclick = () => {
         const englishWord = englishWordInput.value;
         const japaneseMeaning = japaneseMeaningInput.value;
@@ -130,7 +94,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 });
 
-// **単語削除ボタン**
 function removeWord(button) {
     button.parentElement.remove();
     validateForm();

@@ -23,4 +23,5 @@ urlpatterns = [
     path('fill_in_the_blank/', include('fill_in_the_blank.urls')),
     path('csv_set/', include('csvManager.urls')),
     path('structuredTest/', include('structuredTest.urls')),
+    path('flatTestMaker/', include('flatTestMaker.urls')),
 ]

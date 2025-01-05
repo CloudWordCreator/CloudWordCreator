@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <title>英単語テスト作成</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'flatTestMaker/css/style.css' %}">
-    <script src="{% static 'flatTestMaker/js/scripts.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'flatTestMaker/css/setting_style.css' %}">
+    <script src="{% static 'flatTestMaker/js/setting_scripts.js' %}"></script>
 </head>
 <body>
     <div class="header">
@@ -17,32 +17,26 @@
         </form>
     </div>
     <div class="container">
+        {% load custom_filters %}
         <div class="description">
             <p>単語の範囲:</p>
             <ul>
-                <li>中学英単語1000 : 1～1000</li>
-                <li>システム英単語 : 1～2027</li>
-                <li>ターゲット1900 : 1～1900</li>
-                <li>でる順5級 : 1～690</li>
-                <li>でる順4級 : 1～800</li>
-                <li>でる順3級 : 1～1300</li>
-                <li>でる順準2級 : 1～1632</li>
-                <li>でる順2級 : 1～1838</li>
+                {% for text in texts %}
+                    <li>
+                        {{ text.name }} : 1 ～ {{ text_counts|get_item:text.id }}
+                    </li>
+                {% endfor %}
             </ul>
         </div>
-        <form id="generateForm" method="POST" action="{% url 'generate_words' %}">
+        <!-- 暫定:作成ボタンを押しても、再度同じ画面に飛ぶようにしている -->
+        <form id="generateForm" method="POST" action="{% url 'generate' %}">
             {% csrf_token %}
             <div class="form-group">
                 <label for="mySelect">指定する教材:</label>
                 <select id="mySelect" name="mySelect">
-                    <option value="option1">中学英単語1000</option>
-                    <option value="option2">システム英単語</option>
-                    <option value="option3">ターゲット1900</option>
-                    <option value="option4">でる順5級</option>
-                    <option value="option5">でる順4級</option>
-                    <option value="option6">でる順3級</option>
-                    <option value="option7">でる順準2級</option>
-                    <option value="option8">でる順2級</option>
+                    {% for text in texts %}
+                        <option value="{{ text.id }}">{{ text.name }}</option>
+                    {% endfor %}
                 </select>
             </div>
             <div class="form-group">
@@ -82,5 +76,15 @@
             </div>
         </form>
     </div>
+    <script>
+        const textData = {
+            {% for text in texts %}
+                "{{ text.id }}": {
+                    "name": "{{ text.name }}",
+                    "count": {{ text_counts|get_item:text.id }}
+                },
+            {% endfor %}
+        };
+    </script>
 </body>
 </html>

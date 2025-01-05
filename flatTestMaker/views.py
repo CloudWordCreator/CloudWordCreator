@@ -1,5 +1,7 @@
 from django.shortcuts import render
-from csvManager.models import NoUnitWord
+from csvManager.models import Text, NoUnitWord
+import random
+from django.db.models import Min, Max
 
 # デフォルトの問題数 
 DEFAULT_COUNTS = 25
@@ -9,7 +11,14 @@ def settings(request):
     """
     情報を入力するページ 
     """
-    return render(request, 'setting.html')
+    # NoUnitWordに関連するTextを取得
+    texts = Text.objects.filter(no_unit_words__isnull=False).distinct()
+    text_counts = {text.id: text.no_unit_words.count() for text in texts}
+    
+    return render(request, 'setting.html', {
+        'texts': texts,
+        'text_counts': text_counts,
+    })
 
 def search(request):
     """
@@ -26,6 +35,17 @@ def generate_words(request):
     単語を生成するページ 
     """
     pass
+    """
+    暫定の返り値
+    return render(request, 'generated_samples25.html', {
+        'words' : words,
+        'selected_text': selected_text,
+        'start_range': start_range,
+        'end_range': end_range,
+        'question_count': question_count
+        }
+    )
+    """
 
 def generate_sentences(request):
     """

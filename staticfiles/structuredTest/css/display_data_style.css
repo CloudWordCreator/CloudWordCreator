@@ -1,0 +1,18 @@
+.nested {
+    display: none;
+}
+.active {
+    display: block;
+}
+.fixed-sidebar {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 300px;
+    height: 800px;
+    background-color: #f8f9fa;
+    padding: 10px;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow-y: auto; /* コンテンツが多い場合にスクロール可能にする */
+}
