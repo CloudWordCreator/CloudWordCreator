@@ -10,10 +10,19 @@
 <body>
     <div class="header">
         <form method="GET" action="{% url 'search' %}">
-            <input type="text" name="q" placeholder="単語を検索">
-            <button type="submit">
-                <img src="{% static 'images/searchicon.png' %}" alt="検索">
-            </button>
+            {% csrf_token %}
+            <div class="search-form">
+                <select id="mySelect" name="mySelect">
+                    <option value="">全ての教材</option>
+                    {% for text in texts %}
+                        <option value="{{ text.id }}" {% if text.id|stringformat:"s" == selected_text_id %}selected{% endif %}>{{ text.name }}</option>
+                    {% endfor %}
+                </select>
+                <input type="text" name="q" placeholder="単語を検索">
+                <button type="submit">
+                    <img src="{% static 'images/searchicon.png' %}" alt="検索">
+                </button>
+            </div>
         </form>
     </div>
     <div class="container">

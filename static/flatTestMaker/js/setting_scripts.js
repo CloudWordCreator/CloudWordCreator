@@ -33,7 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
             endNumberElement.value = ''; // デフォルト値を空にする
             questionCountElement.value = ''; // 表示は空欄
     
-            console.log(`選択された教材: ${textData[selectedOption].name}, 範囲: 1～${textData[selectedOption].count}`);
         } else {
             startNumberElement.min = 1;
             endNumberElement.max = 1000;

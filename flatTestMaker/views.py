@@ -26,13 +26,18 @@ def search(request):
     テキスト事の検索と全ての検索付けて、日本語英語の検索に対応させる 
     """
     query = request.GET.get('q')
+    selected_text_id = request.GET.get('mySelect')
     results = []
     if query:
         results = NoUnitWord.objects.filter(
             models.Q(english__icontains=query) | models.Q(japanese__icontains=query)
         ).select_related('text')
-    
-    return render(request, 'flatTest_search_results.html', {'results': results})
+        if selected_text_id:
+            results = results.filter(text_id=selected_text_id)
+    return render(request, 'flatTest_search_results.html', {
+        'results': results,
+        'selected_text_id': selected_text_id,
+    })
 
 def generate_words(request):
     """

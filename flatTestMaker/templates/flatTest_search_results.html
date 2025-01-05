@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>検索結果</h1>
-    <table border="1">
+    <table>
         <tr>
             <th>テキスト</th>
             <th>番号</th>
@@ -16,10 +16,14 @@
         </tr>
         {% for result in results %}
         <tr>
-            <td>{{ result.text }}</td>
+            <td>{{ result.text.name }}</td>
             <td>{{ result.no }}</td>
             <td>{{ result.english }}</td>
             <td>{{ result.japanese }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4">該当する結果はありません。</td>
         </tr>
         {% endfor %}
     </table>
