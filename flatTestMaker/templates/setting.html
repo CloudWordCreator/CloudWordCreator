@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>英単語テスト作成</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'flatTestMaker/css/style.css' %}">
+    <script src="{% static 'flatTestMaker/js/scripts.js' %}"></script>
+</head>
+<body>
+    <div class="header">
+        <form method="GET" action="{% url 'search' %}">
+            <input type="text" name="q" placeholder="単語を検索">
+            <button type="submit">
+                <img src="{% static 'images/searchicon.png' %}" alt="検索">
+            </button>
+        </form>
+    </div>
+    <div class="container">
+        <div class="description">
+            <p>単語の範囲:</p>
+            <ul>
+                <li>中学英単語1000 : 1～1000</li>
+                <li>システム英単語 : 1～2027</li>
+                <li>ターゲット1900 : 1～1900</li>
+                <li>でる順5級 : 1～690</li>
+                <li>でる順4級 : 1～800</li>
+                <li>でる順3級 : 1～1300</li>
+                <li>でる順準2級 : 1～1632</li>
+                <li>でる順2級 : 1～1838</li>
+            </ul>
+        </div>
+        <form id="generateForm" method="POST" action="{% url 'generate_words' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="mySelect">指定する教材:</label>
+                <select id="mySelect" name="mySelect">
+                    <option value="option1">中学英単語1000</option>
+                    <option value="option2">システム英単語</option>
+                    <option value="option3">ターゲット1900</option>
+                    <option value="option4">でる順5級</option>
+                    <option value="option5">でる順4級</option>
+                    <option value="option6">でる順3級</option>
+                    <option value="option7">でる順準2級</option>
+                    <option value="option8">でる順2級</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="startNumber">作成する範囲 (開始):</label>
+                <input type="number" id="startNumber" name="startNumber" min="1">
+            </div>
+            <div class="form-group">
+                <label for="endNumber">作成する範囲 (終了):</label>
+                <input type="number" id="endNumber" name="endNumber" max="1000">
+            </div>
+            <button type="button" id="toggleAdvancedOptions" class="toggle-button">高度なオプションを表示</button>
+            <div id="advancedOptions" class="advanced-options">
+                <div class="form-group tooltip">
+                    <input type="checkbox" id="fillInTheBlanks" name="fillInTheBlanks"> 穴埋め問題
+                    <span class="tooltiptext">穴埋め問題は、文中の単語を空欄にして解答する形式です。<br>
+                        人工知能Gemini 1.5 Flashを使用しています。<br>
+                        動作が不安定・難易度調節が難しい場合があります。その場合は最初から再度作成してください。</span>
+                    </span>
+                </div>
+                <div class="form-group">
+                    <label for="questionCount">問題数の変更:</label>
+                    <input type="number" id="questionCount" name="questionCount" min="1" max="50">
+                </div>
+                <div class="form-group">
+                    <label>追加する単語:</label>
+                    <div class="add-word-container">
+                        <input type="text" id="englishWord" placeholder="英語">
+                        <input type="text" id="japaneseMeaning" placeholder="日本語の意味">
+                        <button type="button" id="addWordButton">+</button>
+                    </div>
+                    <div id="addedWordsContainer" class="added-words"></div>
+                </div>
+            </div>
+            <div class="form-group" style="margin-top: 20px;">
+                <button id="myButton" type="submit" disabled>作成</button>
+                <div id="loader" class="loader"></div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
