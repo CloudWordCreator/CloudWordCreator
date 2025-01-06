@@ -12,7 +12,7 @@
         <form method="GET" action="{% url 'search' %}">
             {% csrf_token %}
             <div class="search-form">
-                <select id="mySelect" name="mySelect">
+                <select id="searchSelect" name="searchSelect">
                     <option value="">全ての教材</option>
                     {% for text in texts %}
                         <option value="{{ text.id }}" {% if text.id|stringformat:"s" == selected_text_id %}selected{% endif %}>{{ text.name }}</option>
