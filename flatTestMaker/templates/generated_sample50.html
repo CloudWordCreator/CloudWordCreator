@@ -9,12 +9,10 @@
 </head>
 <body>
     <h1>生成された英単語</h1>
-    <div class="tab-buttons">
-        <button id="english-to-japanese-button" class="button">英語→日本語</button>
-        <button id="japanese-to-english-button" class="button">日本語→英語</button>
-        <button onclick="printContent()" class="button">印刷</button>
-        <a href="{% url 'index' %}">戻る</a>
-    </div>
+    <button id="english-to-japanese-button" class="button">英語→日本語</button>
+    <button id="japanese-to-english-button" class="button">日本語→英語</button>
+    <button onclick="printContent()" class="button">印刷</button>
+    <a href="{% url 'settings' %}">戻る</a>
     <div class="print-area">
         <div id="english-to-japanese-content" class="tab">
             <div class="printer-setting">
@@ -28,7 +26,7 @@
                         {% for word in words_first_half %}
                         <tr>
                             <td>{{ forloop.counter }}</td>
-                            <td>{{ word.word }}</td>
+                            <td>{{ word.english }}</td>
                             <td></td>
                         </tr>
                         {% endfor %}
@@ -42,7 +40,7 @@
                         {% for word in words_second_half %}
                         <tr>
                             <td>{{ forloop.counter|add:25 }}</td>
-                            <td>{{ word.word }}</td>
+                            <td>{{ word.english }}</td>
                             <td></td>
                         </tr>
                         {% endfor %}
@@ -63,8 +61,8 @@
                         {% for word in words_first_half %}
                         <tr>
                             <td>{{ forloop.counter }}</td>
-                            <td>{{ word.word }}</td>
-                            <td>{{ word.meaning }}</td>
+                            <td>{{ word.english }}</td>
+                            <td>{{ word.japanese }}</td>
                         </tr>
                         {% endfor %}
                     </table>
@@ -77,8 +75,8 @@
                         {% for word in words_second_half %}
                         <tr>
                             <td>{{ forloop.counter|add:25 }}</td>
-                            <td>{{ word.word }}</td>
-                            <td>{{ word.meaning }}</td>
+                            <td>{{ word.englsih }}</td>
+                            <td>{{ word.japanese }}</td>
                         </tr>
                         {% endfor %}
                     </table>
@@ -100,7 +98,7 @@
                         {% for word in words_first_half %}
                         <tr>
                             <td>{{ forloop.counter }}</td>
-                            <td>{{ word.meaning }}</td>
+                            <td>{{ word.japanese }}</td>
                             <td></td>
                         </tr>
                         {% endfor %}
@@ -114,7 +112,7 @@
                         {% for word in words_second_half %}
                         <tr>
                             <td>{{ forloop.counter|add:25 }}</td>
-                            <td>{{ word.meaning }}</td>
+                            <td>{{ word.japanese }}</td>
                             <td></td>
                         </tr>
                         {% endfor %}
@@ -135,8 +133,8 @@
                         {% for word in words_first_half %}
                         <tr>
                             <td>{{ forloop.counter }}</td>
-                            <td>{{ word.meaning }}</td>
-                            <td>{{ word.word }}</td>
+                            <td>{{ word.japanese }}</td>
+                            <td>{{ word.englsih }}</td>
                         </tr>
                         {% endfor %}
                     </table>
@@ -149,8 +147,8 @@
                         {% for word in words_second_half %}
                         <tr>
                             <td>{{ forloop.counter|add:25 }}</td>
-                            <td>{{ word.meaning }}</td>
-                            <td>{{ word.word }}</td>
+                            <td>{{ word.japanese }}</td>
+                            <td>{{ word.english }}</td>
                         </tr>
                         {% endfor %}
                     </table>
@@ -161,5 +159,26 @@
             </div>
         </div>
     </div>
+    <script>
+        // **タブ切り替え**
+        function showTab(tabId) {
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.style.display = 'none';
+            });
+            document.getElementById(tabId).style.display = 'block';
+        }
+
+        document.getElementById('english-to-japanese-button').addEventListener('click', function() {
+            showTab('english-to-japanese-content');
+        });
+
+        document.getElementById('japanese-to-english-button').addEventListener('click', function() {
+            showTab('japanese-to-english-content');
+        });
+
+        // 初期表示を設定
+        showTab('english-to-japanese-content');
+    </script>
 </body>
 </html>

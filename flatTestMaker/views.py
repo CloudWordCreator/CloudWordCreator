@@ -42,6 +42,8 @@ def search(request):
 def generate_words(request):
     """
     単語を生成するページ
+    問題数が25以下の場合 sample25.htmlを使用
+    問題数が25以上の場合 sample50.htmlを使用
     """
     if request.method == 'POST':
         # フォームからの情報を取得
@@ -77,14 +79,31 @@ def generate_words(request):
         if count <= 25:
             while len(words) < 25:
                 words.append("")
-
-        return render(request, 'generated_sample25.html', {
-            'words': words,
-            'selected_text': text,
-            'start_range': start_range,
-            'end_range': end_range,
-            'question_count': count,
-        })
+            
+            return render(request, 'generated_sample25.html', {
+                'words': words,
+                'selected_text': text,
+                'start_range': start_range,
+                'end_range': end_range,
+                'question_count': count,
+            })
+        else:
+            while len(words) < 50:
+                words.append("")
+            words_first_half = words[:25]
+            words_second_half = words[25:]
+            number_first_half = [i for i in range(1, 26)]
+            number_secound_half = [i for i in range(26, 51)]
+            return render(request, 'generated_sample50.html', {
+                'words_first_half': words_first_half,
+                'words_second_half': words_second_half,
+                'number_first_half': number_first_half,
+                'number_secound_half': number_secound_half,
+                'amount_count': count,
+                'selected_text': text,
+                'start_range': start_range,
+                'end_range': end_range,
+            })
 
 def generate_sentences(request):
     """
