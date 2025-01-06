@@ -45,11 +45,13 @@ def generate_words(request):
     """
     if request.method == 'POST':
         # フォームからの情報を取得
-        text = request.POST.get('mySelect')
+        text_id = request.POST.get('mySelect')
         start_range = int(request.POST.get('startNumber'))
         end_range = int(request.POST.get('endNumber'))
         question_count = request.POST.get('questionCount')
         mandatory_words = request.POST.getlist('mandatoryWords[]')
+
+        text = Text.objects.get(id=text_id).name
 
         # 問題数の設定
         # デフォルト値(フォームが空)ならDEFAULT_COUNTを使用
@@ -64,11 +66,11 @@ def generate_words(request):
             count = range_size
         
         ids = random.sample(range(start_range, end_range + 1), count)
-        words = list(NoUnitWord.objects.filter(text_id=text, no__in=ids))
+        words = list(NoUnitWord.objects.filter(text_id=text_id, no__in=ids))
         
         for mondatory_word in mandatory_words:
             english_word, japanese_word = mondatory_word.split(':')
-            words.append({'word': english_word, 'meaning': japanese_word})
+            words.append({'english': english_word, 'japanese': japanese_word})
         
         random.shuffle(words)
         
@@ -81,7 +83,7 @@ def generate_words(request):
             'selected_text': text,
             'start_range': start_range,
             'end_range': end_range,
-            'question_count': question_count,
+            'question_count': count,
         })
 
 def generate_sentences(request):

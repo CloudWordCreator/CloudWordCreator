@@ -33,7 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
             endNumberElement.value = ''; // デフォルト値を空にする
             questionCountElement.value = ''; // 表示は空欄
     
-            console.log(`選択された教材: ${textData[selectedOption].name}, 範囲: 1～${textData[selectedOption].count}`);
         } else {
             startNumberElement.min = 1;
             endNumberElement.max = 1000;
@@ -119,9 +118,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (englishWord && japaneseMeaning) {
             const wordElement = document.createElement('div');
             wordElement.className = 'added-word';
-            wordElement.innerHTML = `<span>${englishWord} | ${japaneseMeaning}</span>
-                                     <button type="button" onclick="removeWord(this)">×</button>`;
-            addedWordsContainer.appendChild(wordElement);
+            wordElement.innerHTML = '<span>' + englishWord + ' | ' + japaneseMeaning + '</span>' +
+                                            '<button type="button" onclick="removeWord(this)">×</button>' +
+                                            '<input type="hidden" name="mandatoryWords[]" value="' + englishWord + ':' + japaneseMeaning + '">';
+                    addedWordsContainer.appendChild(wordElement);
 
             englishWordInput.value = '';
             japaneseMeaningInput.value = '';
@@ -135,3 +135,23 @@ function removeWord(button) {
     button.parentElement.remove();
     validateForm();
 }
+
+// **タブ切り替え**
+function showTab(tabId) {
+    const tabs = document.querySelectorAll('.tab');
+    tabs.forEach(tab => {
+        tab.style.display = 'none';
+    });
+    document.getElementById(tabId).style.display = 'block';
+}
+
+document.getElementById('english-to-japanese-button').addEventListener('click', function() {
+    showTab('english-to-japanese-content');
+});
+
+document.getElementById('japanese-to-english-button').addEventListener('click', function() {
+    showTab('japanese-to-english-content');
+});
+
+// 初期表示を設定
+showTab('english-to-japanese-content');

@@ -118,9 +118,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (englishWord && japaneseMeaning) {
             const wordElement = document.createElement('div');
             wordElement.className = 'added-word';
-            wordElement.innerHTML = `<span>${englishWord} | ${japaneseMeaning}</span>
-                                     <button type="button" onclick="removeWord(this)">×</button>`;
-            addedWordsContainer.appendChild(wordElement);
+            wordElement.innerHTML = '<span>' + englishWord + ' | ' + japaneseMeaning + '</span>' +
+                                            '<button type="button" onclick="removeWord(this)">×</button>' +
+                                            '<input type="hidden" name="mandatoryWords[]" value="' + englishWord + ':' + japaneseMeaning + '">';
+                    addedWordsContainer.appendChild(wordElement);
 
             englishWordInput.value = '';
             japaneseMeaningInput.value = '';
