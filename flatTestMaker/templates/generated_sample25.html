@@ -12,7 +12,7 @@
     <button id="english-to-japanese-button" class="button">英語→日本語</button>
     <button id="japanese-to-english-button" class="button">日本語→英語</button>
     <button onclick="printContent()" class="button">印刷</button>
-    <a href="{% url 'index' %}">戻る</a>
+    <a href="{% url 'settings' %}">戻る</a>
     <div class="print-area">
         <div id ="english-to-japanese-content" class="tab">
             <div class="printer-setting">
@@ -27,7 +27,7 @@
                         <tr>
                             <td>{{ forloop.counter }}</td>
                             <td></td>
-                            <td>{{ word.word }}</td>
+                            <td>{{ word.english}}</td>
                             <td></td>
                         </tr>
                         {% endfor %}
@@ -48,8 +48,8 @@
                     <tr>
                         <td>{{ forloop.counter }}</td>
                         <td></td>
-                        <td>{{ word.word }}</td>
-                        <td>{{ word.meaning }}</td>
+                        <td>{{ word.english }}</td>
+                        <td>{{ word.japanese }}</td>
                     </tr>
                     {% endfor %}
                 </table>

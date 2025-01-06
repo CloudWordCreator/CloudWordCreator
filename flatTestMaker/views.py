@@ -4,7 +4,7 @@ from django.db import models
 import random
 
 # デフォルトの問題数 
-DEFAULT_COUNTS = 25
+DEFAULT_COUNT = 25
 
 # Create your views here.
 def settings(request):
@@ -41,20 +41,48 @@ def search(request):
 
 def generate_words(request):
     """
-    単語を生成するページ 
+    単語を生成するページ
     """
-    pass
-    """
-    暫定の返り値
-    return render(request, 'generated_samples25.html', {
-        'words' : words,
-        'selected_text': selected_text,
-        'start_range': start_range,
-        'end_range': end_range,
-        'question_count': question_count
-        }
-    )
-    """
+    if request.method == 'POST':
+        # フォームからの情報を取得
+        text = request.POST.get('mySelect')
+        start_range = int(request.POST.get('startNumber'))
+        end_range = int(request.POST.get('endNumber'))
+        question_count = request.POST.get('questionCount')
+        mandatory_words = request.POST.getlist('mandatoryWords[]')
+
+        # 問題数の設定
+        # デフォルト値(フォームが空)ならDEFAULT_COUNTを使用
+        # そうでない場合はフォームの値を使用
+        count = int(question_count) if question_count else DEFAULT_COUNT
+        count -= len(mandatory_words)
+        
+        # 範囲の設定 
+        range_size = end_range - start_range + 1
+        if count > range_size:
+            # 問題数が範囲の数を超えている場合、範囲の下図に合わせる 
+            count = range_size
+        
+        ids = random.sample(range(start_range, end_range + 1), count)
+        words = list(NoUnitWord.objects.filter(text_id=text, no__in=ids))
+        
+        for mondatory_word in mandatory_words:
+            english_word, japanese_word = mondatory_word.split(':')
+            words.append({'word': english_word, 'meaning': japanese_word})
+        
+        random.shuffle(words)
+        
+        if count <= 25:
+            while len(words) < 25:
+                words.append("")
+
+        return render(request, 'generated_sample25.html', {
+            'words': words,
+            'selected_text': text,
+            'start_range': start_range,
+            'end_range': end_range,
+            'question_count': question_count,
+        })
 
 def generate_sentences(request):
     """
