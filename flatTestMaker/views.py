@@ -2,6 +2,7 @@ from django.shortcuts import render
 from csvManager.models import Text, NoUnitWord
 from django.db import models
 import random
+from . import ai_prompt as prompt
 
 # デフォルトの問題数 
 DEFAULT_COUNT = 25
@@ -110,4 +111,25 @@ def generate_sentences(request):
     文を生成するページ 
     gemini flash 1.5のAPIを使用して文を生成する。 
     """
-    pass
+    if request.method == 'POST':
+        # フォームから情報を取得 
+        text_id = request.POST.get('mySelect')
+        start_range = int(request.POST.get('startNumber'))
+        end_range = int(request.POST.get('endNumber'))
+        
+        text = Text.objects.get(id=text_id).name
+
+        # 範囲の設定
+        ids = random.sample(range(start_range, end_range + 1), DEFAULT_COUNT)
+        words = list(NoUnitWord.objects.filter(text_id=text_id, no__in=ids))
+        phrase = prompt.ai_prompt(words, DEFAULT_COUNT)
+        options = words.copy()
+        random.shuffle(options)
+
+        return render(request, 'sentence_result.html',{
+                'fill_in_the_blank': phrase,
+                'text' : text,
+                'start_number': start_range,
+                'end_number': end_range,
+                'options': options,
+        })

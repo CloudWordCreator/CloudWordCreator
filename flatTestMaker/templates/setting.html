@@ -37,8 +37,7 @@
                 {% endfor %}
             </ul>
         </div>
-        <!-- 暫定:作成ボタンを押しても、再度同じ画面に飛ぶようにしている -->
-        <form id="generateForm" method="POST" action="{% url 'generate' %}">
+        <form id="generateForm" method="POST" action="">
             {% csrf_token %}
             <div class="form-group">
                 <label for="mySelect">指定する教材:</label>
@@ -86,6 +85,8 @@
         </form>
     </div>
     <script>
+        const generateWordsUrl = "{% url 'generate_words' %}";
+        const generateSentencesUrl = "{% url 'generate_sentences' %}";
         const textData = {
             {% for text in texts %}
                 "{{ text.id }}": {

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>穴埋め問題結果</title>
+    {% load static %}
+    <link href="{% static 'css/style.css' %}" media="print" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="{% static 'flatTestMaker/css/sentence_result_style.css' %}">
+    <script src="{% static 'flatTestMaker/js/sentence_result_scripts.js' %}"></script>
+</head>
+<body>
+    <h1>穴埋め問題結果</h1>
+    <button id="japanese-available-button" class="button">日本語あり選択肢無し</button>
+    <button id="japanese-unavailable-button" class="button">日本語なし選択肢有り</button>
+    <button onclick="printContent()" class="button">印刷</button>
+    <div class="button-container">
+        <button class="reload-button" onclick="reloadPage()">再生成</button>
+        <a href="{% url 'settings' %}" class="back-button">戻る</a>
+    </div>
+    {% if fill_in_the_blank and options %}
+        <div class="print-area">
+            <!-- 日本語あり -->
+            <div id="japanese-available-content" class="tab">
+                <p>{{ text }}</p>
+                <p>{{ start_number }} ～ {{ end_number }}</p>
+                
+                {% if fill_in_the_blank.error %}
+                    <div class="error-message">{{ fill_in_the_blank.error }}</div>
+                    <pre>{{ fill_in_the_blank.response_text }}</pre>
+                {% else %}
+                    <!-- 問題部分: 13問ごとに分割 -->
+                    {% for item in fill_in_the_blank %}
+                        {% if forloop.counter0|divisibleby:13 %}
+                            {% if not forloop.first %}
+                                </div>
+                            {% endif %}
+                            <div class="printer-setting">
+                        {% endif %}
+                            <div class="question">
+                                <div class="question-number">{{ item.number }}</div>
+                                <div class="japanese">{{ item.Japanese }}</div>
+                                <div class="question-phrase">{{ item.questionPhrase }}</div>
+                            </div>
+                        {% if forloop.last %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+
+                <!-- 解答部分: 分割せず1枚にまとめる -->
+                <!-- 左側に 1 ~ 13問 右側に 14 ~ 25問を表示するようにする。 -->
+                <div class="printer-setting">
+                    <p>解答</p>
+                    {% for item in fill_in_the_blank %}
+                        <div class="question">
+                            <div class="question-number">{{ item.number }}</div>
+                            <div class="answer-word">{{ item.answerWord }}</div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- 日本語なし -->
+            <!-- 表示されているが余分な空白が多いため再度レイアウトを考える -->
+            <div id="japanese-unavailable-content" class="tab">
+                <!-- 1枚目: 選択肢 + 1～5問目 -->
+                <div class="printer-setting">
+                    <p>{{ text }}</p>
+                    <p>{{ start_number }} ～ {{ end_number }}</p>
+                    <p>選択肢</p>
+                    <div class="options-grid">
+                        {% for option in options %}
+                            <div class="option-item">{{ option.english }}</div>
+                        {% endfor %}
+                    </div>
+            
+                    {% for item in fill_in_the_blank %}
+                        {% if forloop.counter <= 5 %}
+                            <div class="question">
+                                <div class="question-number">{{ item.number }}</div>
+                                <div class="question-phrase">{{ item.questionPhrase }}</div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            
+                <!-- 2枚目: 6～10問目 -->
+                {% if fill_in_the_blank|length > 5 %}
+                <div class="printer-setting">
+                    {% for item in fill_in_the_blank %}
+                        {% if forloop.counter > 5 and forloop.counter <= 25 %}
+                            <div class="question">
+                                <div class="question-number">{{ item.number }}</div>
+                                <div class="question-phrase">{{ item.questionPhrase }}</div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+            
+                <!-- 3枚目: 解答 -->
+                <div class="printer-setting">
+                    <p>解答</p>
+                    {% for item in fill_in_the_blank %}
+                        <div class="question-number">{{ item.number }}</div>
+                        <div class="japanese">{{ item.Japanese }}</div>
+                        <div class="answer-word">{{ item.answerWord }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    <script>
+        function showTab(tabId) {
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.style.display = 'none';
+            });
+            document.getElementById(tabId).style.display = 'block';
+        }
+        
+        document.getElementById('japanese-available-button').addEventListener('click', function() {
+            showTab('japanese-available-content');
+        });
+        
+        document.getElementById('japanese-unavailable-button').addEventListener('click', function() {
+            showTab('japanese-unavailable-content');
+        });
+        
+        // 初期状態で表示するタブを設定
+        showTab('japanese-available-content');
+    </script>
+</body>
+</html>
