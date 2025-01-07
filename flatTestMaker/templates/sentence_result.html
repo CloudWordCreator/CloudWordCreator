@@ -49,32 +49,49 @@
                 <!-- 解答部分: 分割せず1枚にまとめる -->
                 <!-- 左側に 1 ~ 13問 右側に 14 ~ 25問を表示するようにする。 -->
                 <div class="printer-setting">
+                    <!-- 解答部分: 左右に分割 -->
                     <p>解答</p>
-                    {% for item in fill_in_the_blank %}
-                        <div class="question">
-                            <div class="question-number">{{ item.number }}</div>
-                            <div class="answer-word">{{ item.answerWord }}</div>
+                    <div class="printer-setting answers-split">
+                        <div class="answers-left">
+                            {% for item in fill_in_the_blank %}
+                                {% if forloop.counter <= 13 %}
+                                    <div class="question">
+                                        <div class="question-number">{{ item.number }}</div>
+                                        <div class="answer-word">{{ item.answerWord }}</div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
                         </div>
-                    {% endfor %}
+                        <div class="answers-right">
+                            {% for item in fill_in_the_blank %}
+                                {% if forloop.counter > 13 %}
+                                    <div class="question">
+                                        <div class="question-number">{{ item.number }}</div>
+                                        <div class="answer-word">{{ item.answerWord }}</div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <!-- 日本語なし -->
             <!-- 表示されているが余分な空白が多いため再度レイアウトを考える -->
             <div id="japanese-unavailable-content" class="tab">
-                <!-- 1枚目: 選択肢 + 1～5問目 -->
+                <!-- 1枚目: 選択肢 + 1～10問目 -->
                 <div class="printer-setting">
-                    <p>{{ text }}</p>
-                    <p>{{ start_number }} ～ {{ end_number }}</p>
-                    <p>選択肢</p>
+                    <h3>{{ text }}</h3>
+                    <p>範囲: {{ start_number }} ～ {{ end_number }}</p>
+                    <h4>選択肢</h4>
                     <div class="options-grid">
                         {% for option in options %}
                             <div class="option-item">{{ option.english }}</div>
                         {% endfor %}
                     </div>
-            
+                    <h4>1～10問目</h4>
                     {% for item in fill_in_the_blank %}
-                        {% if forloop.counter <= 5 %}
+                        {% if forloop.counter <= 10 %}
                             <div class="question">
                                 <div class="question-number">{{ item.number }}</div>
                                 <div class="question-phrase">{{ item.questionPhrase }}</div>
@@ -82,12 +99,12 @@
                         {% endif %}
                     {% endfor %}
                 </div>
-            
-                <!-- 2枚目: 6～10問目 -->
-                {% if fill_in_the_blank|length > 5 %}
+                
+                <!-- 2枚目: 11～25問目 -->
                 <div class="printer-setting">
+                    <h4>11～25問目</h4>
                     {% for item in fill_in_the_blank %}
-                        {% if forloop.counter > 5 and forloop.counter <= 25 %}
+                        {% if forloop.counter > 10 %}
                             <div class="question">
                                 <div class="question-number">{{ item.number }}</div>
                                 <div class="question-phrase">{{ item.questionPhrase }}</div>
@@ -95,16 +112,34 @@
                         {% endif %}
                     {% endfor %}
                 </div>
-                {% endif %}
             
                 <!-- 3枚目: 解答 -->
                 <div class="printer-setting">
-                    <p>解答</p>
-                    {% for item in fill_in_the_blank %}
-                        <div class="question-number">{{ item.number }}</div>
-                        <div class="japanese">{{ item.Japanese }}</div>
-                        <div class="answer-word">{{ item.answerWord }}</div>
-                    {% endfor %}
+                    <!-- 解答部分: 左右に分割 (1～12問左、13～25問右) -->
+                    <div class="printer-setting answers-split">
+                        <div class="answers-left">
+                            {% for item in fill_in_the_blank %}
+                                {% if forloop.counter <= 12 %}
+                                    <div class="question">
+                                        <div class="question-number">{{ item.number }}</div>
+                                        <div class="japanese">{{ item.Japanese }}</div>
+                                        <div class="answer-word">{{ item.answerWord }}</div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <div class="answers-right">
+                            {% for item in fill_in_the_blank %}
+                                {% if forloop.counter > 12 %}
+                                    <div class="question">
+                                        <div class="question-number">{{ item.number }}</div>
+                                        <div class="japanese">{{ item.Japanese }}</div>
+                                        <div class="answer-word">{{ item.answerWord }}</div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
