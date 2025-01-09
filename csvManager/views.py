@@ -12,9 +12,19 @@ def upload_csv(request):
         fs = FileSystemStorage(location=settings.CSV_UPLOAD_DIR)
         filename = fs.save(csv_file.name, csv_file)
         file_path = fs.path(filename)
-        import_csv(file_path, text_name)
-        # データベースに書き込んだ後、CSVファイルを削除
-        os.remove(file_path)
+        try:
+            import_csv(file_path, text_name)
+            # データベースに書き込んだ後、CSVファイルを削除
+            os.remove(file_path)
+        except KeyError as e:
+            # ヘッダーのエラーが発生した場合 
+            os.remove(file_path)
+            error_text = f"CSVファイルのヘッダーが不正です: {e}"
+            return render(request, 'failed.html', {'error': error_text})
+        except ValueError as e:
+            os.remove(file_path)
+            # エンコードエラーが発生した場合 
+            return render(request, 'failed.html', {'error': e})
         return redirect('success')
     return render(request, 'set.html')
 
@@ -25,6 +35,3 @@ def display_data_none_unit(request):
     texts_without_units = Text.objects.filter(units__isnull=True).distinct()
     words = NoUnitWord.objects.all()
     return render(request, 'display_data_NoneUnit.html', {'texts': texts_without_units, 'words': words})
-
-def failed(request):
-    return render(request, 'failed.html')

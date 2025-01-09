@@ -9,7 +9,6 @@ def import_csv(file_path, text_name):
     with open(file_path, 'rb') as rawfile:
         result = chardet.detect(rawfile.read())
         encoding = result['encoding']
-
     try:
         with open(file_path, newline='', encoding=encoding) as csvfile:
             reader = csv.DictReader(csvfile)
