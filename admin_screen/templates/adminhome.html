@@ -3,6 +3,9 @@
 <head>
     <title>Admin Home</title>
     <meta charset="UTF-8">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'admin_screen/css/adminscreen_style.css' %}">
+    <script src="{% static 'admin_screen/js/adminscreen_scripts.js' %}"></script>
 </head>
 <body>
     <div class="searchForm">
@@ -21,7 +24,10 @@
             <p>unit</p>
             <ul>
                 {% for text in unit_texts %}
-                    <li id='text-{{ text.id }}'>{{ text.name }}</li>
+                    <li class="text-item" id='text-{{ text.id }}'>
+                        <span>{{ text.name }}</span>
+                        <button id='delete-{{ text.id }}' onclick="deleteText({{ text.id }})">削除</button>
+                    </li>
                 {% endfor %}
             </ul>
         </div>
@@ -30,7 +36,10 @@
             <p>no unit</p>
             <ul>
                 {% for text in no_unit_texts %}
-                    <li id='text-{{ text.id }}'>{{ text.name }}</li>
+                    <li class="text-item" id='text-{{ text.id }}'>
+                        <span>{{ text.name }}</span>
+                        <button id='delete-{{ text.id }}' onclick="deleteText({{ text.id }})">削除</button>
+                    </li>
                 {% endfor %}
             </ul>
         </div>

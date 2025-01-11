@@ -18,35 +18,76 @@ body {
     align-items: center;
 }
 
-    .header form {
-        display: flex;
-        width: 100%;
-        max-width: 600px; /* フォームの最大幅を設定 */
-    }
+.header form {
+    display: flex;
+    width: 100%;
+    max-width: 600px; /* フォームの最大幅を設定 */
+}
 
-    .header input[type="text"] {
-        flex: 1;
-        padding: 8px;
-        font-size: 16px;
-        border: 1px solid #ccc;
-        border-radius: 4px 0 0 4px;
-    }
+.header input[type="text"] {
+    flex: 1;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px 0 0 4px;
+}
 
-    .header button {
-        padding: 0;
-        border: none;
-        background: none;
-        cursor: pointer;
-    }
+.header button {
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
 
-        .header button img {
-            width: 32px; /* 画像の幅を設定 */
-            height: 32px; /* 画像の高さを設定 */
-            border-radius: 0 4px 4px 0;
-        }
+/* 検索フォーム全体 */
+.search-form {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* 各要素の間隔 */
+}
+
+/* セレクトボックス */
+.search-form select {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    height: 40px;
+}
+
+/* 検索入力ボックス */
+.search-form input[type="text"] {
+    flex: 1; /* 残りのスペースを占有 */
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    height: 40px;
+    width: 600px;
+}
+
+/* 検索ボタン */
+.search-form button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    height: 40px;
+    width: 40px;
+    border-radius: 4px;
+    padding: 0;
+}
+
+/* 検索アイコン画像 */
+.search-form button img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
 
 .container {
-    margin-top: 80px; /* ヘッダーの高さ分の余白を追加 */
+    margin-top: 100px; /* ヘッダーの高さ分の余白を追加 */
     border: 2px solid #333333;
     padding: 20px;
     border-radius: 10px;
