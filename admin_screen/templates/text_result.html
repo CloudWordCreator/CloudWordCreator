@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>検索結果</title>
+</head>
+<body>
+    <div class="search-result">
+        <p>検索結果</p>
+        {% for text in results %}
+            <p>{{ text.name }}</p>
+        {% endfor %}
+    </div>
+    <div class="back-button">
+        <button onclick="backToHome()">戻る</button>
+    </div>
+</body>
+</html>

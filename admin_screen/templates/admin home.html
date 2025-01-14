@@ -8,11 +8,12 @@
     <script src="{% static 'admin_screen/js/adminscreen_scripts.js' %}"></script>
 </head>
 <body>
-    <div class="searchForm">
-        <!-- 検索フォーム　後で実装する -->
-        <input type="text" id="searchInput" placeholder="教材検索">
+    <form method="GET" action="{%  url 'search_text' %}">
+        <div class="searchForm">
+        <input type="text" name="text_query" id="searchInput" placeholder="教材検索">
         <button type="button" onclick="searchText()">検索</button>
     </div>
+    </form>
     <div class="csvForm">
         <!-- 後で実装する -->
         <url>教材をアップロード</url>
