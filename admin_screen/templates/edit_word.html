@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>単語編集</title>
+</head>
+<body>
+    <h1>単語編集</h1>
+    <form method="post" action="{% url 'edit_word' %}">
+        {% csrf_token %}
+        <input type="hidden" name="id" value="{{ word.id }}">
+
+        <label for="no">No:</label>
+        <input type="text" id="no" name="no" value="{{ word.no }}">
+
+        <label for="english">英語:</label>
+        <input type="text" id="english" name="english" value="{{ word.english }}">
+
+        <label for="japanese">日本語:</label>
+        <input type="text" id="japanese" name="japanese" value="{{ word.japanese }}">
+
+        <button type="submit">保存</button>
+        <button type="submit">削除</button>
+    </form>
+</body>
+</html>

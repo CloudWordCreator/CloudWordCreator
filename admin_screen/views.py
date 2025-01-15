@@ -54,14 +54,14 @@ def search_word(request):
                 unit__text=text
             ).filter(
                 Q(english__icontains=query) | Q(japanese__icontains=query)  # 英語または日本語で検索
-            ).values('english', 'japanese', 'no', 'unit__text__name')
+            ).values('id', 'english', 'japanese', 'no', 'unit__text__name')
 
             # NoUnitWord（ユニット外の単語）を検索（英語または日本語で部分一致）
             no_unit_word_results = NoUnitWord.objects.filter(
                 text=text
             ).filter(
                 Q(english__icontains=query) | Q(japanese__icontains=query)  # 英語または日本語で検索
-            ).values('english', 'japanese', 'no', 'text__name')
+            ).values('id', 'english', 'japanese', 'no', 'text__name')
 
             # 結果の統合
             results = list(unit_word_results) + list(no_unit_word_results)
@@ -74,6 +74,30 @@ def search_word(request):
 
     # JSON形式で結果を返す
     return JsonResponse({'results': results})
+
+# 単語を編集する
+def edit_word(request):
+    # URLパラメータから単語IDを取得
+    word_id = request.GET.get('word_id')  # 単語のID
+
+    # 単語を取得（UnitWord または NoUnitWord を考慮）
+    word = None
+    try:
+        if UnitWord.objects.filter(id=word_id).exists():
+            word = UnitWord.objects.get(id=word_id)  # UnitWord から取得
+        elif NoUnitWord.objects.filter(id=word_id).exists():
+            word = NoUnitWord.objects.get(id=word_id)  # NoUnitWord から取得
+        else:
+            return render(request, 'error.html', {'message': '指定された単語が見つかりませんでした。'})
+    except Exception as e:
+        return print(e)
+
+    # 単語情報をテンプレートに渡す
+    return render(request, 'edit_word.html', {'word': word})
+
+# 単語を削除する
+def delete_word(request):
+    pass
 
 # 教材を削除する
 def delete_text(request):

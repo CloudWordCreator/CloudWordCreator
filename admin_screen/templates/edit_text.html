@@ -31,14 +31,17 @@
             <th>No.</th>
             <th>英語</th>
             <th>日本語</th>
-            <th></th>
+            <th>アクション</th>
         </tr>
         {% for word in words %}
         <tr>
             <td>{{ word.no }}</td>
             <td>{{ word.english }}</td>
             <td>{{ word.japanese }}</td>
-            <td><button type="button" onclick="edit_word()">編集</button></td>
+            <td>
+                <a href="{% url 'edit_word' %}?word_id={{ word.id }}">編集</a>
+                <button type="button" onclick="delete_word()">削除</button>
+            </td>
         </tr>
         {% endfor %}
     </table>

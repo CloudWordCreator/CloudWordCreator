@@ -31,8 +31,8 @@ function searchText() {
                 <ul>
                     ${data.results.map(word => `
                         <li>
-                            No: ${word.no} | 英語: ${word.english} | 日本語: ${word.japanese} |
-                            <button type="button" onclick="edit_word()">編集</button>
+                            No: ${word.no} | 英語: ${word.english} | 日本語: ${word.japanese} | ID : ${word.id} |
+                            <a href="/admin_screen/eisai_admin/edit_word/?word_id=${word.id}">編集</a>
                         </li>
                     `).join('')}
                 </ul>
