@@ -8,7 +8,10 @@
     <div class="search-result">
         <p>検索結果</p>
         {% for text in results %}
-            <p>{{ text.name }}</p>
+            <li>
+                <span>{{ text.name }}</span>
+                <button id='edit-{{ text.id }}' onclick="location.href='{% url 'edit_text' %}?text-id={{ text.id }}'">編集</button>
+            </li>
         {% endfor %}
     </div>
     <div class="back-button">
