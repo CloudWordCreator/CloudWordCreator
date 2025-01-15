@@ -99,16 +99,16 @@ document.addEventListener('DOMContentLoaded', () => {
     questionCountElement.oninput = validateForm;
 
     // **フォーム送信時の確認**
-    form.onsubmit = (event) => {
+    form.addEventListener('submit', (event) => {
         validateForm();
         if (submitButton.disabled) {
             alert("範囲や問題数が正しくありません。確認してください。");
             event.preventDefault();
         } else {
-            form.action = fillInTheBlanks.checked ? fillInTheBlankUrl : generateWordsUrl;
+            form.action = fillInTheBlanks.checked ? generateSentencesUrl : generateWordsUrl;
             loader.style.display = "inline-block";
         }
-    };    
+    });
 
     // **単語追加ボタン**
     addWordButton.onclick = () => {

@@ -10,7 +10,7 @@
 <body>
     <form method="GET" action="{%  url 'search_text' %}">
         <div class="searchForm">
-        <input type="text" name="text_query" id="searchInput" placeholder="教材検索">
+            <input type="text" name="text_query" id="searchInput" placeholder="教材検索">
         <button type="button" onclick="searchText()">検索</button>
     </div>
     </form>
@@ -21,16 +21,19 @@
     <div class="text-list">
         <!-- 教材リスト 表示まで実装 js等の設定はまだ -->
         <div class="unit-text">
-            <!-- unitで分類された教材 -->
-            <p>unit</p>
-            <ul>
-                {% for text in unit_texts %}
-                    <li class="text-item" id='text-{{ text.id }}'>
-                        <span>{{ text.name }}</span>
-                        <button id='delete-{{ text.id }}' onclick="deleteText({{ text.id }})">削除</button>
-                    </li>
-                {% endfor %}
-            </ul>
+        <!-- unitで分類された教材 -->
+        <p>unit</p>
+        <ul>
+            {% for text in unit_texts %}
+                <li class="text-item" id='text-{{ text.id }}'>
+                    <span>{{ text.name }}</span>
+                    <!-- 編集ボタン -->
+                    <button id='edit-{{ text.id }}' onclick="location.href='{% url 'edit_text' %}?text-id={{ text.id }}'">編集</button>
+                    <!-- 削除ボタン -->
+                    <button id='delete-{{ text.id }}' onclick="deleteText({{ text.id }})">削除</button>
+                </li>
+            {% endfor %}
+        </ul>
         </div>
         <div class="nounit-text">
             <!-- unitで分類されていない教材 -->
@@ -38,8 +41,11 @@
             <ul>
                 {% for text in no_unit_texts %}
                     <li class="text-item" id='text-{{ text.id }}'>
-                        <span>{{ text.name }}</span>
-                        <button id='delete-{{ text.id }}' onclick="deleteText({{ text.id }})">削除</button>
+                    <span>{{ text.name }}</span>
+                    <!-- 編集ボタン -->
+                    <button id='edit-{{ text.id }}' onclick="location.href='{% url 'edit_text' %}?text-id={{ text.id }}'">編集</button>
+                    <!-- 削除ボタン -->
+                    <button id='delete-{{ text.id }}' onclick="deleteText({{ text.id }})">削除</button>
                     </li>
                 {% endfor %}
             </ul>

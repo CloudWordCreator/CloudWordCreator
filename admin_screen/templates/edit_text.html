@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>単語 編集</title>
+    <script src="{% static 'admin_screen/js/edit_text_scripts.js' %}"></script>
+</head>
+<body>
+    <!-- 暫定機能 -->
+    <!-- 単語を全て表示する Done-->
+    <!-- 単語検索 -->
+    <!-- 単語編集 書き換え削除 -->
+    <!-- 検索フォーム -->
+    <!-- 現在編集中の教材のIDを隠しフィールドに埋め込む -->
+    <input type="hidden" id="currentTextId" value="{{ text.id }}">
+
+    <!-- 検索フォーム -->
+    <div class="searchForm">
+        <input type="text" name="word_query" id="searchInput" placeholder="単語を検索">
+        <button type="button" onclick="searchText()">検索</button>
+    </div>
+
+    <!-- 検索結果を表示する部分 -->
+    <div id="searchResults">
+        <p>検索結果</p>
+    </div>
+    <h1>{{ text.name }} の単語一覧</h1>
+    <table border=1">
+        <tr>
+            <th>No.</th>
+            <th>英語</th>
+            <th>日本語</th>
+            <th></th>
+        </tr>
+        {% for word in words %}
+        <tr>
+            <td>{{ word.no }}</td>
+            <td>{{ word.english }}</td>
+            <td>{{ word.japanese }}</td>
+            <td><button type="button" onclick="edit_word()">編集</button></td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
