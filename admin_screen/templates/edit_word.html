@@ -8,7 +8,7 @@
     <h1>単語編集</h1>
     <form method="post" action="{% url 'edit_word' %}">
         {% csrf_token %}
-        <input type="hidden" name="id" value="{{ word.id }}">
+        <input type="hidden" name="word_id" value="{{ word.id }}">
 
         <label for="no">No:</label>
         <input type="text" id="no" name="no" value="{{ word.no }}">

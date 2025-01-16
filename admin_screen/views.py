@@ -97,8 +97,17 @@ def edit_word(request):
 
 # 単語を削除する
 def delete_word(request):
+    word_id = request.GET.get('word_id')
+    del_word = Text.objects.get(id=word_id)
+    del_word.delete()
+
+# 単語を上書き保存する
+def save_word(request):
     pass
 
 # 教材を削除する
 def delete_text(request):
-    pass
+    text_id = request.GET.get('text_id')
+    del_text = Text.objects.get(id=text_id)
+    del_text.delete()
+    return print("削除")

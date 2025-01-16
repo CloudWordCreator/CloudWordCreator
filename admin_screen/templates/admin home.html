@@ -30,7 +30,7 @@
                     <!-- 編集ボタン -->
                     <button id='edit-{{ text.id }}' onclick="location.href='{% url 'edit_text' %}?text-id={{ text.id }}'">編集</button>
                     <!-- 削除ボタン -->
-                    <button id='delete-{{ text.id }}' onclick="deleteText({{ text.id }})">削除</button>
+                    <button id='delete-{{ text.id }}' onclick="location.href='{% url 'delete_text' %}?text_id={{ text.id }}'">削除</button>
                 </li>
             {% endfor %}
         </ul>
