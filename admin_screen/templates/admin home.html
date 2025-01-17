@@ -15,8 +15,7 @@
     </div>
     </form>
     <div class="csvForm">
-        <!-- 後で実装する -->
-        <url>教材をアップロード</url>
+        <a href="{% url 'upload_csv' %}" target="_blank" rel="noopener">教材をアップロード</a>
     </div>
     <div class="text-list">
         <!-- 教材リスト 表示まで実装 js等の設定はまだ -->
@@ -45,7 +44,7 @@
                     <!-- 編集ボタン -->
                     <button id='edit-{{ text.id }}' onclick="location.href='{% url 'edit_text' %}?text-id={{ text.id }}'">編集</button>
                     <!-- 削除ボタン -->
-                    <button id='delete-{{ text.id }}' onclick="deleteText({{ text.id }})">削除</button>
+                    <button id='delete-{{ text.id }}' onclick="location.href='{% url 'delete_text' %}?text_id={{ text.id }}'">削除</button>
                     </li>
                 {% endfor %}
             </ul>

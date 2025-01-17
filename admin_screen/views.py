@@ -110,4 +110,4 @@ def delete_text(request):
     text_id = request.GET.get('text_id')
     del_text = Text.objects.get(id=text_id)
     del_text.delete()
-    return print("削除")
+    return render(request, 'delete success.html', {'delText': del_text})
