@@ -97,9 +97,29 @@ def edit_word(request):
 
 # 単語を削除する
 def delete_word(request):
-    word_id = request.GET.get('word_id')
-    del_word = Text.objects.get(id=word_id)
-    del_word.delete()
+    word_id = request.GET.get('word_id')  # 削除対象の単語IDを取得
+
+    if not word_id:  # `word_id` が指定されていない場合の処理
+        return JsonResponse({'error': '単語IDが指定されていません。'}, status=400)
+
+    try:
+        # `UnitWord` または `NoUnitWord` で削除処理を実行
+        if UnitWord.objects.filter(id=word_id).exists():
+            word = UnitWord.objects.get(id=word_id)  # UnitWord
+        elif NoUnitWord.objects.filter(id=word_id).exists():
+            word = NoUnitWord.objects.get(id=word_id)  # NoUnitWord
+        else:
+            return JsonResponse({'error': '単語が見つかりませんでした。'}, status=404)
+
+        # 単語を削除
+        word.delete()
+
+        # 成功時のJSONレスポンス
+        return JsonResponse({'message': '単語が正常に削除されました。'})
+
+    except Exception as e:
+        # 予期しないエラー時のエラーレスポンス
+        return JsonResponse({'error': f'サーバーエラー: {str(e)}'}, status=500)
 
 # 単語を上書き保存する
 def save_word(request):
