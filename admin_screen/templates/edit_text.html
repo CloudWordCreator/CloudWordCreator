@@ -40,6 +40,7 @@
             <td>{{ word.japanese }}</td>
             <td>
                 <a href="{% url 'edit_word' %}?word_id={{ word.id }}">編集</a>
+                <input type="hidden" id="deleteWordUrl" value="{% url 'delete_word' %}">
                 <button onclick="deleteWord({{ word.id }}, this)">削除</button>
             </td>
         </tr>

@@ -88,7 +88,8 @@ def edit_word(request):
         elif NoUnitWord.objects.filter(id=word_id).exists():
             word = NoUnitWord.objects.get(id=word_id)  # NoUnitWord から取得
         else:
-            return render(request, 'error.html', {'message': '指定された単語が見つかりませんでした。'})
+            pass
+            # return render(request, 'error.html', {'message': '指定された単語が見つかりませんでした。'})
     except Exception as e:
         return print(e)
 

@@ -49,20 +49,20 @@ function searchText() {
 }
 
 function deleteWord(wordId, rowElement) {
+    const baseUrl = document.getElementById('deleteWordUrl').value; // テンプレートからURLを取得
     if (confirm('この単語を削除してもよろしいですか？')) {
-        fetch(`{% url 'delete_word' %}?word_id=` + wordId, {
+        fetch(`${baseUrl}?word_id=` + wordId, {
             method: 'GET',
         })
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            return response.json();  // 確実にJSON形式に変換
+            return response.json();
         })
         .then(data => {
             if (data.message) {
                 alert(data.message);
-                // 行を削除
                 rowElement.parentElement.parentElement.remove();
             } else if (data.error) {
                 alert('削除に失敗しました: ' + data.error);
