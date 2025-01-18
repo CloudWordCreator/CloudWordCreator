@@ -1,8 +1,9 @@
-from django.shortcuts import render, get_object_or_404
-from csvManager.models import Text, NoUnitWord, UnitWord, Unit
+from django.shortcuts import render, get_object_or_404, redirect
+from csvManager.models import Text, NoUnitWord, UnitWord
 from django.db import models
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
 from django.db.models import Q
+from django.urls import reverse
 
 # Create your views here.
 # This is the view for the admin page
@@ -124,7 +125,37 @@ def delete_word(request):
 
 # 単語を上書き保存する
 def save_word(request):
-    pass
+    if request.method == 'POST':  # POSTリクエストを確認
+        word_id = request.POST.get('word_id')  # フォームから単語IDを取得
+        no = request.POST.get('no')  # Noを取得
+        english = request.POST.get('english')  # 英語単語を取得
+        japanese = request.POST.get('japanese')  # 日本語単語を取得
+
+        try:
+            # `UnitWord` または `NoUnitWord` に一致する単語を取得
+            if UnitWord.objects.filter(id=word_id).exists():
+                word = UnitWord.objects.get(id=word_id)  # UnitWord から取得
+            elif NoUnitWord.objects.filter(id=word_id).exists():
+                word = NoUnitWord.objects.get(id=word_id)  # NoUnitWord から取得
+            else:
+                return JsonResponse({'error': '単語が見つかりませんでした。'}, status=404)
+
+            # データを更新
+            word.no = no
+            word.english = english
+            word.japanese = japanese
+            word.save()  # データベースに保存
+
+            # 編集完了後のリダイレクト（再ロードを防ぐため）
+            url = reverse('edit_text')  # Named URLを取得
+            return HttpResponseRedirect(f'{url}?text-id={int(word.text.id)}')
+
+        except Exception as e:
+            # エラーハンドリング
+            return JsonResponse({'error': f'サーバーエラー: {str(e)}'}, status=500)
+
+    # POST以外のリクエストはエラーを返す
+    return JsonResponse({'error': 'POSTリクエストを受け付けていません。'}, status=400)
 
 # 教材を削除する
 def delete_text(request):
