@@ -4,11 +4,21 @@ from django.db import models
 from django.http import JsonResponse, HttpResponseRedirect
 from django.db.models import Q
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import TemplateView
 
 # Create your views here.
 # This is the view for the admin page
+class EditTextView(LoginRequiredMixin, TemplateView):
+    # summary
+    # ログイン要の設定
+    template_name = 'admin_screen/edit_text.html'
+    login_url = '/login/'  # ログインURL指定
+    redirect_field_name = 'redirect_to'  # ログイン後のリダイレクト先
 
 # admin画面ホーム
+@login_required(login_url='/login/')
 def admin(request):
     # ユニットで分けられているテキストを取得
     unit_texts = Text.objects.filter(units__isnull=False).distinct()
@@ -19,6 +29,7 @@ def admin(request):
     return render(request, 'admin home.html', {'unit_texts': unit_texts, 'no_unit_texts': no_unit_texts})
 
 # テキスト選択後の編集画面
+@login_required(login_url='/login/')
 def edit_text(request):
     text_id = request.GET.get('text-id')
     text = get_object_or_404(Text, id=text_id)
@@ -31,6 +42,7 @@ def edit_text(request):
     return render(request, 'edit_text.html', {'text': text, 'words': words})
 
 # テキストを検索
+@login_required(login_url='/login/')
 def search_text(request):
     query = request.GET.get('text_query')
     results = []
@@ -39,6 +51,7 @@ def search_text(request):
     return render(request, 'text_result.html', {'results': results})
 
 # 単語を検索する
+@login_required(login_url='/login/')
 def search_word(request):
     query = request.GET.get('word_query', '')  # 検索クエリ
     text_id = request.GET.get('text_id', None)  # 教材ID
@@ -77,6 +90,7 @@ def search_word(request):
     return JsonResponse({'results': results})
 
 # 単語を編集する
+@login_required(login_url='/login/')
 def edit_word(request):
     # URLパラメータから単語IDを取得
     word_id = request.GET.get('word_id')  # 単語のID
@@ -98,6 +112,7 @@ def edit_word(request):
     return render(request, 'edit_word.html', {'word': word})
 
 # 単語を削除する
+@login_required(login_url='/login/')
 def delete_word(request):
     word_id = request.GET.get('word_id')  # 削除対象の単語IDを取得
 
@@ -124,6 +139,7 @@ def delete_word(request):
         return JsonResponse({'error': f'サーバーエラー: {str(e)}'}, status=500)
 
 # 単語を上書き保存する
+@login_required(login_url='/login/')
 def save_word(request):
     if request.method == 'POST':  # POSTリクエストを確認
         word_id = request.POST.get('word_id')  # フォームから単語IDを取得
@@ -158,6 +174,7 @@ def save_word(request):
     return JsonResponse({'error': 'POSTリクエストを受け付けていません。'}, status=400)
 
 # 教材を削除する
+@login_required(login_url='/login/')
 def delete_text(request):
     text_id = request.GET.get('text_id')
     del_text = Text.objects.get(id=text_id)

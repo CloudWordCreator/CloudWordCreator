@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'flatTestMaker',
     'structuredTest',
     'admin_screen',
+    'authentication'
 ]
 
 MIDDLEWARE = [
@@ -147,3 +148,8 @@ CSV_UPLOAD_DIR = os.path.join(BASE_DIR, 'csv_uploads')
 # ディレクトリが存在しない場合は作成
 if not os.path.exists(CSV_UPLOAD_DIR):
     os.makedirs(CSV_UPLOAD_DIR)
+
+# ログインURL
+LOGIN_URL = '/login/'
+# ログイン後のリダイレクトURL
+LOGIN_REDIRECT_URL = '/admin_screen/'  # ログイン後にリダイレクトするページ
