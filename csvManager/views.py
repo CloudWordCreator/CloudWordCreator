@@ -4,7 +4,17 @@ from django.conf import settings
 from .csv_importer import import_csv
 import os
 from .models import Text, Unit, UnitWord, NoUnitWord
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import TemplateView
 
+class CsvUploadView(LoginRequiredMixin, TemplateView):
+    # summary
+    # ログイン用の設定
+    template_name = 'csv_set/upload.html'
+    login_url = '/login/'  # ログイン画面へのリダイレクト
+
+@login_required(login_url='/login/')
 def upload_csv(request):
     if request.method == 'POST' and request.FILES['csv_file']:
         csv_file = request.FILES['csv_file']
@@ -28,10 +38,6 @@ def upload_csv(request):
         return redirect('success')
     return render(request, 'set.html')
 
+@login_required(login_url='/login/')
 def success(request):
     return render(request, 'success.html')
-
-def display_data_none_unit(request):
-    texts_without_units = Text.objects.filter(units__isnull=True).distinct()
-    words = NoUnitWord.objects.all()
-    return render(request, 'display_data_NoneUnit.html', {'texts': texts_without_units, 'words': words})
