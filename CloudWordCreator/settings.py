@@ -154,3 +154,10 @@ if not os.path.exists(CSV_UPLOAD_DIR):
 LOGIN_URL = '/login/'
 # ログイン後のリダイレクトURL
 LOGIN_REDIRECT_URL = '/admin_screen/'  # ログイン後にリダイレクトするページ
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')  # 送信元のメールアドレス
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')  # 送信元のメールアドレスのパスワード
