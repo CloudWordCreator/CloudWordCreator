@@ -24,7 +24,6 @@ class SpreadSheetWriter:
 
     report : dict
     """
-
     def __init__(self, report):
         # 認証情報の設定
         try:
@@ -57,35 +56,3 @@ class SpreadSheetWriter:
 
         # 一番上に追加（書き込み処理）
         self.__bug_report.append_row(report_data)
-
-    def send_notification(self):
-        """
-        メール通知を送信する
-        """
-        # メールアドレスリストを取得
-        address_list = self.__address_list.get_all_values()  # スプレッドシートのアドレスリストを取得
-        email_addresses = [row[0] for row in address_list if row]  # メールアドレスを抽出
-
-        # メールタイトルと本文を作成
-        subject = "新しいバグ報告がありました"
-        message = (
-            f"以下の内容でバグ報告が送信されました。\n\n"
-            f"校舎名: {self.report.get('schoolName', '')}\n"
-            f"教材: {self.report.get('material', '')}\n"
-            f"詳細: {self.report.get('details', '')}\n\n"
-            f"スプレッドシートを確認してください。"
-        )
-        from_email = settings.EMAIL_HOST_USER
-
-        # メール送信処理
-        try:
-            send_mail(
-                subject,
-                message,
-                from_email,
-                email_addresses,  # 取得したメールアドレスリストを使用
-                fail_silently=False,  # 失敗時に例外を発生させる
-            )
-            print("メール通知が正常に送信されました。")
-        except Exception as e:
-            print(f"メール送信中にエラーが発生しました: {e}")

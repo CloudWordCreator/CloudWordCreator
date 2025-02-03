@@ -28,6 +28,5 @@ def submit_report(request):
 
         sheet_writer = bug_report_writter.SpreadSheetWriter(report)
         sheet_writer.write_report()
-        sheet_writer.send_notification()
 
     return redirect('home')
