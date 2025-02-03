@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from . import bug_report_writter
 
 # Create your views here.
 # 暫定作るもの
@@ -19,8 +20,12 @@ def submit_report(request):
         material = request.POST.get('material')
         details = request.POST.get('details')
 
-        # 暫定print
-        print(school_name)
-        print(material)
-        print(details)
-    return render(request, 'home.html')
+        report = {
+            'schoolName' : school_name,
+            'material' : material,
+            'details' : details,
+        }
+
+        sheet_writer = bug_report_writter.SpreadSheetWriter(report)
+        sheet_writer.write_report()
+    return redirect('home')
