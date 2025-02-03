@@ -14,4 +14,13 @@ def report(request):
     return render(request, 'report.html')
 
 def submit_report(request):
-    pass
+    if request.method == 'POST':
+        school_name = request.POST.get('school_name')
+        material = request.POST.get('material')
+        details = request.POST.get('details')
+
+        # 暫定print
+        print(school_name)
+        print(material)
+        print(details)
+    return render(request, 'home.html')
