@@ -75,7 +75,7 @@ def create_test(request):
                 for word in subunit.words.all():
                     # 各単語を追加し、テーブル番号を考慮した番号付けを行う
                     subunit_data["words"].append({
-                        "No": table_no, # 単語が属するテーブルの番号
+                        "position": table_no, # 単語が属するテーブルの番号
                         "english": word.english,
                         "japanese": word.japanese
                     })

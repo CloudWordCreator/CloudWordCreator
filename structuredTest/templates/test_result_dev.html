@@ -15,90 +15,88 @@
     <button onclick="printContent()" class="button">印刷</button>
     <a href="{% url 'display_data' %}">戻る</a>
     <div class="print-area">
-        <div id="english-to-japanese-content" class="tab">
-            <!-- 動的に生成された英語→日本語の問題がここに表示される -->
-            <div id="english-to-japanese-questions"></div>
+        <div id="left-column" class="column">
+            <!-- 左側テーブルを配置 -->
         </div>
-        <div id="japanese-to-english-content" class="tab" style="display: none;">
-            <!-- 動的に生成された日本語→英語の問題がここに表示される -->
-            <div id="japanese-to-english-questions"></div>
+        <div id="right-column" class="column">
+            <!-- 右側テーブルを配置 -->
+        </div>
+
+        <!-- テーブルセクションのラッパー要素を追加 -->
+        <div id="table-sections">
+            <!-- JavaScriptがここにテーブルを生成します -->
         </div>
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // ビュー関数で返された JSON データ (Django テンプレート変数として埋め込む)
-            const data = {{ data|safe }};
-            console.log(data);
 
-            // 英語→日本語の問題を表示
-            const englishToJapaneseContainer = document.getElementById('english-to-japanese-questions');
-            data.units.forEach(unit => {
-                const unitTitle = document.createElement('h3');
-                unitTitle.textContent = unit.name;
-                englishToJapaneseContainer.appendChild(unitTitle);
 
-                unit.sub_units.forEach(subUnit => {
-                    const subUnitTitle = document.createElement('h4');
-                    subUnitTitle.textContent = subUnit.name;
-                    englishToJapaneseContainer.appendChild(subUnitTitle);
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const data = {{ data|safe }};
+        console.log(data);
 
-                    const table = document.createElement('table');
-                    table.classList.add('table', 'table-bordered');
+        const tableSections = document.getElementById('table-sections');
 
-                    const thead = document.createElement('thead');
-                    thead.innerHTML = `
-                        <tr>
-                            <th>英語</th>
-                            <th>日本語</th>
-                        </tr>`;
-                    table.appendChild(thead);
+        // テーブル番号ごとに単語をまとめる
+        const positionMap = {};
 
-                    const tbody = document.createElement('tbody');
-                    subUnit.words.forEach(word => {
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                            <td>${word.english}</td>
-                            <td>${word.japanese}</td>
-                        `;
-                        tbody.appendChild(row);
+        data.units.forEach(unit => {
+            unit.sub_units.forEach(subUnit => {
+                subUnit.words.forEach(word => {
+                    // 初めてのposition（テーブル番号）の場合、初期化
+                    if (!positionMap[word.position]) {
+                        positionMap[word.position] = [];
+                    }
+                    // positionに単語を追加
+                    positionMap[word.position].push({
+                        english: word.english,
+                        japanese: word.japanese
                     });
-                    table.appendChild(tbody);
-                    englishToJapaneseContainer.appendChild(table);
                 });
             });
-
-            // 日本語→英語の問題を表示 (必要に応じて追加)
-            const japaneseToEnglishContainer = document.getElementById('japanese-to-english-questions');
-            data.units.forEach(unit => {
-                const unitTitle = document.createElement('h3');
-                unitTitle.textContent = unit.name;
-                japaneseToEnglishContainer.appendChild(unitTitle);
-
-                unit.sub_units.forEach(subUnit => {
-                    const subUnitTitle = document.createElement('h4');
-                    subUnitTitle.textContent = subUnit.name;
-                    japaneseToEnglishContainer.appendChild(subUnitTitle);
-
-                    const list = document.createElement('ul');
-                    subUnit.words.forEach(word => {
-                        const listItem = document.createElement('li');
-                        listItem.textContent = `${word.japanese} → ${word.english}`;
-                        list.appendChild(listItem);
-                    });
-                    japaneseToEnglishContainer.appendChild(list);
-                });
-            });
-
-            // タブ切り替え機能
-            document.getElementById('english-to-japanese-button').onclick = () => {
-                document.getElementById('english-to-japanese-content').style.display = 'block';
-                document.getElementById('japanese-to-english-content').style.display = 'none';
-            };
-            document.getElementById('japanese-to-english-button').onclick = () => {
-                document.getElementById('english-to-japanese-content').style.display = 'none';
-                document.getElementById('japanese-to-english-content').style.display = 'block';
-            };
         });
-    </script>
+
+        // positionごとにテーブルを生成
+        Object.keys(positionMap).forEach(position => {
+            const words = positionMap[position]; // このテーブル番号に対応する単語
+            const section = document.createElement('div');
+            section.classList.add('table-section');
+
+            // テーブル番号の見出し
+            const heading = document.createElement('h2');
+            heading.textContent = `テーブル番号: ${position}`;
+            heading.classList.add('table-heading');
+            section.appendChild(heading);
+
+            // テーブルを構築
+            const table = document.createElement('table');
+            table.classList.add('table', 'table-bordered');
+
+            // テーブルヘッダー
+            const thead = document.createElement('thead');
+            thead.innerHTML = `
+                <tr>
+                    <th>英語</th>
+                    <th>日本語</th>
+                </tr>`;
+            table.appendChild(thead);
+
+            // テーブルボディ
+            const tbody = document.createElement('tbody');
+            words.forEach(word => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${word.english}</td>
+                    <td>${word.japanese}</td>
+                `;
+                tbody.appendChild(row);
+            });
+            table.appendChild(tbody);
+
+            // セクションにテーブルを追加
+            section.appendChild(table);
+            tableSections.appendChild(section);
+        });
+    });
+</script>
 </body>
 </html>
