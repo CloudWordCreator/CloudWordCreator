@@ -28,6 +28,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             // ビュー関数で返された JSON データ (Django テンプレート変数として埋め込む)
             const data = {{ data|safe }};
+            console.log(data);
 
             // 英語→日本語の問題を表示
             const englishToJapaneseContainer = document.getElementById('english-to-japanese-questions');
