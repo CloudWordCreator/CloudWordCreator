@@ -3,67 +3,8 @@
 <head>
     {% load static %}
     <link href="{% static 'css/style.css' %}" media="print" rel="stylesheet" type="text/css">
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
-        }
-        .button {
-            padding: 10px 20px;
-            margin: 10px;
-            font-size: 16px;
-            color: #fff;
-            background-color: #007bff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .button:hover {
-            background-color: #0056b3;
-        }
-        .button:focus {
-            outline: none;
-        }
-        .tab-buttons {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-        .print-area {
-            border: 2px dashed #000; /* 印刷範囲を囲む線 */
-            width: 100%; /* 印刷範囲の幅を設定 */
-            margin: 0 auto; /* 中央揃え */
-            position: relative;
-        }
-        .selected_text {
-            font-size: 20px;
-        }
-        
-        @media print {
-            body {
-                -webkit-print-color-adjust: exact;
-                color-adjust: exact;
-            }
-            .print-area {
-                page-break-after: always;
-                border: none;
-                width: 100%; /* 印刷範囲の幅を設定 */
-            }
-            table {
-                width: 100%;
-                font-size: 12px; /* フォントサイズを小さくしてA4に収める */
-            }
-            th, td {
-                padding: 4px; /* パディングを小さくしてA4に収める */
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'structuredTest/css/test_result_style.css' %}">
+    <script src="{% static 'structuredTest/js/test_result_scripts.js' %}"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>テスト</title>
@@ -80,231 +21,56 @@
                 {% for text in selected_texts %}
                     <p class="selected_text">{{ text.name }}</p>
                 {% endfor %}
-                {% for unit in units %}
-                    {% if not unit.parent %}
-                        {% for subunit in unit.subunits.all %}
-                            <h3>{{ subunit.name }}</h3>
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>英語</th>
-                                        <th>日本語</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for word in words %}
-                                        {% if word.unit.id == subunit.id %}
-                                            <tr>
-                                                <td>{{ word.english }}</td>
-                                                <td></td>
-                                            </tr>
-                                        {% endif %}
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        {% endfor %}
-                    {% endif %}
-                {% endfor %}
+                <div class="content-container">
+                <!-- 左側(1～25問) -->
+                <div class="left-panel">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>英語</th>
+                                <th>日本語</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for word in words|slice:":25" %}
+                                <tr>
+                                    <td>{{ word.english }}</td>
+                                    <td>{{ word.japanese }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <!-- 右側(26問目以降) -->
+                <div class="right-panel">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>英語</th>
+                                <th>日本語</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for word in words|slice:"25:" %}
+                                <tr>
+                                    <td>{{ word.english }}</td>
+                                    <td>{{ word.japanese }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
             </div>
             <!-- 英語→日本語の解答 -->
-            <div class="printer-setting">
-                {% for text in selected_texts %}
-                    <p class="selected_text">{{ text.name }}</p>
-                {% endfor %}
-                {% for unit in units %}
-                    {% if not unit.parent %}
-                        {% for subunit in unit.subunits.all %}
-                            <h3>{{ subunit.name }}</h3>
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>英語</th>
-                                        <th>日本語</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for word in words %}
-                                        {% if word.unit.id == subunit.id %}
-                                            <tr>
-                                                <td>{{ word.english }}</td>
-                                                <td>{{ word.japanese }}</td>
-                                            </tr>
-                                        {% endif %}
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        {% endfor %}
-                    {% endif %}
-                {% endfor %}
-            </div>
+            <p>答えのコード</p>
         </div>
         <div id="japanese-to-english-content" class="tab" style="display: none;">
             <!-- 日本語→英語の問題 -->
-            <div class="printer-setting">
-                {% for text in selected_texts %}
-                    <p class="selected_text">{{ text.name }}</p>
-                {% endfor %}
-                {% for unit in units %}
-                    {% if not unit.parent %}
-                        {% for subunit in unit.subunits.all %}
-                            <h3>{{ subunit.name }}</h3>
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>日本語</th>
-                                        <th>英語</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for word in words %}
-                                        {% if word.unit.id == subunit.id %}
-                                            <tr>
-                                                <td>{{ word.japanese }}</td>
-                                                <td></td>
-                                            </tr>
-                                        {% endif %}
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        {% endfor %}
-                    {% endif %}
-                {% endfor %}
-            </div>
+            <p>日本語→英語</p>
             <!-- 日本語→英語の解答 -->
-            <div class="printer-setting">
-                {% for text in selected_texts %}
-                    <p class="selected_text">{{ text.name }}</p>
-                {% endfor %}
-                {% for unit in units %}
-                    {% if not unit.parent %}
-                        {% for subunit in unit.subunits.all %}
-                            <h3>{{ subunit.name }}</h3>
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>日本語</th>
-                                        <th>英語</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for word in words %}
-                                        {% if word.unit.id == subunit.id %}
-                                            <tr>
-                                                <td>{{ word.japanese }}</td>
-                                                <td>{{ word.english }}</td>
-                                            </tr>
-                                        {% endif %}
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        {% endfor %}
-                    {% endif %}
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-        </div>
-        <div id="japanese-to-english-content" class="tab" style="display: none;">
-            <!-- 日本語→英語の問題 -->
-            <div class="printer-setting">
-                {% for text in selected_texts %}
-                        <p class="selected_text">{{ text.name }}</p>
-                {% endfor %}
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Unit</th>
-                            <th>日本語</th>
-                            <th>英語</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for word in words %}
-                            <tr>
-                                <td>{{ word.no }}</td>
-                                <td>
-                                    {% if word.unit %}
-                                        {{ word.unit.name }}
-                                    {% else %}
-                                        なし
-                                    {% endif %}
-                                </td>
-                                <td>{{ word.japanese }}</td>
-                                <td></td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            <!-- 日本語→英語の解答 -->
-            <div class="printer-setting">
-                {% for text in selected_texts %}
-                        <p class="selected_text">{{ text.name }}</p>
-                {% endfor %}
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Unit</th>
-                            <th>日本語</th>
-                            <th>英語</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for word in words %}
-                            <tr>
-                                <td>{{ word.no }}</td>
-                                <td>
-                                    {% if word.unit %}
-                                        {{ word.unit.name }}
-                                    {% else %}
-                                        なし
-                                    {% endif %}
-                                </td>
-                                <td>{{ word.japanese }}</td>
-                                <td>{{ word.english }}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+            <p>日本語→英語の解答</p>
         </div>
     </div>
 </body>
-<script>
-    function printContent() {
-        const printArea = document.querySelector('.print-area').innerHTML;
-        const originalContent = document.body.innerHTML;
-        document.body.innerHTML = printArea;
-        window.print();
-        document.body.innerHTML = originalContent;
-        document.body.innerHTML = originalContent;
-        document.getElementById('english-to-japanese-button').addEventListener('click', function() {
-            showTab('english-to-japanese-content');
-        });
-        document.getElementById('japanese-to-english-button').addEventListener('click', function() {
-            showTab('japanese-to-english-content');
-        });
-    }
-
-    function showTab(tabId) {
-        const tabs = document.querySelectorAll('.tab');
-        tabs.forEach(tab => {
-            tab.style.display = 'none';
-        });
-        document.getElementById(tabId).style.display = 'block';
-    }
-
-    document.getElementById('english-to-japanese-button').addEventListener('click', function() {
-        showTab('english-to-japanese-content');
-    });
-
-    document.getElementById('japanese-to-english-button').addEventListener('click', function() {
-        showTab('japanese-to-english-content');
-    });
-
-    // 初期表示を設定
-    showTab('english-to-japanese-content');
-</script>
 </html>

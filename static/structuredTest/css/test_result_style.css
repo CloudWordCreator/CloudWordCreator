@@ -1,0 +1,76 @@
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+            .table-bordered thead th {
+        border-bottom: 2px solid black; /* 黒の実線 */
+        }
+        .button {
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        .button:focus {
+            outline: none;
+        }
+        .tab-buttons {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .print-area {
+            border: 2px dashed #000; /* 印刷範囲を囲む線 */
+            width: 100%; /* 印刷範囲の幅を設定 */
+            margin: 0 auto; /* 中央揃え */
+            position: relative;
+        }
+        .selected_text {
+            font-size: 20px;
+        }
+
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact;
+                color-adjust: exact;
+            }
+            .print-area {
+                page-break-after: always;
+                border: none;
+                width: 100%; /* 印刷範囲の幅を設定 */
+            }
+            table {
+                width: 100%;
+                font-size: 12px; /* フォントサイズを小さくしてA4に収める */
+            }
+            th, td {
+                padding: 4px; /* パディングを小さくしてA4に収める */
+            }
+        }
+
+    .content-container {
+        display: flex;
+    }
+    .left-panel, .right-panel {
+        width: 50%;
+    }
+    .left-panel {
+        padding-right: 15px;
+        border-right: 1px solid #ccc;
+    }
+    .right-panel {
+        padding-left: 15px;
+    }
