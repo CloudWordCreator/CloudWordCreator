@@ -31,58 +31,82 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const data = {{ data|safe }};
-        console.log(data);
+    const data = {{ data|safe }};
+    console.log(data);
 
-        const tableSections = document.getElementById('table-sections');
+    const tableSections = document.getElementById('table-sections');
 
-        // テーブル番号ごとに単語をまとめる
-        const positionMap = {};
+    // テーブル番号ごとに単語をまとめる
+    const positionMap = {};
 
-        data.units.forEach(unit => {
-            unit.sub_units.forEach(subUnit => {
-                subUnit.words.forEach(word => {
-                    // 初めてのposition（テーブル番号）の場合、初期化
-                    if (!positionMap[word.position]) {
-                        positionMap[word.position] = [];
-                    }
-                    // positionに単語を追加
-                    positionMap[word.position].push({
-                        english: word.english,
-                        japanese: word.japanese
-                    });
+    data.units.forEach(unit => {
+        unit.sub_units.forEach(subUnit => {
+            subUnit.words.forEach(word => {
+                // 初めてのposition（テーブル番号）の場合、初期化
+                if (!positionMap[word.position]) {
+                    positionMap[word.position] = [];
+                }
+                // positionに単語を追加
+                positionMap[word.position].push({
+                    english: word.english,
+                    japanese: word.japanese,
+                    subUnitName: subUnit.name // 子ユニットの名前を追加
                 });
             });
         });
+    });
 
-        // positionごとにテーブルを生成
-        Object.keys(positionMap).forEach(position => {
-            const words = positionMap[position]; // このテーブル番号に対応する単語
-            const section = document.createElement('div');
-            section.classList.add('table-section');
+    // positionごとにテーブルを生成
+    Object.keys(positionMap).forEach(position => {
+        const words = positionMap[position]; // このテーブル番号に対応する単語
+        const section = document.createElement('div');
+        section.classList.add('table-section');
 
-            // テーブル番号の見出し
-            const heading = document.createElement('h2');
-            heading.textContent = `テーブル番号: ${position}`;
-            heading.classList.add('table-heading');
-            section.appendChild(heading);
+        // テーブル番号の見出し
+        // ここは将来的に削除
+        const heading = document.createElement('h2');
+        heading.textContent = `テーブル番号: ${position}`;
+        heading.classList.add('table-heading');
+        section.appendChild(heading);
 
-            // テーブルを構築
-            const table = document.createElement('table');
-            table.classList.add('table', 'table-bordered');
+        // 子ユニットごとに単語をグループ化
+        const subUnitMap = {};
+        words.forEach(word => {
+            if (!subUnitMap[word.subUnitName]) {
+                subUnitMap[word.subUnitName] = [];
+            }
+            subUnitMap[word.subUnitName].push(word);
+        });
 
-            // テーブルヘッダー
-            const thead = document.createElement('thead');
-            thead.innerHTML = `
-                <tr>
-                    <th>英語</th>
-                    <th>日本語</th>
-                </tr>`;
-            table.appendChild(thead);
+        // テーブルを構築
+        const table = document.createElement('table');
+        table.classList.add('table', 'table-bordered');
 
-            // テーブルボディ
-            const tbody = document.createElement('tbody');
-            words.forEach(word => {
+        // テーブルヘッダー
+        const thead = document.createElement('thead');
+        thead.innerHTML = `
+            <tr>
+                <th>英語</th>
+                <th>日本語</th>
+            </tr>`;
+        table.appendChild(thead);
+
+        // テーブルボディ
+        const tbody = document.createElement('tbody');
+        Object.keys(subUnitMap).forEach(subUnitName => {
+            const subUnitWords = subUnitMap[subUnitName];
+
+            // 子ユニットの見出し行を追加
+            const subUnitHeadingRow = document.createElement('tr');
+            const subUnitHeadingCell = document.createElement('td');
+            subUnitHeadingCell.colSpan = 2;
+            subUnitHeadingCell.textContent = `${subUnitName}`;
+            subUnitHeadingCell.classList.add('subunit-heading');
+            subUnitHeadingRow.appendChild(subUnitHeadingCell);
+            tbody.appendChild(subUnitHeadingRow);
+
+            // 子ユニットの単語を追加
+            subUnitWords.forEach(word => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${word.english}</td>
@@ -90,11 +114,12 @@
                 `;
                 tbody.appendChild(row);
             });
-            table.appendChild(tbody);
+        });
+        table.appendChild(tbody);
 
-            // セクションにテーブルを追加
-            section.appendChild(table);
-            tableSections.appendChild(section);
+        // セクションにテーブルを追加
+        section.appendChild(table);
+        tableSections.appendChild(section);
         });
     });
 </script>
