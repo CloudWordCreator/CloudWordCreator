@@ -15,62 +15,133 @@
     <button onclick="printContent()" class="button">印刷</button>
     <a href="{% url 'display_data' %}">戻る</a>
     <div class="print-area">
-        <div id ="english-to-japanese-content" class="tab">
-            <!-- 英語→日本語の問題 -->
-            <div class="printer-setting">
-                {% for text in selected_texts %}
-                    <p class="selected_text">{{ text.name }}</p>
-                {% endfor %}
-                <div class="content-container">
-                <!-- 左側(1～25問) -->
-                <div class="left-panel">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>英語</th>
-                                <th>日本語</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for word in words|slice:":25" %}
-                                <tr>
-                                    <td>{{ word.english }}</td>
-                                    <td>{{ word.japanese }}</td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-                <!-- 右側(26問目以降) -->
-                <div class="right-panel">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>英語</th>
-                                <th>日本語</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for word in words|slice:"25:" %}
-                                <tr>
-                                    <td>{{ word.english }}</td>
-                                    <td>{{ word.japanese }}</td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+        <!-- 英語->日本語 -->
+        <div id="english-to-japanese-content" class="tab">
+            <div id="left-column" class="column">
+                <!-- 左側テーブルを配置 -->
             </div>
+            <div id="right-column" class="column">
+                <!-- 右側テーブルを配置 -->
             </div>
-            <!-- 英語→日本語の解答 -->
-            <p>答えのコード</p>
+
+            <!-- テーブルセクションのラッパー要素を追加 -->
+            <div id="table-sections">
+                <!-- JavaScriptがここにテーブルを生成します -->
+            </div>
         </div>
-        <div id="japanese-to-english-content" class="tab" style="display: none;">
-            <!-- 日本語→英語の問題 -->
-            <p>日本語→英語</p>
-            <!-- 日本語→英語の解答 -->
-            <p>日本語→英語の解答</p>
+        <!-- 日本語->英語 -->
+        <div id="japanese-to-english-content" class="tab">
+            <div id="left-column" class="column">
+                <!-- 左側テーブルを配置 -->
+            </div>
+            <div id="right-column" class="column">
+                <!-- 右側テーブルを配置 -->
+            </div>
+
+            <!-- テーブルセクションのラッパー要素を追加 -->
+            <div id="table-sections">
+                <!-- JavaScriptがここにテーブルを生成します -->
+            </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const data = {{ data|safe }};
+
+            const leftColumn = document.getElementById('left-column');
+            const rightColumn = document.getElementById('right-column');
+
+            // Create a wrapper div with class "printer-setting"
+            const leftWrapper = document.createElement('div');
+            leftWrapper.classList.add('printer-setting');
+            leftColumn.appendChild(leftWrapper);
+
+            const rightWrapper = document.createElement('div');
+            rightWrapper.classList.add('printer-setting');
+            rightColumn.appendChild(rightWrapper);
+
+            // テーブル番号ごとに単語をまとめる
+            const positionMap = {};
+
+            data.units.forEach(unit => {
+                unit.sub_units.forEach(subUnit => {
+                    subUnit.words.forEach(word => {
+                        // 初めてのposition（テーブル番号）の場合、初期化
+                        if (!positionMap[word.position]) {
+                            positionMap[word.position] = [];
+                        }
+                        // positionに単語を追加
+                        positionMap[word.position].push({
+                            english: word.english,
+                            japanese: word.japanese,
+                            subUnitName: subUnit.name // 子ユニットの名前を追加
+                        });
+                    });
+                });
+            });
+
+            // positionごとにテーブルを生成
+            Object.keys(positionMap).forEach(position => {
+                const words = positionMap[position]; // このテーブル番号に対応する単語
+                const section = document.createElement('div');
+                section.classList.add('table-section');
+
+                // テーブル番号の見出し
+                const heading = document.createElement('h2');
+                heading.textContent = `テーブル番号: ${position}`;
+                heading.classList.add('table-heading');
+                section.appendChild(heading);
+
+                // 子ユニットごとに単語をグループ化
+                const subUnitMap = {};
+                words.forEach(word => {
+                    if (!subUnitMap[word.subUnitName]) {
+                        subUnitMap[word.subUnitName] = [];
+                    }
+                    subUnitMap[word.subUnitName].push(word);
+                });
+
+                // テーブルを構築
+                const table = document.createElement('table');
+                table.classList.add('table', 'table-bordered');
+
+                // テーブルボディ
+                const tbody = document.createElement('tbody');
+                Object.keys(subUnitMap).forEach(subUnitName => {
+                    const subUnitWords = subUnitMap[subUnitName];
+
+                    // 子ユニットの見出し行を追加
+                    const subUnitHeadingRow = document.createElement('tr');
+                    const subUnitHeadingCell = document.createElement('td');
+                    subUnitHeadingCell.colSpan = 2;
+                    subUnitHeadingCell.textContent = `${subUnitName}`;
+                    subUnitHeadingCell.classList.add('subunit-heading');
+                    subUnitHeadingRow.appendChild(subUnitHeadingCell);
+                    tbody.appendChild(subUnitHeadingRow);
+
+                    // 子ユニットの単語を追加
+                    subUnitWords.forEach(word => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${word.english}</td>
+                            <td>${word.japanese}</td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                });
+                table.appendChild(tbody);
+
+                // セクションにテーブルを追加
+                section.appendChild(table);
+
+                // テーブル番号が奇数なら左側、偶数なら右側に追加
+                if (position % 2 === 1) {
+                    leftWrapper.appendChild(section);
+                } else {
+                    rightWrapper.appendChild(section);
+                }
+            });
+        });
+    </script>
 </body>
 </html>

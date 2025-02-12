@@ -100,7 +100,7 @@ def create_test(request):
             response_data["units"].append(unit_data)
 
         # JSON データをテンプレートに渡す
-        return render(request, 'test_result_dev.html', {"data": response_data})
+        return render(request, 'test_result.html', {"data": response_data})
 
     # POST でない場合
     return redirect('display_data')
