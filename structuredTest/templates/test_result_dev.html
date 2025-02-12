@@ -30,11 +30,12 @@
 
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
     const data = {{ data|safe }};
     console.log(data);
 
-    const tableSections = document.getElementById('table-sections');
+    const leftColumn = document.getElementById('left-column');
+    const rightColumn = document.getElementById('right-column');
 
     // テーブル番号ごとに単語をまとめる
     const positionMap = {};
@@ -63,7 +64,6 @@
         section.classList.add('table-section');
 
         // テーブル番号の見出し
-        // ここは将来的に削除
         const heading = document.createElement('h2');
         heading.textContent = `テーブル番号: ${position}`;
         heading.classList.add('table-heading');
@@ -119,9 +119,15 @@
 
         // セクションにテーブルを追加
         section.appendChild(table);
-        tableSections.appendChild(section);
-        });
+
+        // テーブル番号が奇数なら左側、偶数なら右側に追加
+        if (position % 2 === 1) {
+            leftColumn.appendChild(section);
+        } else {
+            rightColumn.appendChild(section);
+        }
     });
+});
 </script>
 </body>
 </html>
