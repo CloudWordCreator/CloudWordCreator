@@ -17,48 +17,17 @@
     <div class="print-area">
         <!-- 英語->日本語 -->
         <div id="english-to-japanese-content" class="tab">
-            <div id="left-column" class="column">
-                <!-- 左側テーブルを配置 -->
-            </div>
-            <div id="right-column" class="column">
-                <!-- 右側テーブルを配置 -->
-            </div>
-
-            <!-- テーブルセクションのラッパー要素を追加 -->
-            <div id="table-sections">
-                <!-- JavaScriptがここにテーブルを生成します -->
-            </div>
+            <!-- JavaScriptがここにテーブルを生成します -->
         </div>
         <!-- 日本語->英語 -->
         <div id="japanese-to-english-content" class="tab">
-            <div id="left-column" class="column">
-                <!-- 左側テーブルを配置 -->
-            </div>
-            <div id="right-column" class="column">
-                <!-- 右側テーブルを配置 -->
-            </div>
-
-            <!-- テーブルセクションのラッパー要素を追加 -->
-            <div id="table-sections">
-                <!-- JavaScriptがここにテーブルを生成します -->
-            </div>
+            <!-- JavaScriptがここにテーブルを生成します -->
         </div>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const data = {{ data|safe }};
-
-            const leftColumn = document.getElementById('left-column');
-            const rightColumn = document.getElementById('right-column');
-
-            // Create a wrapper div with class "printer-setting"
-            const leftWrapper = document.createElement('div');
-            leftWrapper.classList.add('printer-setting');
-            leftColumn.appendChild(leftWrapper);
-
-            const rightWrapper = document.createElement('div');
-            rightWrapper.classList.add('printer-setting');
-            rightColumn.appendChild(rightWrapper);
+            console.log(data);
 
             // テーブル番号ごとに単語をまとめる
             const positionMap = {};
@@ -66,33 +35,32 @@
             data.units.forEach(unit => {
                 unit.sub_units.forEach(subUnit => {
                     subUnit.words.forEach(word => {
-                        // 初めてのposition（テーブル番号）の場合、初期化
                         if (!positionMap[word.position]) {
                             positionMap[word.position] = [];
                         }
-                        // positionに単語を追加
                         positionMap[word.position].push({
                             english: word.english,
                             japanese: word.japanese,
-                            subUnitName: subUnit.name // 子ユニットの名前を追加
+                            subUnitName: subUnit.name
                         });
                     });
                 });
             });
 
+            let tableCounter = 0;
+            let currentWrapper = null;
+
             // positionごとにテーブルを生成
             Object.keys(positionMap).forEach(position => {
-                const words = positionMap[position]; // このテーブル番号に対応する単語
+                const words = positionMap[position];
                 const section = document.createElement('div');
                 section.classList.add('table-section');
 
-                // テーブル番号の見出し
                 const heading = document.createElement('h2');
                 heading.textContent = `テーブル番号: ${position}`;
                 heading.classList.add('table-heading');
                 section.appendChild(heading);
 
-                // 子ユニットごとに単語をグループ化
                 const subUnitMap = {};
                 words.forEach(word => {
                     if (!subUnitMap[word.subUnitName]) {
@@ -101,16 +69,13 @@
                     subUnitMap[word.subUnitName].push(word);
                 });
 
-                // テーブルを構築
                 const table = document.createElement('table');
                 table.classList.add('table', 'table-bordered');
 
-                // テーブルボディ
                 const tbody = document.createElement('tbody');
                 Object.keys(subUnitMap).forEach(subUnitName => {
                     const subUnitWords = subUnitMap[subUnitName];
 
-                    // 子ユニットの見出し行を追加
                     const subUnitHeadingRow = document.createElement('tr');
                     const subUnitHeadingCell = document.createElement('td');
                     subUnitHeadingCell.colSpan = 2;
@@ -119,7 +84,6 @@
                     subUnitHeadingRow.appendChild(subUnitHeadingCell);
                     tbody.appendChild(subUnitHeadingRow);
 
-                    // 子ユニットの単語を追加
                     subUnitWords.forEach(word => {
                         const row = document.createElement('tr');
                         row.innerHTML = `
@@ -130,16 +94,34 @@
                     });
                 });
                 table.appendChild(tbody);
-
-                // セクションにテーブルを追加
                 section.appendChild(table);
 
-                // テーブル番号が奇数なら左側、偶数なら右側に追加
-                if (position % 2 === 1) {
-                    leftWrapper.appendChild(section);
-                } else {
-                    rightWrapper.appendChild(section);
+                if (tableCounter % 2 === 0) {
+                    currentWrapper = document.createElement('div');
+                    currentWrapper.classList.add('printer-setting');
+
+                    // 新しいleft-columnとright-columnを作成
+                    const leftColumn = document.createElement('div');
+                    leftColumn.classList.add('column', 'left-column');
+                    const rightColumn = document.createElement('div');
+                    rightColumn.classList.add('column', 'right-column');
+
+                    currentWrapper.appendChild(leftColumn);
+                    currentWrapper.appendChild(rightColumn);
+
+                    // 親要素に追加
+                    const parentElement = document.getElementById('english-to-japanese-content');
+                    parentElement.appendChild(currentWrapper);
                 }
+
+                // テーブルを左右に分けて配置
+                if (tableCounter % 2 === 0) {
+                    currentWrapper.querySelector('.left-column').appendChild(section);
+                } else {
+                    currentWrapper.querySelector('.right-column').appendChild(section);
+                }
+
+                tableCounter++;
             });
         });
     </script>
