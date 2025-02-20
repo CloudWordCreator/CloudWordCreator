@@ -27,9 +27,8 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const data = {{ data|safe }};
-            console.log(data);
 
-            // テーブル番号ごとに単語をまとめる
+            // Group words by their positions
             const positionMap = {};
 
             data.units.forEach(unit => {
@@ -50,7 +49,7 @@
             let tableCounter = 0;
             let currentWrapper = null;
 
-            // positionごとにテーブルを生成
+            // Create tables for each position
             Object.keys(positionMap).forEach(position => {
                 const words = positionMap[position];
                 const section = document.createElement('div');
@@ -78,7 +77,6 @@
 
                     const subUnitHeadingRow = document.createElement('tr');
                     const subUnitHeadingCell = document.createElement('td');
-                    // 子unitを表示する場所
                     subUnitHeadingCell.colSpan = 2;
                     subUnitHeadingCell.textContent = `${subUnitName}`;
                     subUnitHeadingCell.classList.add('subunit-heading');
@@ -97,12 +95,10 @@
                 table.appendChild(tbody);
                 section.appendChild(table);
 
-                // 表が2個表示されたら、印刷用のcssを読み込む
                 if (tableCounter % 2 === 0) {
                     currentWrapper = document.createElement('div');
                     currentWrapper.classList.add('printer-setting');
 
-                    // 新しいleft-columnとright-columnを作成
                     const leftColumn = document.createElement('div');
                     leftColumn.classList.add('column', 'left-column');
                     const rightColumn = document.createElement('div');
@@ -111,14 +107,15 @@
                     currentWrapper.appendChild(leftColumn);
                     currentWrapper.appendChild(rightColumn);
 
-                    // 親要素に追加
                     const parentElement = document.getElementById('english-to-japanese-content');
+                    const parentElement_Jp_To_En = document.getElementById('japanese-to-english-content');
                     parentElement.appendChild(currentWrapper);
-                }
 
-                // テーブルを左右に分けて配置
-                // 奇数なら左側、偶数なら右側に表示する
-                if (tableCounter % 2 === 0) {
+                    // 多分ここで問題がある。
+                    // rightColumn/leftに追加はされているが、中身にtable要素が追加されていない
+                    // 印刷用のcssは適用されている
+                    // parentElement_Jp_To_En.appendChild(currentWrapper.cloneNode(true));
+
                     currentWrapper.querySelector('.left-column').appendChild(section);
                 } else {
                     currentWrapper.querySelector('.right-column').appendChild(section);
