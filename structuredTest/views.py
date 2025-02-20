@@ -3,6 +3,12 @@ from django.http import JsonResponse
 from django.shortcuts import redirect
 from csvManager.models import Text, Unit, UnitWord
 
+# global
+
+## 25行使ったら改行して別の表に移行する
+MAX_ENTRIES_PER_TABLE = 25
+
+
 # Create your views here.
 def display_data(request):
     """
@@ -85,7 +91,7 @@ def create_test(request):
                     entry_count += 1
 
                     # テーブル内の行数が25を超えたら次のテーブルに移動
-                    if entry_count >= 25:
+                    if entry_count >= MAX_ENTRIES_PER_TABLE:
                         entry_count = 0
                         table_no += 1
 
@@ -93,7 +99,7 @@ def create_test(request):
 
                 # 子ユニット終了時も行数確認
                 entry_count += 1
-                if entry_count >= 25:
+                if entry_count >= MAX_ENTRIES_PER_TABLE:
                     entry_count = 0
                     table_no += 1
 

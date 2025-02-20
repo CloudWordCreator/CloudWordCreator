@@ -78,6 +78,7 @@
 
                     const subUnitHeadingRow = document.createElement('tr');
                     const subUnitHeadingCell = document.createElement('td');
+                    // 子unitを表示する場所
                     subUnitHeadingCell.colSpan = 2;
                     subUnitHeadingCell.textContent = `${subUnitName}`;
                     subUnitHeadingCell.classList.add('subunit-heading');
@@ -96,6 +97,7 @@
                 table.appendChild(tbody);
                 section.appendChild(table);
 
+                // 表が2個表示されたら、印刷用のcssを読み込む
                 if (tableCounter % 2 === 0) {
                     currentWrapper = document.createElement('div');
                     currentWrapper.classList.add('printer-setting');
@@ -115,6 +117,7 @@
                 }
 
                 // テーブルを左右に分けて配置
+                // 奇数なら左側、偶数なら右側に表示する
                 if (tableCounter % 2 === 0) {
                     currentWrapper.querySelector('.left-column').appendChild(section);
                 } else {
