@@ -20,17 +20,19 @@
             <!-- JavaScriptがここにテーブルを生成します -->
         </div>
         <!-- 日本語->英語 -->
-        <div id="japanese-to-english-content" class="tab">
-            <!-- JavaScriptがここにテーブルを生成します -->
-        </div>
+        <!-- javascriptによって自動生成される -->
+        <!-- idは以下 -->
+        <!-- div id="japanese-to-english-content" -->
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // jsonデータを取得
             const data = {{ data|safe }};
 
             // Group words by their positions
             const positionMap = {};
 
+            // 単語をテーブル番号ごとにまとめる
             data.units.forEach(unit => {
                 unit.sub_units.forEach(subUnit => {
                     subUnit.words.forEach(word => {
@@ -50,16 +52,23 @@
             let currentWrapper = null;
 
             // Create tables for each position
+            // positionMapオブジェクトキーでfor文を回す
             Object.keys(positionMap).forEach(position => {
                 const words = positionMap[position];
+                // sectionをそれぞれのテーブルで作成する
+                // 新しいdiv要素を作成してtable-sectionを追加する
                 const section = document.createElement('div');
                 section.classList.add('table-section');
 
+                // テーブル番号を表示 (削除予定)
                 const heading = document.createElement('h2');
                 heading.textContent = `テーブル番号: ${position}`;
                 heading.classList.add('table-heading');
                 section.appendChild(heading);
 
+                // 子ユニットごとに単語をまとめる
+                // example :
+                // unit1-part1 :{word1, word2, word3}
                 const subUnitMap = {};
                 words.forEach(word => {
                     if (!subUnitMap[word.subUnitName]) {
@@ -68,6 +77,7 @@
                     subUnitMap[word.subUnitName].push(word);
                 });
 
+                //
                 const table = document.createElement('table');
                 table.classList.add('table', 'table-bordered');
 
@@ -108,13 +118,7 @@
                     currentWrapper.appendChild(rightColumn);
 
                     const parentElement = document.getElementById('english-to-japanese-content');
-                    const parentElement_Jp_To_En = document.getElementById('japanese-to-english-content');
                     parentElement.appendChild(currentWrapper);
-
-                    // 多分ここで問題がある。
-                    // rightColumn/leftに追加はされているが、中身にtable要素が追加されていない
-                    // 印刷用のcssは適用されている
-                    // parentElement_Jp_To_En.appendChild(currentWrapper.cloneNode(true));
 
                     currentWrapper.querySelector('.left-column').appendChild(section);
                 } else {
@@ -123,6 +127,12 @@
 
                 tableCounter++;
             });
+
+            // 日本語->英語のコンテンツを複製
+            const enToJpContent = document.getElementById('english-to-japanese-content');
+            let clone_element = enToJpContent.cloneNode(true);
+            clone_element.id = 'japanese-to-english-content';
+            enToJpContent.after(clone_element);
         });
     </script>
 </body>
