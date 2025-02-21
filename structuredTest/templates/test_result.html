@@ -97,8 +97,8 @@
                     subUnitWords.forEach(word => {
                         const row = document.createElement('tr');
                         row.innerHTML = `
-                            <td>${word.english}</td>
-                            <td>${word.japanese}</td>
+                            <td width=50%>${word.english}</td>
+                            <td width=50%>${word.japanese}</td>
                         `;
                         tbody.appendChild(row);
                     });
@@ -145,6 +145,30 @@
             clone_element.id = 'japanese-to-english-content';
             clone_element.style.display='none';
             enToJpContent.after(clone_element);
+
+            // 英語→日本語
+            // 日本語のテキストを削除
+            const rows = questionSheet.querySelectorAll('tr');
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                if (cells.length > 1) {
+                    cells[1].textContent = ''; // 日本語のセルを空白にする
+                }
+            });
+
+            parentElement.insertBefore(questionSheet, parentElement.firstChild);
+
+            // 日本語→英語
+            // question-sheetの英語の部分を削除し、日本語を左側に移動
+            const testSheet = clone_element.querySelector('.question-sheet');
+            const testRows = testSheet.querySelectorAll('tr');
+            testRows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                if (cells.length > 1) {
+                    cells[0].textContent = cells[1].textContent; // 日本語を左側に移動
+                    cells[1].textContent = '     '; // 英語のセルを空白にする
+                }
+            });
         });
     </script>
 </body>
