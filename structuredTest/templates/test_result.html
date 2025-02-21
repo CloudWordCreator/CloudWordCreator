@@ -51,8 +51,10 @@
             let tableCounter = 0;
             let currentWrapper = null;
 
-            // Create tables for each position
-            // positionMapオブジェクトキーでfor文を回す
+            // answer-sheetを生成
+            const answerSheet = document.createElement('div');
+            answerSheet.classList.add('answer-sheet');
+
             Object.keys(positionMap).forEach(position => {
                 const words = positionMap[position];
                 // sectionをそれぞれのテーブルで作成する
@@ -77,7 +79,6 @@
                     subUnitMap[word.subUnitName].push(word);
                 });
 
-                //
                 const table = document.createElement('table');
                 table.classList.add('table', 'table-bordered');
 
@@ -117,8 +118,7 @@
                     currentWrapper.appendChild(leftColumn);
                     currentWrapper.appendChild(rightColumn);
 
-                    const parentElement = document.getElementById('english-to-japanese-content');
-                    parentElement.appendChild(currentWrapper);
+                    answerSheet.appendChild(currentWrapper);
 
                     currentWrapper.querySelector('.left-column').appendChild(section);
                 } else {
@@ -128,10 +128,22 @@
                 tableCounter++;
             });
 
+            // answer-sheetを表示
+            const parentElement = document.getElementById('english-to-japanese-content');
+            parentElement.appendChild(answerSheet);
+
+            // question-sheetを生成
+            // answer-sheetから複製して、answer-sheetの前に挿入
+            const questionSheet = answerSheet.cloneNode(true);
+            questionSheet.classList.remove('answer-sheet');
+            questionSheet.classList.add('question-sheet');
+            parentElement.insertBefore(questionSheet, parentElement.firstChild);
+
             // 日本語->英語のコンテンツを複製
             const enToJpContent = document.getElementById('english-to-japanese-content');
             let clone_element = enToJpContent.cloneNode(true);
             clone_element.id = 'japanese-to-english-content';
+            clone_element.style.display='none';
             enToJpContent.after(clone_element);
         });
     </script>
