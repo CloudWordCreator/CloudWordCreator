@@ -4,15 +4,15 @@
     <title>Admin Home</title>
     <meta charset="UTF-8">
     {% load static %}
-    <link rel="stylesheet" href="{% static 'admin_screen/css/adminscreen_style.css' %}">
+    <link rel="stylesheet" href="{% static 'admin_screen/css/admin home_style.css' %}">
     <script src="{% static 'admin_screen/js/adminscreen_scripts.js' %}"></script>
 </head>
 <body>
-    <form method="GET" action="{%  url 'search_text' %}">
+    <form method="GET" action="{% url 'search_text' %}" id="searchForm">
         <div class="searchForm">
             <input type="text" name="text_query" id="searchInput" placeholder="教材検索">
-        <button type="button" onclick="searchText()">検索</button>
-    </div>
+            <button type="button" onclick="searchText()">検索</button>
+        </div>
     </form>
     <div class="csvForm">
         <a href="{% url 'upload_csv' %}" target="_blank" rel="noopener">教材をアップロード</a>
@@ -27,9 +27,13 @@
                 <li class="text-item" id='text-{{ text.id }}'>
                     <span>{{ text.name }}</span>
                     <!-- 編集ボタン -->
-                    <button id='edit-{{ text.id }}' onclick="location.href='{% url 'edit_text' %}?text-id={{ text.id }}'">編集</button>
+                    <button id='edit-{{ text.id }}' class="edit-button" onclick="location.href='{% url 'edit_text' %}?text-id={{ text.id }}'">
+                        <img src="{% static 'admin_screen/images/edit.png' %}" alt="編集">
+                    </button>
                     <!-- 削除ボタン -->
-                    <button id='delete-{{ text.id }}' onclick="location.href='{% url 'delete_text' %}?text_id={{ text.id }}'">削除</button>
+                    <button id='delete-{{ text.id }}' class="delete-button" onclick="location.href='{% url 'delete_text' %}?text_id={{ text.id }}'">
+                        <img src="{% static 'admin_screen/images/delete.png' %}" alt="削除">
+                    </button>
                 </li>
             {% endfor %}
         </ul>
@@ -42,13 +46,28 @@
                     <li class="text-item" id='text-{{ text.id }}'>
                     <span>{{ text.name }}</span>
                     <!-- 編集ボタン -->
-                    <button id='edit-{{ text.id }}' onclick="location.href='{% url 'edit_text' %}?text-id={{ text.id }}'">編集</button>
+                    <button id='edit-{{ text.id }}' class="edit-button" onclick="location.href='{% url 'edit_text' %}?text-id={{ text.id }}'">
+                        <img src="{% static 'admin_screen/images/edit.png' %}" alt="編集">
+                    </button>
                     <!-- 削除ボタン -->
-                    <button id='delete-{{ text.id }}' onclick="location.href='{% url 'delete_text' %}?text_id={{ text.id }}'">削除</button>
+                    <button id='delete-{{ text.id }}' class="delete-button" onclick="location.href='{% url 'delete_text' %}?text_id={{ text.id }}'">
+                        <img src="{% static 'admin_screen/images/delete.png' %}" alt="削除">
+                    </button>
                     </li>
                 {% endfor %}
             </ul>
         </div>
     </div>
+    <script>
+        document.getElementById('searchInput').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                document.getElementById('searchForm').submit();
+            }
+        });
+        function searchText() {
+            document.getElementById('searchForm').submit();
+        }
+    </script>
 </body>
 </html>

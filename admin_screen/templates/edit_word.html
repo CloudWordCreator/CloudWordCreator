@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>単語編集</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'admin_screen/css/edit_word_style.css' %}">
 </head>
 <body>
     <h1>単語編集</h1>
-   <form method="post" action="{% url 'save_word' %}">
+    <form method="post" action="{% url 'save_word' %}">
         {% if messages %}
             <ul>
                 {% for message in messages %}
