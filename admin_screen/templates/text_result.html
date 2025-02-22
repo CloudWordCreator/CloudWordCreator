@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>検索結果</title>
+        {% load static %}
+    <link rel="stylesheet" href="{% static 'admin_screen/css/text_result_style.css' %}">
 </head>
 <body>
     <div class="search-result">
@@ -10,12 +12,19 @@
         {% for text in results %}
             <li>
                 <span>{{ text.name }}</span>
-                <button id='edit-{{ text.id }}' onclick="location.href='{% url 'edit_text' %}?text-id={{ text.id }}'">編集</button>
+                <button id='edit-{{ text.id }}' onclick="location.href='{% url 'edit_text' %}?text-id={{ text.id }}'">
+                    <img src="{% static 'admin_screen/images/edit.png' %}" alt="編集">
+                </button>
             </li>
         {% endfor %}
     </div>
     <div class="back-button">
         <button onclick="backToHome()">戻る</button>
     </div>
+    <script>
+        function backToHome() {
+            window.history.back();
+        }
+    </script>
 </body>
 </html>
