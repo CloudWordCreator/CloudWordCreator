@@ -37,19 +37,8 @@
             </ul>
             <!-- 右側に固定表示するチェックボックスとボタン -->
             <div class="fixed-sidebar">
-                <h5>固定表示</h5>2
-                <div>
-                    <input type="checkbox" id="fixed-checkbox-1" name="fixed-checkbox-1">
-                    <label for="fixed-checkbox-1">順番通り</label>
-                </div>
-                <div>
-                    <input type="checkbox" id="fixed-checkbox-2" name="fixed-checkbox-2">
-                    <label for="fixed-checkbox-2">ランダム</label>
-                </div>
-                <div>
-                    <input type="checkbox" id="fixed-checkbox-3" name="fixed-checkbox-3">
-                    <label for="fixed-checkbox-3">穴埋め問題</label>
-                </div>
+                <h5>表示されていない教材はこちら</h5>
+                <li><a href="/flatTestMaker/settings/" class="hover-link" data-materials="{{ flat_test_texts|join:', ' }}">Flat Test Maker Settings</a></li>
                 <button type="submit" class="btn btn-primary mt-2">作成</button>
             </div>
         </form>
