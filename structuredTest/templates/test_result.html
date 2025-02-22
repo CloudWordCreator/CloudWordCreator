@@ -10,10 +10,12 @@
     <title>テスト</title>
 </head>
 <body>
-    <button id="english-to-japanese-button" class="button">英語→日本語</button>
-    <button id="japanese-to-english-button" class="button">日本語→英語</button>
-    <button onclick="printContent()" class="button">印刷</button>
-    <a href="{% url 'display_data' %}">戻る</a>
+    <div class="header fixed-header">
+        <button id="english-to-japanese-button" class="button">英語→日本語</button>
+        <button id="japanese-to-english-button" class="button">日本語→英語</button>
+        <button onclick="printContent()" class="button">印刷</button>
+        <a href="{% url 'display_data' %}">戻る</a>
+    </div>
     <div class="print-area">
         <!-- 英語->日本語 -->
         <div id="english-to-japanese-content" class="tab">
@@ -61,12 +63,6 @@
                 // 新しいdiv要素を作成してtable-sectionを追加する
                 const section = document.createElement('div');
                 section.classList.add('table-section');
-
-                // テーブル番号を表示 (削除予定)
-                const heading = document.createElement('h2');
-                heading.textContent = `テーブル番号: ${position}`;
-                heading.classList.add('table-heading');
-                section.appendChild(heading);
 
                 // 子ユニットごとに単語をまとめる
                 // example :
