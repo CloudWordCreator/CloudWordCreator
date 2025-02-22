@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'flatTestMaker',
     'structuredTest',
     'admin_screen',
-    'authentication'
+    'authentication',
+    'home_screen',
 ]
 
 MIDDLEWARE = [
