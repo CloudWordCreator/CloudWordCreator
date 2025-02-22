@@ -1,5 +1,13 @@
 from django.shortcuts import render, redirect
-from csvManager.models import Text, Unit, UnitWord, NoUnitWord
+from django.http import JsonResponse
+from django.shortcuts import redirect
+from csvManager.models import Text, Unit, UnitWord
+
+# global
+
+## 25行使ったら改行して別の表に移行する
+MAX_ENTRIES_PER_TABLE = 25
+
 
 # Create your views here.
 def display_data(request):
@@ -19,25 +27,88 @@ def display_data(request):
 def create_test(request):
     """
     チェックボックスの選択内容に基づいてテストを作成し、表示する。
+    returnのjsonファイルについて
+    - 親unit
+    - 子unit
+    - 単語
+    - テーブル番号
+
+    テーブルの番号について :
+    子unitと単語unitが合計25個になったらテーブル番号を更新している
+    Json内はint型で扱う。
+
+    フロントエンドでのテーブル番号の扱いについて :
+    左上をテーブル番号1とすると、右上が2、左下が3、右下が4...
+    example:
+    ```
+    1 2
+    3 4
+    5 6
+    ```
+
+    :return
+        json file (コード見ろ)
     """
     if request.method == 'POST':
+        # POST データから選択されたユニットとテキストIDを取得
         selected_unit_ids = request.POST.getlist('selected_units')
         selected_text_ids = request.POST.getlist('selected_texts')
-        
+
         # 親ユニットを取得
         selected_units = Unit.objects.filter(id__in=selected_unit_ids)
         selected_texts = Text.objects.filter(id__in=selected_text_ids)
-        
-        # 複数の親ユニットから子ユニットを取得
-        child_units = Unit.objects.filter(parent__in=selected_units)
-        
-        # 親ユニットおよび子ユニットに関連する単語を取得
-        child_words = UnitWord.objects.filter(unit__in=child_units | selected_units)
-        
-        return render(request, 'test_result.html', {
-            'words': child_words,
-            'units': selected_units,
-            'selected_texts': selected_texts,
-        })
-    
+
+        # データを整形して番号付け
+        table_no = 1  # テーブル番号
+        entry_count = 0  # 現在のテーブル内の行数カウント
+        word_index = 1  # 各単語の全体的なインデックス
+
+        response_data = {
+            "units": []
+        }
+
+        for unit in selected_units.prefetch_related('subunits__words'):
+            unit_data = {
+                "name": unit.name,
+                "sub_units": []
+            }
+            for subunit in unit.subunits.all():
+                subunit_data = {
+                    "name": subunit.name,
+                    "position": table_no,  # 子ユニットが属するテーブル番号
+                    "words": []
+                }
+                for word in subunit.words.all():
+                    # 各単語を追加し、テーブル番号を考慮した番号付けを行う
+                    subunit_data["words"].append({
+                        "position": table_no, # 単語が属するテーブルの番号
+                        "english": word.english,
+                        "japanese": word.japanese
+                    })
+
+                    # 単語のカウントを更新
+                    word_index += 1
+                    entry_count += 1
+
+                    # テーブル内の行数が25を超えたら次のテーブルに移動
+                    if entry_count >= MAX_ENTRIES_PER_TABLE:
+                        entry_count = 0
+                        table_no += 1
+
+                unit_data["sub_units"].append(subunit_data)
+
+                # 子ユニット終了時も行数確認
+                entry_count += 1
+                if entry_count >= MAX_ENTRIES_PER_TABLE:
+                    entry_count = 0
+                    table_no += 1
+
+            response_data["units"].append(unit_data)
+
+        # JSON データをテンプレートに渡す
+        return render(request, 'test_result.html', {"data": response_data})
+
+    # POST でない場合
     return redirect('display_data')
+
+
