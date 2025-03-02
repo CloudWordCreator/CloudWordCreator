@@ -109,3 +109,12 @@ body {
     padding: 10px; /* Optional: adjust padding as needed */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: add a shadow for better visibility */
 }
+
+.answer-sheet {
+    margin: 0 auto; /* Center the answer-sheet horizontally */
+    padding: 20px; /* Add padding around the answer-sheet */
+    max-width: 800px; /* Set a maximum width for the answer-sheet */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow for better visibility */
+    background-color: #fff; /* Optional: Set a background color */
+    border-radius: 8px; /* Optional: Add rounded corners */
+}

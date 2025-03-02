@@ -28,13 +28,10 @@
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // jsonデータを取得
             const data = {{ data|safe }};
 
-            // Group words by their positions
             const positionMap = {};
 
-            // 単語をテーブル番号ごとにまとめる
             data.units.forEach(unit => {
                 unit.sub_units.forEach(subUnit => {
                     subUnit.words.forEach(word => {
@@ -53,20 +50,81 @@
             let tableCounter = 0;
             let currentWrapper = null;
 
-            // answer-sheetを生成
+            const questionSheet = document.createElement('div');
+            questionSheet.classList.add('question-sheet');
+
             const answerSheet = document.createElement('div');
             answerSheet.classList.add('answer-sheet');
 
             Object.keys(positionMap).forEach(position => {
                 const words = positionMap[position];
-                // sectionをそれぞれのテーブルで作成する
-                // 新しいdiv要素を作成してtable-sectionを追加する
                 const section = document.createElement('div');
                 section.classList.add('table-section');
 
-                // 子ユニットごとに単語をまとめる
-                // example :
-                // unit1-part1 :{word1, word2, word3}
+                const subUnitMap = {};
+                words.forEach(word => {
+                    if (!subUnitMap[word.subUnitName]) {
+                        subUnitMap[word.subUnitName] = [];
+                    }
+                    subUnitMap[word.subUnitName].push(word);
+                });
+
+                const table = document.createElement('table');
+                table.classList.add('table', 'table-bordered');
+
+                const tbody = document.createElement('tbody');
+                Object.keys(subUnitMap).forEach(subUnitName => {
+                    const subUnitWords = subUnitMap[subUnitName];
+
+                    const subUnitHeadingRow = document.createElement('tr');
+                    const subUnitHeadingCell = document.createElement('td');
+                    subUnitHeadingCell.colSpan = 2;
+                    subUnitHeadingCell.textContent = `${subUnitName}`;
+                    subUnitHeadingCell.classList.add('subunit-heading');
+                    subUnitHeadingRow.appendChild(subUnitHeadingCell);
+                    tbody.appendChild(subUnitHeadingRow);
+
+                    subUnitWords.forEach(word => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td width=50%>${word.english}</td>
+                            <td width=50%>${word.japanese}</td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                });
+                table.appendChild(tbody);
+                section.appendChild(table);
+
+                if (tableCounter % 2 === 0) {
+                    currentWrapper = document.createElement('div');
+                    currentWrapper.classList.add('printer-setting');
+
+                    const leftColumn = document.createElement('div');
+                    leftColumn.classList.add('column', 'left-column');
+                    const rightColumn = document.createElement('div');
+                    rightColumn.classList.add('column', 'right-column');
+
+                    currentWrapper.appendChild(leftColumn);
+                    currentWrapper.appendChild(rightColumn);
+
+                    questionSheet.appendChild(currentWrapper);
+
+                    currentWrapper.querySelector('.left-column').appendChild(section);
+                } else {
+                    currentWrapper.querySelector('.right-column').appendChild(section);
+                }
+
+                tableCounter++;
+            });
+
+            tableCounter = 0; // Reset counter for answer tables
+
+            Object.keys(positionMap).forEach(position => {
+                const words = positionMap[position];
+                const section = document.createElement('div');
+                section.classList.add('table-section');
+
                 const subUnitMap = {};
                 words.forEach(word => {
                     if (!subUnitMap[word.subUnitName]) {
@@ -124,45 +182,32 @@
                 tableCounter++;
             });
 
-            // answer-sheetを表示
             const parentElement = document.getElementById('english-to-japanese-content');
+            parentElement.appendChild(questionSheet);
+
             parentElement.appendChild(answerSheet);
 
-            // question-sheetを生成
-            // answer-sheetから複製して、answer-sheetの前に挿入
-            const questionSheet = answerSheet.cloneNode(true);
-            questionSheet.classList.remove('answer-sheet');
-            questionSheet.classList.add('question-sheet');
-            parentElement.insertBefore(questionSheet, parentElement.firstChild);
-
-            // 日本語->英語のコンテンツを複製
             const enToJpContent = document.getElementById('english-to-japanese-content');
             let clone_element = enToJpContent.cloneNode(true);
             clone_element.id = 'japanese-to-english-content';
-            clone_element.style.display='none';
+            clone_element.style.display = 'none';
             enToJpContent.after(clone_element);
 
-            // 英語→日本語
-            // 日本語のテキストを削除
             const rows = questionSheet.querySelectorAll('tr');
             rows.forEach(row => {
                 const cells = row.querySelectorAll('td');
                 if (cells.length > 1) {
-                    cells[1].textContent = ''; // 日本語のセルを空白にする
+                    cells[1].textContent = '';
                 }
             });
 
-            parentElement.insertBefore(questionSheet, parentElement.firstChild);
-
-            // 日本語→英語
-            // question-sheetの英語の部分を削除し、日本語を左側に移動
             const testSheet = clone_element.querySelector('.question-sheet');
             const testRows = testSheet.querySelectorAll('tr');
             testRows.forEach(row => {
                 const cells = row.querySelectorAll('td');
                 if (cells.length > 1) {
-                    cells[0].textContent = cells[1].textContent; // 日本語を左側に移動
-                    cells[1].textContent = '     '; // 英語のセルを空白にする
+                    cells[0].textContent = cells[1].textContent;
+                    cells[1].textContent = '     ';
                 }
             });
         });
