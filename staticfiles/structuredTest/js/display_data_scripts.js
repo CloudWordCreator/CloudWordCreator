@@ -26,15 +26,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const textCheckboxes = document.querySelectorAll('.text-checkbox');
     const unitCheckboxes = document.querySelectorAll('.unit-checkbox');
 
-    // Disable all checkboxes initially
-    textCheckboxes.forEach(function(checkbox) {
-        checkbox.disabled = true;
-    });
-
-    unitCheckboxes.forEach(function(checkbox) {
-        checkbox.disabled = false;
-    });
-
     function handleUnitCheckboxChange(checkbox) {
         if (checkbox.checked) {
             // Disable all other unit checkboxes
@@ -56,11 +47,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 otherCheckbox.disabled = false;
             });
 
-            // Uncheck the corresponding text checkbox but keep it disabled
+            // Disable the corresponding text checkbox
             const textCheckbox = checkbox.closest('.text-item').querySelector('.text-checkbox');
             if (textCheckbox) {
                 textCheckbox.checked = false;
-                textCheckbox.disabled = true;
+                textCheckbox.disabled = false;
             }
         }
     }
@@ -69,6 +60,10 @@ document.addEventListener('DOMContentLoaded', function() {
         checkbox.addEventListener('change', function() {
             handleUnitCheckboxChange(checkbox);
         });
+    });
+
+    textCheckboxes.forEach(function(checkbox) {
+        checkbox.disabled = true; // Disable all text checkboxes initially
     });
 });
 

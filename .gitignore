@@ -2,3 +2,5 @@ csv_data
 .env
 csv_uploads
 config
+__pycache__
+*.pyc
