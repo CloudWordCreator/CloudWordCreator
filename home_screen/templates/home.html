@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>home</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'home_screen/css/home_style.css' %}">
+</head>
+<body>
+    <h1>Home</h1>
+    <ul>
+        <li><a href="/flatTestMaker/settings/" class="hover-link" data-materials="{{ flat_test_texts|join:', ' }}">Flat Test Maker Settings</a></li>
+        <li><a href="/structuredTest/settings/" class="hover-link" data-materials="{{ structured_test_texts|join:', ' }}">Structured Test Settings</a></li>
+        <li><a href="/login">Login</a></li>
+    </ul>
+    <form action="report/" method="get">
+        <button type="submit">
+            <img src="{% static 'home_screen/images/issue.png' %}" alt="報告">
+        </button>
+    </form>
+    <div id="tooltip" class="tooltip"></div>
+    <script src="{% static 'home_screen/js/home_screen_scripts.js' %}"></script>
+</body>
+</html>

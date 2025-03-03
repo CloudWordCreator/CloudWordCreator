@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>バグ/問題の報告</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'home_screen/css/report_style.css' %}">
+</head>
+<body>
+    <!-- バグ/問題の報告画面-->
+    <h1>バグ/問題の報告/機能リクエスト</h1>
+    <form action="{% url 'submit_report' %}" method="post">
+        {% csrf_token %}
+        <label for="school_name">校舎名:</label><br>
+        <input type="text" id="school_name" name="school_name"><br><br>
+
+        <label for="material">教材/範囲:<span class="required-label">必須</span></label><br>
+        <input type="text" id="material" name="material" required><br><br>
+
+        <label for="details">詳細:<span class="required-label">必須</span></label><br>
+        <textarea id="details" name="details" rows="5" cols="40" required></textarea><br><br>
+
+        <button type="submit">送信</button>
+    </form>
+</body>
+</html>
