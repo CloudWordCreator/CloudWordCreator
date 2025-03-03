@@ -163,8 +163,13 @@ def save_word(request):
             word.save()  # データベースに保存
 
             # 編集完了後のリダイレクト（再ロードを防ぐため）
+            if isinstance(word, UnitWord):
+                text_id = word.unit.text.id  # UnitWord の text ID を取得
+            else:
+                text_id = word.text.id  # NoUnitWord の text ID を取得
+
             url = reverse('edit_text')  # Named URLを取得
-            return HttpResponseRedirect(f'{url}?text-id={int(word.text.id)}')
+            return HttpResponseRedirect(f'{url}?text-id={int(text_id)}')
 
         except Exception as e:
             # エラーハンドリング
