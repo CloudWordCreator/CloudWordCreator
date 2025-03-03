@@ -22,6 +22,16 @@
         <button type="button" onclick="searchText()">検索</button>
     </div>
 
+    <!-- 戻るボタンとホーム画面のボタンを配置 -->
+    <div class="buttons">
+        <a href="{% url 'admin' %}">
+            <img src="{% static 'admin_screen/images/home.png' %}" alt="ホーム画面へ">
+        </a>
+        <a href="{% url 'admin' %}">
+            <img src="{% static 'admin_screen/images/back.png' %}" alt="戻る">
+        </a>
+    </div>
+
     <!-- 検索結果を表示する部分 -->
     <div id="searchResults">
         <p>検索結果</p>

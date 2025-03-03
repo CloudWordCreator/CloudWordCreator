@@ -61,3 +61,15 @@ ul {
 ul li {
     color: red;
 }
+
+.buttons {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: flex;
+    gap: 10px;
+}
+.buttons img {
+    width: 30px;
+    height: 30px;
+}

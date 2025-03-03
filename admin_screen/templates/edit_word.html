@@ -8,6 +8,15 @@
 </head>
 <body>
     <h1>単語編集</h1>
+    <!-- 戻るボタンとホーム画面のボタンを配置 -->
+    <div class="buttons">
+        <a href="{% url 'admin' %}">
+            <img src="{% static 'admin_screen/images/home.png' %}" alt="ホーム画面へ">
+        </a>
+        <a href="{% url 'edit_text' %}?text-id={{ text.id }}">
+            <img src="{% static 'admin_screen/images/back.png' %}" alt="戻る">
+        </a>
+    </div>
     <form method="post" action="{% url 'save_word' %}">
         {% if messages %}
             <ul>

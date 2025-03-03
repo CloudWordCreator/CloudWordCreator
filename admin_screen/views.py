@@ -109,7 +109,10 @@ def edit_word(request):
         return print(e)
 
     # 単語情報をテンプレートに渡す
-    return render(request, 'edit_word.html', {'word': word})
+    return render(request, 'edit_word.html', {
+        'word': word,
+        'text' : word.unit.text if isinstance(word, UnitWord) else word.text
+    })
 
 # 単語を削除する
 @login_required(login_url='/login/')
