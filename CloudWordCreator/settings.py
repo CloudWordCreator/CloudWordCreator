@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 from dotenv import load_dotenv
 import os
+import google.generativeai as genai
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,8 +41,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'EnglishWordTest',
-    'fill_in_the_blank',
     'csvManager',
     'flatTestMaker',
     'structuredTest',
@@ -153,3 +152,7 @@ if not os.path.exists(CSV_UPLOAD_DIR):
 LOGIN_URL = '/login/'
 # ログイン後のリダイレクトURL
 LOGIN_REDIRECT_URL = '/admin_screen/'  # ログイン後にリダイレクトするページ
+
+# gemini 1.5のロード
+AI_APIKEY = os.getenv('Gemini_APIKEY')
+genai.configure(api_key=AI_APIKEY)

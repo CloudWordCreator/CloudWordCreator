@@ -19,11 +19,10 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('info/', include('EnglishWordTest.urls')),
-    path('fill_in_the_blank/', include('fill_in_the_blank.urls')),
     path('csv_set/', include('csvManager.urls')),
     path('structuredTest/', include('structuredTest.urls')),
     path('flatTestMaker/', include('flatTestMaker.urls')),
     path('admin_screen/', include('admin_screen.urls')),
-    path('login/', include('authentication.urls'))
+    path('login/', include('authentication.urls')),
+    path('home/', include('home_screen.urls')),
 ]
