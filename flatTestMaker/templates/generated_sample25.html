@@ -8,11 +8,12 @@
     <script src="{% static 'flatTestMaker/js/generated_sample25_scripts.js' %}"></script>
 </head>
 <body>
-    <h1>生成された英単語</h1>
-    <button id="english-to-japanese-button" class="button">英語→日本語</button>
-    <button id="japanese-to-english-button" class="button">日本語→英語</button>
-    <button onclick="printContent()" class="button">印刷</button>
-    <a href="{% url 'settings' %}">戻る</a>
+    <div class="header fixed-header">
+        <button id="english-to-japanese-button" class="button">英語→日本語</button>
+        <button id="japanese-to-english-button" class="button">日本語→英語</button>
+        <button onclick="printContent()" class="button">印刷</button>
+        <a href="{% url 'settings' %}">戻る</a>
+    </div>
     <div class="print-area">
         <div id ="english-to-japanese-content" class="tab">
             <div class="printer-setting">

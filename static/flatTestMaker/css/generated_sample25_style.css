@@ -34,6 +34,7 @@ th:nth-child(4), td:nth-child(4) {
     width: 100%; /* 印刷範囲の幅を設定 */
     margin: 0 auto; /* 中央揃え */
     position: relative;
+    margin-top: 25px;
 }
 
 @media print {
@@ -75,4 +76,18 @@ th:nth-child(4), td:nth-child(4) {
     display: flex;
     justify-content: center;
     margin-bottom: 20px;
+}
+body {
+    padding-top: 60px; /* Adjust this value based on the height of your fixed header */
+}
+
+.fixed-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: white; /* Optional: to ensure the header has a background */
+    z-index: 1000; /* Ensure it is above other content */
+    padding: 10px; /* Optional: adjust padding as needed */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: add a shadow for better visibility */
 }

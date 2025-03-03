@@ -8,13 +8,14 @@
     <script src="{% static 'flatTestMaker/js/sentence_result_scripts.js' %}"></script>
 </head>
 <body>
-    <h1>穴埋め問題結果</h1>
-    <button id="japanese-available-button" class="button">日本語あり選択肢無し</button>
-    <button id="japanese-unavailable-button" class="button">日本語なし選択肢有り</button>
-    <button onclick="printContent()" class="button">印刷</button>
-    <div class="button-container">
-        <button class="reload-button" onclick="reloadPage()">再生成</button>
-        <a href="{% url 'settings' %}" class="back-button">戻る</a>
+    <div class="header fixed-header">
+        <button id="japanese-available-button" class="button">日本語あり選択肢無し</button>
+        <button id="japanese-unavailable-button" class="button">日本語なし選択肢有り</button>
+        <button onclick="printContent()" class="button">印刷</button>
+        <div class="button-container">
+            <button class="reload-button" onclick="reloadPage()">再生成</button>
+            <a href="{% url 'settings' %}" class="back-button">戻る</a>
+        </div>
     </div>
     {% if fill_in_the_blank and options %}
         <div class="print-area">
