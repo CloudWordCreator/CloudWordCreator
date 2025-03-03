@@ -106,20 +106,13 @@
         </div>
     </div>
     <div class="fixed-sidebar">
-        <h5>それぞれのURLの表示</h5>
-        <div>
-            <input type="checkbox" id="fixed-checkbox-1" name="fixed-checkbox-1">
-            <label for="fixed-checkbox-1">1</label>
-        </div>
-        <div>
-            <input type="checkbox" id="fixed-checkbox-2" name="fixed-checkbox-2">
-            <label for="fixed-checkbox-2">2</label>
-        </div>
-        <div>
-            <input type="checkbox" id="fixed-checkbox-3" name="fixed-checkbox-3">
-            <label for="fixed-checkbox-3">3</label>
-        </div>
-        <button class="btn btn-primary mt-2">作成</button>
+        <h5>URL</h5>
+    <ul>
+        <li><a href="/flatTestMaker/settings/" class="hover-link" data-materials="{{ flat_test_texts|join:', ' }}">unitなしテスト</a></li>
+        <li><a href="/structuredTest/settings/" class="hover-link" data-materials="{{ structured_test_texts|join:', ' }}">unitありテスト</a></li>
+        <li><a href="/home">home画面</a></li>
+        <!-- home画面はまだ未実装 -->
+    </ul>
     </div>
     <!-- Bootstrap JS and dependencies -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
