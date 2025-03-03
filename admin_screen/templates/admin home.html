@@ -50,7 +50,7 @@
                         <img src="{% static 'admin_screen/images/edit.png' %}" alt="編集">
                     </button>
                     <!-- 削除ボタン -->
-                    <button id='delete-{{ text.id }}' class="delete-button" onclick="location.href='{% url 'delete_text' %}?text_id={{ text.id }}'">
+                    <button id='delete-{{ text.id }}' class="delete-button" onclick="confirmDelete({{ text.id }})">
                         <img src="{% static 'admin_screen/images/delete.png' %}" alt="削除">
                     </button>
                     </li>
@@ -67,6 +67,11 @@
         });
         function searchText() {
             document.getElementById('searchForm').submit();
+        }
+        function confirmDelete(textId) {
+            if (confirm("削除しますか？")) {
+                location.href = '{% url "delete_text" %}?text_id=' + textId;
+            }
         }
     </script>
 </body>
