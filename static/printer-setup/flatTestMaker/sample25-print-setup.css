@@ -1,0 +1,52 @@
+/* 印刷用のcss - 微調整用 */
+body {
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+}
+table {
+    width: 99%;
+    font-size: 15px; /* フォントサイズを小さくしてA4に収める */
+    border-collapse: collapse;
+}
+th, td {
+    padding: 5px; /* パディングを小さくしてA4に収める */
+    border: 1px solid black;
+}
+th:nth-child(1), td:nth-child(1) {
+    width: 10%; /* 1列目の幅を10%に設定 */
+}
+th:nth-child(2), td:nth-child(2) {
+    width: 10%; /* 2列目の幅を10%に設定 */
+}
+th:nth-child(3), td:nth-child(3) {
+    width: 40%; /* 3列目の幅を40%に設定 */
+}
+th:nth-child(4), td:nth-child(4) {
+    width: 40%; /* 4列目の幅を40%に設定 */
+}
+
+.print-area {
+    page-break-after: always;
+    border: none;
+    width: 100%; /* 印刷範囲の幅を設定 */
+}
+.question-sheet {
+    text-align: center;
+    border: none;
+    width: 100%;
+    float: none;
+}
+.answer-sheet {
+    text-align: center;
+    border: none;
+    width: 100%;
+    float: none;
+}
+.selected_text, .test_range {
+    text-align: left;
+    font-size: 20px;
+}
+.score {
+    text-align: right;
+    font-size: 30px;
+}

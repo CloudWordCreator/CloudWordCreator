@@ -1,6 +1,6 @@
 /*印刷用のcss*/
 @page {
-	margin: 0mm 5mm;
+	margin: 10mm 10mm;
 	size: A4 portrait;
 }
 .printer-setting {

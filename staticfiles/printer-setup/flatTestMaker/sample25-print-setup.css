@@ -1,0 +1,41 @@
+/* 印刷用のcss - 微調整用 */
+body {
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+}
+table {
+    width: 100%;
+    font-size: 20px; /* フォントサイズを小さくしてA4に収める */
+    border-collapse: collapse;
+}
+th, td {
+    padding: 5px; /* パディングを小さくしてA4に収める */
+    border: 1px solid black;
+}
+.print-area {
+    page-break-after: always;
+    border: none;
+    width: 100%; /* 印刷範囲の幅を設定 */
+}
+.question-sheet {
+    text-align: center;
+    border: none;
+    width: 100%;
+    float: none;
+}
+.answer-sheet {
+    text-align: center;
+    border: none;
+    width: 100%;
+    float: none;
+}
+.selected_text {
+    font-size: 20px;
+}
+.test_range {
+    font-size: 20px;
+}
+.score {
+    text-align: right;
+    font-size: 30px;
+}
