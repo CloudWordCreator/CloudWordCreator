@@ -1,11 +1,12 @@
 /* プリンター設定用の微調整CSS */
 body {
-        -webkit-print-color-adjust: exact;
-        color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
 }
 .table-container {
     display: flex;
     justify-content: space-between;
+    padding: 1px;
 }
 .print-area {
     page-break-after: always;
@@ -20,7 +21,7 @@ th, td {
     padding: 4px; /* パディングを小さくしてA4に収める */
 }
 table {
-    width: 48%;
+    width: 49%;
     border-collapse: collapse;
 }
 th, td {
