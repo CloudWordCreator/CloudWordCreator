@@ -34,7 +34,7 @@
                             {% if not forloop.first %}
                                 </div>
                             {% endif %}
-                            <div class="printer-setting">
+                            <div class="sheet-size">
                         {% endif %}
                             <div class="question">
                                 <div class="question-number">{{ item.number }}</div>
@@ -49,10 +49,10 @@
 
                 <!-- 解答部分: 分割せず1枚にまとめる -->
                 <!-- 左側に 1 ~ 13問 右側に 14 ~ 25問を表示するようにする。 -->
-                <div class="printer-setting">
+                <div class="sheet-size">
                     <!-- 解答部分: 左右に分割 -->
                     <p>解答</p>
-                    <div class="printer-setting answers-split">
+                    <div class="sheet-size answers-split">
                         <div class="answers-left">
                             {% for item in fill_in_the_blank %}
                                 {% if forloop.counter <= 13 %}
@@ -81,7 +81,7 @@
             <!-- 表示されているが余分な空白が多いため再度レイアウトを考える -->
             <div id="japanese-unavailable-content" class="tab">
                 <!-- 1枚目: 選択肢 + 1～10問目 -->
-                <div class="printer-setting">
+                <div class="sheet-size">
                     <h3>{{ text }}</h3>
                     <p>範囲: {{ start_number }} ～ {{ end_number }}</p>
                     <h4>選択肢</h4>
@@ -102,7 +102,7 @@
                 </div>
                 
                 <!-- 2枚目: 11～25問目 -->
-                <div class="printer-setting">
+                <div class="sheet-size">
                     <h4>11～25問目</h4>
                     {% for item in fill_in_the_blank %}
                         {% if forloop.counter > 10 %}
@@ -115,9 +115,9 @@
                 </div>
             
                 <!-- 3枚目: 解答 -->
-                <div class="printer-setting">
+                <div class="sheet-size">
                     <!-- 解答部分: 左右に分割 (1～12問左、13～25問右) -->
-                    <div class="printer-setting answers-split">
+                    <div class="sheet-size answers-split">
                         <div class="answers-left">
                             {% for item in fill_in_the_blank %}
                                 {% if forloop.counter <= 12 %}
