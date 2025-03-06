@@ -59,24 +59,6 @@
     position: relative;
     margin-top: 110px;
 }
-@media print {
-    body {
-        -webkit-print-color-adjust: exact;
-        color-adjust: exact;
-    }
-    .print-area {
-        page-break-after: always;
-        border: none;
-        width: 100%; /* 印刷範囲の幅を設定 */
-    }
-    table {
-        width: 100%;
-        font-size: 12px; /* フォントサイズを小さくしてA4に収める */
-    }
-    th, td {
-        padding: 4px; /* パディングを小さくしてA4に収める */
-    }
-}
 .button {
     padding: 10px 20px;
     margin: 10px;
