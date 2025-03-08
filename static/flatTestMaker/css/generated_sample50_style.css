@@ -80,7 +80,6 @@ body {
 }
 
 .answer-sheet {
-    break-before: page;
     float: right;
     width: 49%;
     border: 2px dashed #000; /* 印刷範囲を囲む線 */

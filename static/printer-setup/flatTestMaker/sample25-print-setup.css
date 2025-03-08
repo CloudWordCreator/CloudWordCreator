@@ -37,6 +37,7 @@ th:nth-child(4), td:nth-child(4) {
     float: none;
 }
 .answer-sheet {
+    break-before: page;
     text-align: center;
     border: none;
     width: 100%;

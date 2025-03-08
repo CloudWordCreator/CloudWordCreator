@@ -53,6 +53,7 @@ th:nth-child(3), td:nth-child(3) {
     float: none;
 }
 .answer-sheet {
+    break-before: page;
     text-align: center;
     border: none;
     width: 100%;
