@@ -73,3 +73,6 @@ p {
 h4 {
     margin: 0;
 }
+.question-number, .japanese, .answer-word {
+    font-size: 10px;
+}
