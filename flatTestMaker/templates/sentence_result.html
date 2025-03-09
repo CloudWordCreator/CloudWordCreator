@@ -8,7 +8,7 @@
     <!-- 印刷用のcssを読み込み -->
     <link href="{% static 'printer-setup/flatTestMaker/sentence-print-setup.css' %}" media="print" rel="stylesheet" type="text/css">
     <!-- スクリーンcssの読み込み -->
-    <link rel="stylesheet" href="{% static 'flatTestMaker/css/sentence_result_style.css' %}">
+    <link rel="stylesheet" href="{% static 'flatTestMaker/css/sentence_result_style.css' %}" media="screen">
     <script src="{% static 'flatTestMaker/js/sentence_result_scripts.js' %}"></script>
 </head>
     <div class="header fixed-header">
@@ -99,8 +99,7 @@
                     <!-- 1枚目: 選択肢 + 1～10問目 -->
                     <div class="question-sheet1">
                         <div class="sheet-size">
-                            <h3>{{ text }}</h3>
-                            <p>範囲: {{ start_number }} ～ {{ end_number }}</p>
+                            <p>{{ text }} : {{ start_number }} ～ {{ end_number }}</p>
                             <h4>選択肢</h4>
                             <div class="options-grid">
                                 {% for option in options %}

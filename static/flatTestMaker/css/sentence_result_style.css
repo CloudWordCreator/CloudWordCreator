@@ -195,3 +195,6 @@ body {
     width: 99%;
     border : 2px dashed #000000;
 }
+.question-sheet2, .answer-sheet {
+    break-before: page;
+}

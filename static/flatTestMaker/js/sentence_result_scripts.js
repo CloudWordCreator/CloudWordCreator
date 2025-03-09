@@ -2,7 +2,9 @@ function printContent() {
     const printArea = document.querySelector('.print-area').innerHTML;
     const originalContent = document.body.innerHTML;
     document.body.innerHTML = printArea;
-    window.print();
+        setTimeout(() => {
+        window.print();
+    }, 100);
     document.body.innerHTML = originalContent;
     document.body.innerHTML = originalContent;
     document.getElementById('japanese-available-button').addEventListener('click', function() {

@@ -53,29 +53,9 @@
     border: 2px solid #008CBA;
 }
 .print-area {
-    border: 2px dashed #000; /* 印刷範囲を囲む線 */
     width: 100%; /* 印刷範囲の幅を設定 */
-    margin: 0 auto; /* 中央揃え */
     position: relative;
     margin-top: 110px;
-}
-@media print {
-    body {
-        -webkit-print-color-adjust: exact;
-        color-adjust: exact;
-    }
-    .print-area {
-        page-break-after: always;
-        border: none;
-        width: 100%; /* 印刷範囲の幅を設定 */
-    }
-    table {
-        width: 100%;
-        font-size: 12px; /* フォントサイズを小さくしてA4に収める */
-    }
-    th, td {
-        padding: 4px; /* パディングを小さくしてA4に収める */
-    }
 }
 .button {
     padding: 10px 20px;
@@ -171,14 +151,12 @@
 }
 
 /* 左側・右側の答え */
-.answers-left,
-.answers-right {
+.answers-left, .answers-right {
     width: 48%;
 }
 
 /* 各解答のスタイル */
-.answers-left .question,
-.answers-right .question {
+.answers-left .question, .answers-right .question {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -202,4 +180,18 @@ body {
     z-index: 1000; /* Ensure it is above other content */
     padding: 10px; /* Optional: adjust padding as needed */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: add a shadow for better visibility */
+}
+
+.question-container {
+    float: left;
+    width : 49%;
+}
+.answer-container {
+    float: right;
+    width : 49%;
+}
+
+.question-sheet1, .question-sheet2 , .answer-sheet{
+    width: 99%;
+    border : 2px dashed #000000;
 }
