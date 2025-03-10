@@ -2,8 +2,12 @@
 <html lang="ja">
 <head>
     {% load static %}
-    <link href="{% static 'css/style.css' %}" media="print" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="{% static 'structuredTest/css/test_result_style.css' %}">
+    <!-- 用紙の読み込み -->
+    <link href="{% static 'printer-setup/paper-setup.css' %}" media="print" rel="stylesheet" type="text/css">
+    <!-- 印刷時の微調整用のcss -->
+    <link href="{% static 'printer-setup/structuredTest/test-result-print-setup.css' %}" media="print" rel="stylesheet" type="text/css">
+    <!-- スクリーン用のcss -->
+    <link rel="stylesheet" href="{% static 'structuredTest/css/test_result_style.css' %}" media="screen">
     <script src="{% static 'structuredTest/js/test_result_scripts.js' %}"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -98,7 +102,7 @@
 
                 if (tableCounter % 2 === 0) {
                     currentWrapper = document.createElement('div');
-                    currentWrapper.classList.add('printer-setting');
+                    currentWrapper.classList.add('sheet-size-setting');
 
                     const leftColumn = document.createElement('div');
                     leftColumn.classList.add('column', 'left-column');
@@ -162,7 +166,7 @@
 
                 if (tableCounter % 2 === 0) {
                     currentWrapper = document.createElement('div');
-                    currentWrapper.classList.add('sheet-size');
+                    currentWrapper.classList.add('sheet-size-setting');
 
                     const leftColumn = document.createElement('div');
                     leftColumn.classList.add('column', 'left-column');
