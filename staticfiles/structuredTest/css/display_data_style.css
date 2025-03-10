@@ -16,3 +16,18 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     overflow-y: auto; /* コンテンツが多い場合にスクロール可能にする */
 }
+.btn.btn-link.text-toggle {
+    font-size: 22px;
+}
+li {
+    font-size: 20px;
+}
+/* Increase the size of checkboxes */
+input[type="checkbox"] {
+    transform: scale(1.5); /* Adjust the scale as needed */
+    -webkit-transform: scale(1.5); /* For Safari */
+    -moz-transform: scale(1.5); /* For Firefox */
+    -ms-transform: scale(1.5); /* For IE */
+    -o-transform: scale(1.5); /* For Opera */
+    margin: 10px; /* Adjust the margin as needed */
+}

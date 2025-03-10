@@ -3,19 +3,18 @@ body {
     color-adjust: exact;
 }
 .print-area {
-    border: none;
     width: 100%; /* 印刷範囲の幅を設定 */
 }
 table {
     width: 100%;
-    font-size: 10px; /* フォントサイズを小さくしてA4に収める */
+    font-size: 8px; /* フォントサイズを小さくしてA4に収める */
 }
 th, td {
     padding: 4px; /* パディングを小さくしてA4に収める */
 }
 /* 問題用のCSS */
 .question {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 .question-number {
     font-weight: bold;
@@ -61,6 +60,19 @@ th, td {
     text-align: center;
     background-color: #fff;
 }
+
 .question-sheet2, .answer-sheet {
     break-before: page;
+}
+p {
+    margin: 0;
+}
+.fixed-header {
+    display: none;
+}
+h4 {
+    margin: 0;
+}
+.question-number, .japanese, .answer-word {
+    font-size: 10px;
 }

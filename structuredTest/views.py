@@ -63,8 +63,11 @@ def create_test(request):
         entry_count = 0  # 現在のテーブル内の行数カウント
         word_index = 1  # 各単語の全体的なインデックス
 
+        textbooks = [{"id": text.id, "name": text.name} for text in selected_texts]
+
         response_data = {
-            "units": []
+            "units": [],
+            "textbooks": textbooks  # ここに追加
         }
 
         for unit in selected_units.prefetch_related('subunits__words'):

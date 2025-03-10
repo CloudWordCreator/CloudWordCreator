@@ -70,7 +70,19 @@ document.addEventListener('DOMContentLoaded', function() {
             handleUnitCheckboxChange(checkbox);
         });
     });
+
+    document.getElementById("testForm").addEventListener("submit", function(event) {
+        // selected_texts のチェックボックスを手動で追加
+        document.querySelectorAll('.text-checkbox:checked').forEach(checkbox => {
+            let hiddenInput = document.createElement("input");
+            hiddenInput.type = "hidden";
+            hiddenInput.name = "selected_texts";
+            hiddenInput.value = checkbox.value;
+            this.appendChild(hiddenInput);
+        });
+    });
 });
+
 
 function searchText() {
     const query = document.getElementById('searchInput').value.toLowerCase();

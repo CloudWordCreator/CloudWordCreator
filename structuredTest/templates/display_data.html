@@ -28,7 +28,7 @@
                         <ul id="text-{{ text.id }}" class="nested">
                             {% for parent in units_by_text|get_item:text.id %}
                                 <li>
-                                    <input type="checkbox" class="unit-checkbox" data-id="unit-{{ parent.id }}" id="unit-checkbox-{{ parent.id }}" name="selected_units" value="{{ parent.id }}"> {{ parent.name }} </checkbox>
+                                    <input type="checkbox" class="unit-checkbox" data-id="unit-{{ parent.id }}" id="unit-checkbox-{{ parent.id }}" name="selected_units" value="{{ parent.id }}"> {{ parent.name }}
                                 </li>
                             {% endfor %}
                         </ul>

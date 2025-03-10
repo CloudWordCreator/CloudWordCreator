@@ -103,6 +103,10 @@
                 if (tableCounter % 2 === 0) {
                     currentWrapper = document.createElement('div');
                     currentWrapper.classList.add('sheet-size-setting');
+                    // Add textbook name and parent unit below the sheet-size-setting div
+                    const textTitle = document.createElement('p');
+                    textTitle.textContent = `${data.textbooks[0].name} ${data.units[0].name}`;
+                    currentWrapper.appendChild(textTitle);
 
                     const leftColumn = document.createElement('div');
                     leftColumn.classList.add('column', 'left-column');
@@ -167,6 +171,10 @@
                 if (tableCounter % 2 === 0) {
                     currentWrapper = document.createElement('div');
                     currentWrapper.classList.add('sheet-size-setting');
+                    // Add textbook name and parent unit below the sheet-size-setting div
+                    const textTitle = document.createElement('p');
+                    textTitle.textContent = `${data.textbooks[0].name} ${data.units[0].name}`;
+                    currentWrapper.appendChild(textTitle);
 
                     const leftColumn = document.createElement('div');
                     leftColumn.classList.add('column', 'left-column');

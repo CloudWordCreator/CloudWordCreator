@@ -1,3 +1,9 @@
+/* 印刷用のcss - 微調整用 */
+body {
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+    padding: 0;
+}
 /* テーブル間の上下間隔を追加 */
 table {
     width: 100%;
@@ -7,6 +13,19 @@ table {
 
 .table-container table {
     margin: 30px 0; /* さらに特定のセクションで調整が必要であればここで上書き */
+}
+.sheet-size-setting {
+    border: 2px solid #000; /* 境界線を明確にする */
+    width: 95%; /* 全体の幅を調整 */
+    margin: 20px auto; /* 上下の間隔を追加 */
+    padding: 15px; /* 内側の余白を追加 */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    background-color: #f9f9f9; /* 背景色を追加して見やすくする */
+}
+p {
+    width: 100%;
 }
 
 th, td {
@@ -41,6 +60,7 @@ th, td {
     width: 100%; /* 印刷範囲の幅を設定 */
     margin: 0 auto; /* 中央揃え */
     position: relative;
+    padding-top: 60px;
 }
 .selected_text {
     font-size: 20px;
@@ -60,10 +80,10 @@ th, td {
     padding-left: 15px;
 }
 .column {
- width: 50%;
- float: left;
- box-sizing: border-box;
- padding: 10px;
+    width: 49%;
+    float: left;
+    box-sizing: border-box;
+    padding: 10px;
 }
 
 #left-column {
@@ -76,9 +96,7 @@ th, td {
     margin: 15px 0 10px 0; /* 上下のマージン調整 */
     color: #333; /* テキスト色 */
 }
-body {
-    padding-top: 60px; /* Adjust this value based on the height of your fixed header */
-}
+
 
 .fixed-header {
     position: fixed;
