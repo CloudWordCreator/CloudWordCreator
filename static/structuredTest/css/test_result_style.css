@@ -1,69 +1,70 @@
-    /* テーブル間の上下間隔を追加 */
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 20px 0; /* 上下に20px間隔を追加 */
-    }
+/* 印刷用のcss - 微調整用 */
+body {
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+    padding: 0;
+}
+/* テーブル間の上下間隔を追加 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0; /* 上下に20px間隔を追加 */
+}
 
-    .table-container table {
-        margin: 30px 0; /* さらに特定のセクションで調整が必要であればここで上書き */
-    }
+.table-container table {
+    margin: 30px 0; /* さらに特定のセクションで調整が必要であればここで上書き */
+}
+.sheet-size-setting {
+    border: 2px solid #000; /* 境界線を明確にする */
+    width: 95%; /* 全体の幅を調整 */
+    margin: 20px auto; /* 上下の間隔を追加 */
+    padding: 15px; /* 内側の余白を追加 */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    background-color: #f9f9f9; /* 背景色を追加して見やすくする */
+}
+p {
+    width: 100%;
+}
 
-    th, td {
-        border: 1px solid black;
-        padding: 8px;
-        text-align: left;
-    }
-    .button {
-        padding: 10px 20px;
-        margin: 10px;
-        font-size: 16px;
-        color: #fff;
-        background-color: #007bff;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-    .button:hover {
-        background-color: #0056b3;
-    }
-    .button:focus {
-        outline: none;
-    }
-    .tab-buttons {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 20px;
-    }
-    .print-area {
-        border: 2px dashed #000; /* 印刷範囲を囲む線 */
-        width: 100%; /* 印刷範囲の幅を設定 */
-        margin: 0 auto; /* 中央揃え */
-        position: relative;
-    }
-    .selected_text {
-        font-size: 20px;
-    }
-
-    @media print {
-        body {
-            -webkit-print-color-adjust: exact;
-            color-adjust: exact;
-        }
-        .print-area {
-            page-break-after: always;
-            border: none;
-            width: 100%; /* 印刷範囲の幅を設定 */
-        }
-        table {
-            width: 100%;
-            font-size: 12px; /* フォントサイズを小さくしてA4に収める */
-        }
-        th, td {
-            padding: 4px; /* パディングを小さくしてA4に収める */
-        }
-    }
+th, td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+}
+.button {
+    padding: 10px 20px;
+    margin: 10px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.button:hover {
+    background-color: #0056b3;
+}
+.button:focus {
+    outline: none;
+}
+.tab-buttons {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+.print-area {
+    border: 2px dashed #000; /* 印刷範囲を囲む線 */
+    width: 100%; /* 印刷範囲の幅を設定 */
+    margin: 0 auto; /* 中央揃え */
+    position: relative;
+    padding-top: 60px;
+}
+.selected_text {
+    font-size: 20px;
+}
 
 .content-container {
     display: flex;
@@ -78,16 +79,16 @@
 .right-panel {
     padding-left: 15px;
 }
- .column {
-     width: 50%;
-     float: left;
-     box-sizing: border-box;
-     padding: 10px;
- }
+.column {
+    width: 49%;
+    float: left;
+    box-sizing: border-box;
+    padding: 10px;
+}
 
- #left-column {
-     border-right: 1px solid #ccc;
- }
+#left-column {
+ border-right: 1px solid #ccc;
+}
  /* 子ユニットのタイトルデザイン */
 .subunit-title {
     font-size: 18px;
@@ -95,9 +96,7 @@
     margin: 15px 0 10px 0; /* 上下のマージン調整 */
     color: #333; /* テキスト色 */
 }
-body {
-    padding-top: 60px; /* Adjust this value based on the height of your fixed header */
-}
+
 
 .fixed-header {
     position: fixed;
@@ -112,4 +111,13 @@ body {
 
 .answer-sheet {
     margin-right : 10px;
+}
+.answer-sheet {
+    float: right;
+}
+.question-sheet {
+    float: left;
+}
+.question-sheet, .answer-sheet {
+    width: 49%;
 }

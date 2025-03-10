@@ -26,6 +26,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const textCheckboxes = document.querySelectorAll('.text-checkbox');
     const unitCheckboxes = document.querySelectorAll('.unit-checkbox');
 
+    // Disable all checkboxes initially
+    textCheckboxes.forEach(function(checkbox) {
+        checkbox.disabled = true;
+    });
+
+    unitCheckboxes.forEach(function(checkbox) {
+        checkbox.disabled = false;
+    });
+
     function handleUnitCheckboxChange(checkbox) {
         if (checkbox.checked) {
             // Disable all other unit checkboxes
@@ -47,11 +56,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 otherCheckbox.disabled = false;
             });
 
-            // Disable the corresponding text checkbox
+            // Uncheck the corresponding text checkbox but keep it disabled
             const textCheckbox = checkbox.closest('.text-item').querySelector('.text-checkbox');
             if (textCheckbox) {
                 textCheckbox.checked = false;
-                textCheckbox.disabled = false;
+                textCheckbox.disabled = true;
             }
         }
     }
@@ -62,10 +71,18 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    textCheckboxes.forEach(function(checkbox) {
-        checkbox.disabled = true; // Disable all text checkboxes initially
+    document.getElementById("testForm").addEventListener("submit", function(event) {
+        // selected_texts のチェックボックスを手動で追加
+        document.querySelectorAll('.text-checkbox:checked').forEach(checkbox => {
+            let hiddenInput = document.createElement("input");
+            hiddenInput.type = "hidden";
+            hiddenInput.name = "selected_texts";
+            hiddenInput.value = checkbox.value;
+            this.appendChild(hiddenInput);
+        });
     });
 });
+
 
 function searchText() {
     const query = document.getElementById('searchInput').value.toLowerCase();

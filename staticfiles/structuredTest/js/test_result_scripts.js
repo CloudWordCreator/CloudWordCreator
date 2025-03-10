@@ -1,16 +1,19 @@
 function printContent() {
-        const printArea = document.querySelector('.print-area').innerHTML;
-        const originalContent = document.body.innerHTML;
-        document.body.innerHTML = printArea;
-        window.print();
-        document.body.innerHTML = originalContent;
-        document.body.innerHTML = originalContent;
-        document.getElementById('english-to-japanese-button').addEventListener('click', function() {
-            showTab('english-to-japanese-content');
-        });
-        document.getElementById('japanese-to-english-button').addEventListener('click', function() {
-            showTab('japanese-to-english-content');
-        });
+    const printArea = document.querySelector('.print-area').innerHTML;
+    const originalContent = document.body.innerHTML;
+    document.body.innerHTML = printArea;
+    window.print();
+    document.body.innerHTML = originalContent;
+    reattachEventListeners();
+}
+
+function reattachEventListeners() {
+    document.getElementById('english-to-japanese-button').addEventListener('click', function() {
+        showTab('english-to-japanese-content');
+    });
+    document.getElementById('japanese-to-english-button').addEventListener('click', function() {
+        showTab('japanese-to-english-content');
+    });
 }
 
 document.addEventListener('DOMContentLoaded', function() {

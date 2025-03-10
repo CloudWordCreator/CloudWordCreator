@@ -7,7 +7,6 @@ function toggleVisibility(id) {
         element.classList.add('active');
     }
 }
-
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.text-toggle').forEach(function(button) {
         button.addEventListener('click', function() {
@@ -70,7 +69,27 @@ document.addEventListener('DOMContentLoaded', function() {
             handleUnitCheckboxChange(checkbox);
         });
     });
+
+    document.getElementById("testForm").addEventListener("submit", function(event) {
+        // Check if any checkboxes are checked
+        const anyChecked = document.querySelectorAll('.text-checkbox:checked, .unit-checkbox:checked').length > 0;
+        if (!anyChecked) {
+            event.preventDefault();
+            alert('少なくとも1つのチェックボックスを選択してください。');
+            return;
+        }
+
+        // selected_texts のチェックボックスを手動で追加
+        document.querySelectorAll('.text-checkbox:checked').forEach(checkbox => {
+            let hiddenInput = document.createElement("input");
+            hiddenInput.type = "hidden";
+            hiddenInput.name = "selected_texts";
+            hiddenInput.value = checkbox.value;
+            this.appendChild(hiddenInput);
+        });
+    });
 });
+
 
 function searchText() {
     const query = document.getElementById('searchInput').value.toLowerCase();

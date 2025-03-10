@@ -1,6 +1,4 @@
 import json
-import os
-from dotenv import load_dotenv
 import google.generativeai as genai
 
 def ai_prompt(word, question_count):
