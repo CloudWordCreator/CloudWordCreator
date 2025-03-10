@@ -6,7 +6,6 @@ function printContent() {
         window.print();
     }, 100);
     document.body.innerHTML = originalContent;
-    document.body.innerHTML = originalContent;
     document.getElementById('japanese-available-button').addEventListener('click', function() {
         showTab('japanese-available-content');
     });
