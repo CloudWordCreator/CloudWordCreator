@@ -30,199 +30,211 @@
         <!-- idは以下 -->
         <!-- div id="japanese-to-english-content" -->
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const data = {{ data|safe }};
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const data = {{ data|safe }};
 
-            const positionMap = {};
+        const positionMap = {};
 
-            data.units.forEach(unit => {
-                unit.sub_units.forEach(subUnit => {
-                    subUnit.words.forEach(word => {
-                        if (!positionMap[word.position]) {
-                            positionMap[word.position] = [];
-                        }
-                        positionMap[word.position].push({
-                            english: word.english,
-                            japanese: word.japanese,
-                            subUnitName: subUnit.name
-                        });
-                    });
-                });
-            });
-
-            let tableCounter = 0;
-            let currentWrapper = null;
-
-            const questionSheet = document.createElement('div');
-            questionSheet.classList.add('question-sheet');
-
-            const answerSheet = document.createElement('div');
-            answerSheet.classList.add('answer-sheet');
-
-            Object.keys(positionMap).forEach(position => {
-                const words = positionMap[position];
-                const section = document.createElement('div');
-                section.classList.add('table-section');
-
-                const subUnitMap = {};
-                words.forEach(word => {
-                    if (!subUnitMap[word.subUnitName]) {
-                        subUnitMap[word.subUnitName] = [];
+        data.units.forEach(unit => {
+            unit.sub_units.forEach(subUnit => {
+                subUnit.words.forEach(word => {
+                    if (!positionMap[word.position]) {
+                        positionMap[word.position] = [];
                     }
-                    subUnitMap[word.subUnitName].push(word);
-                });
-
-                const table = document.createElement('table');
-                table.classList.add('table', 'table-bordered');
-
-                const tbody = document.createElement('tbody');
-                Object.keys(subUnitMap).forEach(subUnitName => {
-                    const subUnitWords = subUnitMap[subUnitName];
-
-                    const subUnitHeadingRow = document.createElement('tr');
-                    const subUnitHeadingCell = document.createElement('td');
-                    subUnitHeadingCell.colSpan = 2;
-                    subUnitHeadingCell.textContent = `${subUnitName}`;
-                    subUnitHeadingCell.classList.add('subunit-heading');
-                    subUnitHeadingRow.appendChild(subUnitHeadingCell);
-                    tbody.appendChild(subUnitHeadingRow);
-
-                    subUnitWords.forEach(word => {
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                            <td width=50%>${word.english}</td>
-                            <td width=50%>${word.japanese}</td>
-                        `;
-                        tbody.appendChild(row);
+                    positionMap[word.position].push({
+                        english: word.english,
+                        japanese: word.japanese,
+                        subUnitName: subUnit.name
                     });
                 });
-                table.appendChild(tbody);
-                section.appendChild(table);
-
-                if (tableCounter % 2 === 0) {
-                    currentWrapper = document.createElement('div');
-                    currentWrapper.classList.add('sheet-size-setting');
-                    // Add textbook name and parent unit below the sheet-size-setting div
-                    const textTitle = document.createElement('p');
-                    textTitle.textContent = `${data.textbooks[0].name} ${data.units[0].name}`;
-                    currentWrapper.appendChild(textTitle);
-
-                    const leftColumn = document.createElement('div');
-                    leftColumn.classList.add('column', 'left-column');
-                    const rightColumn = document.createElement('div');
-                    rightColumn.classList.add('column', 'right-column');
-
-                    currentWrapper.appendChild(leftColumn);
-                    currentWrapper.appendChild(rightColumn);
-
-                    questionSheet.appendChild(currentWrapper);
-
-                    currentWrapper.querySelector('.left-column').appendChild(section);
-                } else {
-                    currentWrapper.querySelector('.right-column').appendChild(section);
-                }
-
-                tableCounter++;
-            });
-
-            tableCounter = 0; // Reset counter for answer tables
-
-            Object.keys(positionMap).forEach(position => {
-                const words = positionMap[position];
-                const section = document.createElement('div');
-                section.classList.add('table-section');
-
-                const subUnitMap = {};
-                words.forEach(word => {
-                    if (!subUnitMap[word.subUnitName]) {
-                        subUnitMap[word.subUnitName] = [];
-                    }
-                    subUnitMap[word.subUnitName].push(word);
-                });
-
-                const table = document.createElement('table');
-                table.classList.add('table', 'table-bordered');
-
-                const tbody = document.createElement('tbody');
-                Object.keys(subUnitMap).forEach(subUnitName => {
-                    const subUnitWords = subUnitMap[subUnitName];
-
-                    const subUnitHeadingRow = document.createElement('tr');
-                    const subUnitHeadingCell = document.createElement('td');
-                    subUnitHeadingCell.colSpan = 2;
-                    subUnitHeadingCell.textContent = `${subUnitName}`;
-                    subUnitHeadingCell.classList.add('subunit-heading');
-                    subUnitHeadingRow.appendChild(subUnitHeadingCell);
-                    tbody.appendChild(subUnitHeadingRow);
-
-                    subUnitWords.forEach(word => {
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                            <td width=50%>${word.english}</td>
-                            <td width=50%>${word.japanese}</td>
-                        `;
-                        tbody.appendChild(row);
-                    });
-                });
-                table.appendChild(tbody);
-                section.appendChild(table);
-
-                if (tableCounter % 2 === 0) {
-                    currentWrapper = document.createElement('div');
-                    currentWrapper.classList.add('sheet-size-setting');
-                    // Add textbook name and parent unit below the sheet-size-setting div
-                    const textTitle = document.createElement('p');
-                    textTitle.textContent = `${data.textbooks[0].name} ${data.units[0].name}`;
-                    currentWrapper.appendChild(textTitle);
-
-                    const leftColumn = document.createElement('div');
-                    leftColumn.classList.add('column', 'left-column');
-                    const rightColumn = document.createElement('div');
-                    rightColumn.classList.add('column', 'right-column');
-
-                    currentWrapper.appendChild(leftColumn);
-                    currentWrapper.appendChild(rightColumn);
-
-                    answerSheet.appendChild(currentWrapper);
-
-                    currentWrapper.querySelector('.left-column').appendChild(section);
-                } else {
-                    currentWrapper.querySelector('.right-column').appendChild(section);
-                }
-
-                tableCounter++;
-            });
-
-            const parentElement = document.getElementById('english-to-japanese-content');
-            parentElement.appendChild(questionSheet);
-
-            parentElement.appendChild(answerSheet);
-
-            const enToJpContent = document.getElementById('english-to-japanese-content');
-            let clone_element = enToJpContent.cloneNode(true);
-            clone_element.id = 'japanese-to-english-content';
-            clone_element.style.display = 'none';
-            enToJpContent.after(clone_element);
-
-            const rows = questionSheet.querySelectorAll('tr');
-            rows.forEach(row => {
-                const cells = row.querySelectorAll('td');
-                if (cells.length > 1) {
-                    cells[1].textContent = '';
-                }
-            });
-
-            const testSheet = clone_element.querySelector('.question-sheet');
-            const testRows = testSheet.querySelectorAll('tr');
-            testRows.forEach(row => {
-                const cells = row.querySelectorAll('td');
-                if (cells.length > 1) {
-                    cells[0].textContent = cells[1].textContent;
-                    cells[1].textContent = '     ';
-                }
             });
         });
-    </script>
+
+        let tableCounter = 0;
+        let currentWrapper = null;
+
+        const questionSheet = document.createElement('div');
+        questionSheet.classList.add('question-sheet');
+
+        const answerSheet = document.createElement('div');
+        answerSheet.classList.add('answer-sheet');
+
+        Object.keys(positionMap).forEach(position => {
+            const words = positionMap[position];
+            const section = document.createElement('div');
+            section.classList.add('table-section');
+
+            const subUnitMap = {};
+            words.forEach(word => {
+                if (!subUnitMap[word.subUnitName]) {
+                    subUnitMap[word.subUnitName] = [];
+                }
+                subUnitMap[word.subUnitName].push(word);
+            });
+
+            const table = document.createElement('table');
+            table.classList.add('table', 'table-bordered');
+
+            const tbody = document.createElement('tbody');
+            Object.keys(subUnitMap).forEach(subUnitName => {
+                const subUnitWords = subUnitMap[subUnitName];
+
+                const subUnitHeadingRow = document.createElement('tr');
+                const subUnitHeadingCell = document.createElement('td');
+                subUnitHeadingCell.colSpan = 2;
+                subUnitHeadingCell.textContent = `${subUnitName}`;
+                subUnitHeadingCell.classList.add('subunit-heading');
+                subUnitHeadingRow.appendChild(subUnitHeadingCell);
+                tbody.appendChild(subUnitHeadingRow);
+
+                subUnitWords.forEach(word => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td width=50%>${word.english}</td>
+                        <td width=50%>${word.japanese}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            });
+            table.appendChild(tbody);
+            section.appendChild(table);
+
+            if (tableCounter % 2 === 0) {
+                currentWrapper = document.createElement('div');
+                currentWrapper.classList.add('sheet-size-setting');
+                // Add textbook name and parent unit below the sheet-size-setting div
+                const textTitle = document.createElement('p');
+                textTitle.textContent = `${data.textbooks[0].name} ${data.units[0].name}`;
+                currentWrapper.appendChild(textTitle);
+
+                const leftColumn = document.createElement('div');
+                leftColumn.classList.add('column', 'left-column');
+                const rightColumn = document.createElement('div');
+                rightColumn.classList.add('column', 'right-column');
+
+                currentWrapper.appendChild(leftColumn);
+                currentWrapper.appendChild(rightColumn);
+
+                questionSheet.appendChild(currentWrapper);
+
+                currentWrapper.querySelector('.left-column').appendChild(section);
+            } else {
+                currentWrapper.querySelector('.right-column').appendChild(section);
+            }
+
+            tableCounter++;
+        });
+
+        tableCounter = 0; // Reset counter for answer tables
+
+        Object.keys(positionMap).forEach(position => {
+            const words = positionMap[position];
+            const section = document.createElement('div');
+            section.classList.add('table-section');
+
+            const subUnitMap = {};
+            words.forEach(word => {
+                if (!subUnitMap[word.subUnitName]) {
+                    subUnitMap[word.subUnitName] = [];
+                }
+                subUnitMap[word.subUnitName].push(word);
+            });
+
+            const table = document.createElement('table');
+            table.classList.add('table', 'table-bordered');
+
+            const tbody = document.createElement('tbody');
+            Object.keys(subUnitMap).forEach(subUnitName => {
+                const subUnitWords = subUnitMap[subUnitName];
+
+                const subUnitHeadingRow = document.createElement('tr');
+                const subUnitHeadingCell = document.createElement('td');
+                subUnitHeadingCell.colSpan = 2;
+                subUnitHeadingCell.textContent = `${subUnitName}`;
+                subUnitHeadingCell.classList.add('subunit-heading');
+                subUnitHeadingRow.appendChild(subUnitHeadingCell);
+                tbody.appendChild(subUnitHeadingRow);
+
+                subUnitWords.forEach(word => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td width=50%>${word.english}</td>
+                        <td width=50%>${word.japanese}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            });
+            table.appendChild(tbody);
+            section.appendChild(table);
+
+            if (tableCounter % 2 === 0) {
+                currentWrapper = document.createElement('div');
+                currentWrapper.classList.add('sheet-size-setting');
+                // Add textbook name and parent unit below the sheet-size-setting div
+                const textTitle = document.createElement('p');
+                textTitle.textContent = `${data.textbooks[0].name} ${data.units[0].name}`;
+                currentWrapper.appendChild(textTitle);
+
+                const leftColumn = document.createElement('div');
+                leftColumn.classList.add('column', 'left-column');
+                const rightColumn = document.createElement('div');
+                rightColumn.classList.add('column', 'right-column');
+
+                currentWrapper.appendChild(leftColumn);
+                currentWrapper.appendChild(rightColumn);
+
+                answerSheet.appendChild(currentWrapper);
+
+                currentWrapper.querySelector('.left-column').appendChild(section);
+            } else {
+                currentWrapper.querySelector('.right-column').appendChild(section);
+            }
+
+            tableCounter++;
+        });
+
+        const parentElement = document.getElementById('english-to-japanese-content');
+        parentElement.appendChild(questionSheet);
+
+        parentElement.appendChild(answerSheet);
+
+        const enToJpContent = document.getElementById('english-to-japanese-content');
+        let clone_element = enToJpContent.cloneNode(true);
+        clone_element.id = 'japanese-to-english-content';
+        clone_element.style.display = 'none';
+        enToJpContent.after(clone_element);
+
+        const rows = questionSheet.querySelectorAll('tr');
+        rows.forEach(row => {
+            const cells = row.querySelectorAll('td');
+            if (cells.length > 1) {
+                cells[1].textContent = '';
+            }
+        });
+
+        const testSheet = clone_element.querySelector('.question-sheet');
+        const testRows = testSheet.querySelectorAll('tr');
+        testRows.forEach(row => {
+            const cells = row.querySelectorAll('td');
+            if (cells.length > 1) {
+                cells[0].textContent = cells[1].textContent;
+                cells[1].textContent = '     ';
+            }
+        });
+
+        // Swap columns for answerSheet in japanese-to-english-content
+        const jpToEnAnswerSheet = clone_element.querySelector('.answer-sheet');
+        const jpToEnRows = jpToEnAnswerSheet.querySelectorAll('tr');
+        jpToEnRows.forEach(row => {
+            const cells = row.querySelectorAll('td');
+            if (cells.length > 1) {
+                const temp = cells[0].textContent;
+                cells[0].textContent = cells[1].textContent;
+                cells[1].textContent = temp;
+            }
+        });
+    });
+</script>
 </body>
 </html>
