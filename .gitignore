@@ -5,3 +5,9 @@ config
 __pycache__
 *.pyc
 .venv
+
+# dockerファイルを無視
+Dockerfile
+docker-compose.yml
+Nginx.conf
+uwsfi.ini
