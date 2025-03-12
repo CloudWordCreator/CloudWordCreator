@@ -9,5 +9,5 @@ __pycache__
 # dockerファイルを無視
 Dockerfile
 docker-compose.yml
-Nginx.conf
+nginx/default.conf
 uwsfi.ini
