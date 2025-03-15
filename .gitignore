@@ -11,3 +11,4 @@ Dockerfile
 docker-compose.yml
 nginx/default.conf
 uwsfi.ini
+start.sh
