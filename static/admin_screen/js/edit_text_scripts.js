@@ -33,6 +33,8 @@ function searchText() {
                         <li>
                             No: ${word.no} | 英語: ${word.english} | 日本語: ${word.japanese} | ID : ${word.id} |
                             <a href="/admin_screen/eisai_admin/edit_word/?word_id=${word.id}">編集</a>
+                            <input type="hidden" id="deleteWordUrl" value="/admin_screen/eisai_admin/delete_word/">
+                            <button onclick="deleteWord(${ word.id }, this)">削除</button>
                         </li>
                     `).join('')}
                 </ul>
