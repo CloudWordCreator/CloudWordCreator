@@ -4,27 +4,19 @@ function printContent() {
     document.body.innerHTML = printArea;
     window.print();
     document.body.innerHTML = originalContent;
-    reattachEventListeners();
+    attachEventListeners()
 }
 
-function reattachEventListeners() {
-    document.getElementById('english-to-japanese-button').addEventListener('click', function() {
-        showTab('english-to-japanese-content');
+function showTab(tabId) {
+    const tabs = document.querySelectorAll('.tab');
+    tabs.forEach(tab => {
+        tab.style.display = 'none';
     });
-    document.getElementById('japanese-to-english-button').addEventListener('click', function() {
-        showTab('japanese-to-english-content');
-    });
+    document.getElementById(tabId).style.display = 'block';
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    function showTab(tabId) {
-        const tabs = document.querySelectorAll('.tab');
-        tabs.forEach(tab => {
-            tab.style.display = 'none';
-        });
-        document.getElementById(tabId).style.display = 'block';
-    }
-
+// イベントリスナーを設定する関数
+function attachEventListeners() {
     document.getElementById('english-to-japanese-button').addEventListener('click', function () {
         showTab('english-to-japanese-content');
     });
@@ -32,7 +24,10 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('japanese-to-english-button').addEventListener('click', function () {
         showTab('japanese-to-english-content');
     });
+}
 
-    // 初期表示を設定
-    showTab('english-to-japanese-content');
+// DOM が読み込まれた後にイベントを設定
+document.addEventListener('DOMContentLoaded', function() {
+    attachEventListeners();
+    showTab('english-to-japanese-content'); // 初期表示
 });

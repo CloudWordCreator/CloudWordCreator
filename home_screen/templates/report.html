@@ -3,24 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <title>バグ/問題の報告</title>
+    <link rel="shortcut icon" href="#">
+    <link rel="stylesheet" href="https://unpkg.com/primeicons/primeicons.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/primevue@4/umd/primevue.min.js"></script>
+    <script src="https://unpkg.com/@primevue/themes/umd/aura.min.js"></script>
     {% load static %}
     <link rel="stylesheet" href="{% static 'home_screen/css/report_style.css' %}">
 </head>
 <body>
-    <!-- バグ/問題の報告画面-->
-    <h1>バグ/問題の報告/機能リクエスト</h1>
-    <form action="{% url 'submit_report' %}" method="post">
-        {% csrf_token %}
-        <label for="school_name">校舎名:</label><br>
-        <input type="text" id="school_name" name="school_name"><br><br>
-
-        <label for="material">教材/範囲:<span class="required-label">必須</span></label><br>
-        <input type="text" id="material" name="material" required><br><br>
-
-        <label for="details">詳細:<span class="required-label">必須</span></label><br>
-        <textarea id="details" name="details" rows="5" cols="40" required></textarea><br><br>
-
-        <button type="submit">送信</button>
-    </form>
+    <div class="report-container">
+        <h2>バグ報告/機能リクエスト</h2>
+        <form action="{% url 'submit_report' %}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="school_name">校舎名:</label>
+                <input type="text" id="school_name" name="school_name">
+            </div>
+            <div class="form-group">
+                <label for="material">教材/範囲:<span class="required-label">必須</span></label>
+                <input type="text" id="material" name="material" required>
+            </div>
+            <div class="form-group">
+                <label for="details">詳細:<span class="required-label">必須</span></label>
+                <textarea id="details" name="details" rows="5" cols="40" required></textarea>
+            </div>
+            <button type="submit">送信</button>
+        </form>
+    </div>
+    <div id="speeddial">
+        <p-speeddial :model="items" :radius="100" type="quarter-circle" direction="down-left" tooltipOptions="{ position: 'left', event: 'hover' }" />
+    </div>
+    <script src="{% static 'home_screen/js/vue_report_scripts.js' %}" type="module"></script>
 </body>
 </html>

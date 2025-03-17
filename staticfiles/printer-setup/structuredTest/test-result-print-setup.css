@@ -1,8 +1,8 @@
 body {
     -webkit-print-color-adjust: exact;
     color-adjust: exact;
-    padding-top: 0; !important;
-    margin-top: 0; !important;
+    padding-top: 0;
+    margin-top: 0;
 }
 .print-area {
     page-break-after: always;
@@ -71,9 +71,6 @@ th, td {
     font-weight: bold;
     margin: 15px 0 10px 0; /* 上下のマージン調整 */
     color: #333; /* テキスト色 */
-}
-body {
-    padding-top: 60px; /* Adjust this value based on the height of your fixed header */
 }
 .sheet-size-setting {
     break-before: avoid-page;

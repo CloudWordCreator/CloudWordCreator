@@ -1,55 +1,79 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
+    background-color: #f8fafc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
     margin: 0;
-    padding: 0;
 }
 
-h1 {
-    color: #333;
-    text-align: center;
-    margin-top: 20px;
-}
-
-form {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
+.report-container {
     background-color: #fff;
-    border-radius: 10px;
+    padding: 5vh;
+    border-radius: 12px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 75vh;
+    text-align: center;
 }
 
-form label {
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+/* form label {
     display: block;
-    margin-bottom: 5px;
     font-weight: bold;
-}
+} */
 
-form input[type="text"],
-form textarea {
+.report-container input[type="text"],
+.report-container textarea {
     width: 100%;
     padding: 10px;
-    margin-bottom: 20px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 4px;
+    display: block;
+    margin: 5px 0;
+    resize: none;
 }
 
-form button {
+.report-container button {
+    width: 100%;
+    padding: 10px;
     background-color: #007bff;
-    color: white;
     border: none;
-    padding: 10px 20px;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 16px;
     cursor: pointer;
-    border-radius: 5px;
+    display: block;
+    margin-top: 30px;
 }
 
-form button:hover {
+.report-container button:hover {
     background-color: #0056b3;
+}
+
+.report-container a {
+    display: block;
+    margin-top: 10px;
+    color: #007bff;
+    text-decoration: none;
+}
+
+.report-container a:hover {
+    text-decoration: underline;
 }
 
 .required-label {
     color: red;
     font-size: 0.8em;
     margin-left: 5px;
+}
+
+#speeddial{
+    position: fixed;
+    top: 5vh;
+    right: 5vh;
 }

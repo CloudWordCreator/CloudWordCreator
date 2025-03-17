@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
+    background-color: #f8fafc;
     margin: 0;
     padding: 0;
 }
@@ -8,7 +8,7 @@ body {
 h1 {
     color: #333;
     text-align: center;
-    margin-top: 20px;
+    margin-top: 5vh;
 }
 
 ul {
@@ -82,24 +82,19 @@ form button:hover {
     background-color: #cc0000;
 }
 
-.tooltip {
-    display: none;
-    position: absolute;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
+/* .hideBeforeVue {
+    visibility: hidden;
+} */
+
+#speeddial{
+    position: fixed;
+    top: 5vh;
+    right: 5vh;
 }
 
-.tooltip {
-    display: none;
-    position: absolute;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
+#links{
+    display: flex;
+    justify-content: center;
+    margin-top: 5vh;
+    height: 75vh;
 }
