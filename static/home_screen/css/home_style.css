@@ -98,3 +98,17 @@ form button:hover {
     margin-top: 5vh;
     height: 75vh;
 }
+.contact {
+    position: fixed;
+    bottom: 1vh;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.contact a img {
+    width: 50px; /* Increase the size of the GitHub icon */
+    height: 50px; /* Increase the size of the GitHub icon */
+    margin-right: 20px; /* Add spacing between the icon and the help link */
+}
