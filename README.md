@@ -16,14 +16,15 @@ python3.13
 
 以下機能
 
-|urls|機能|
-|---|---|
-|admin/|管理画面|
-|csv_set/|新規データをデータベースに書き込む。csvファイルのみ対応|
-|structuredTest/|unit事に分類されたテストを作成する。|
-|flatTestMaker/|unit事に分類されていないテストを作成する。検索、穴埋め問題の作成まで対応。|
-|admin_screen/|教材の編集、削除をする機能|
-|login/|csv_set/とadmin_screen/を保護するためのログイン画面|
+| urls            | 機能                                      |
+|-----------------|-----------------------------------------|
+| admin/          | 管理画面                                    |
+| csv_set/        | 新規データをデータベースに書き込む。csvファイルのみ対応           |
+| structuredTest/ | unit事に分類されたテストを作成する。                    |
+| flatTestMaker/  | unit事に分類されていないテストを作成する。検索、穴埋め問題の作成まで対応。 |
+| admin_screen/   | 教材の編集、削除をする機能                           |
+| login/          | csv_set/とadmin_screen/を保護するためのログイン画面    |
+| home/           | ホーム画面                                   |
 
 ## ネットワーク構成図
 
