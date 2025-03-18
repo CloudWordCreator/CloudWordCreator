@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+import random
 from . import bug_report_writter
 from csvManager.models import UnitWord, NoUnitWord
 
@@ -10,17 +11,18 @@ from csvManager.models import UnitWord, NoUnitWord
 ### gmailはGoogle SpreadSheetのシート2枚目にあるリストに通知をするようにする。
 
 def home(request):
-    # home画面では、URLにカーソルを合わせたときに対応している教材一覧を表示するためにデータベースから教材名を取得している。
-    # それぞれ分類するため2変数で取得している。
     unit_words = UnitWord.objects.select_related('unit__text').all()
     no_unit_words = NoUnitWord.objects.select_related('text').all()
 
-    flat_test_texts = set(nuw.text.name for nuw in no_unit_words)
-    structured_test_texts = set(uw.unit.text.name for uw in unit_words)
+    flat_test_texts = list(set(nuw.text.name for nuw in no_unit_words))
+    structured_test_texts = list(set(uw.unit.text.name for uw in unit_words))
+
+    flat_test_texts_sample = random.sample(flat_test_texts, min(2, len(flat_test_texts)))
+    structured_test_texts_sample = random.sample(structured_test_texts, min(2, len(structured_test_texts)))
 
     return render(request, 'home.html', {
-        'flat_test_texts': flat_test_texts,
-        'structured_test_texts': structured_test_texts
+        'flat_test_texts': flat_test_texts_sample,
+        'structured_test_texts': structured_test_texts_sample
     })
 
 def report(request):
@@ -33,12 +35,14 @@ def submit_report(request):
         details = request.POST.get('details')
 
         report_content = {
-            'schoolName' : school_name,
-            'material' : material,
-            'details' : details,
+            'schoolName': school_name,
+            'material': material,
+            'details': details,
         }
 
         sheet_writer = bug_report_writter.SpreadSheetWriter(report_content)
         sheet_writer.write_report()
 
-    return redirect('home')
+        return redirect('home')
+    else:
+        return render(request, 'report.html')

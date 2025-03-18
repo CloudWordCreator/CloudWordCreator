@@ -21,7 +21,7 @@
         }">
             <template #title>from 単語帳</template>
             <template #subtitle>
-                システム英単語やターゲット1900などから問題を作成します
+                {{ flat_test_texts|join:"、" }}などから問題を作成します
             </template>
             <template #content>
                 以下に作成したテストのサンプルを示します
@@ -46,7 +46,7 @@
         }">
             <template #title>from 教科書</template>
             <template #subtitle>
-                Here We Go! 1やHere We Go! 2などから問題を作成します
+                {{ structured_test_texts|join:"、" }}などから問題を作成します
             </template>
             <template #content>
                 以下に作成したテストのサンプルを示します
