@@ -10,5 +10,5 @@ __pycache__
 Dockerfile
 docker-compose.yml
 nginx/default.conf
-uwsfi.ini
+uwsgi.ini
 start.sh
