@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSVファイルアップロード</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'csvManager/css/set_style.css' %}">
+    <link rel="shortcut icon" href="{% static 'images/icon.png' %}" type="logo.icon" />
+    <link rel="icon" href="{% static 'images/icon.png' %}" type="logo.icon" />
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-header text-center">
+                <h2>CSVファイルアップロード</h2>
+            </div>
+            <div class="card-body">
+                <p>例1</p>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>unit</th>
+                            <th>subunit</th>
+                            <th>英語</th>
+                            <th>日本語</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>unit1</td>
+                            <td>unit1-1</td>
+                            <td>apple</td>
+                            <td>りんご</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>unit1</td>
+                            <td>unit1-1</td>
+                            <td>pineapple</td>
+                            <td>パイナップル</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>unit1</td>
+                            <td>unit1-2</td>
+                            <td>banana</td>
+                            <td>バナナ</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>unit2</td>
+                            <td>unit2-1</td>
+                            <td>orange</td>
+                            <td>オレンジ</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>unit2</td>
+                            <td>重要表現</td>
+                            <td>peach</td>
+                            <td>桃</td>
+                        </tr>                        
+                    </tbody>
+                </table>
+                <p>例2</p>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>英語</th>
+                            <th>日本語</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>apple</td>
+                            <td>りんご</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>banana</td>
+                            <td>バナナ</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>orange</td>
+                            <td>オレンジ</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>ヘッダー「subunit」に入れる値は任意の値で可能です。</p>
+                <form action="{% url 'upload_csv' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="csv_file">CSVファイルを選択:</label>
+                        <input type="file" class="form-control-file" id="csv_file" name="csv_file" accept=".csv">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">アップロード</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="fixed-sidebar">
+        <h5>URL</h5>
+    <ul>
+        <li><a href="/flatTestMaker/settings/" class="hover-link" data-materials="{{ flat_test_texts|join:', ' }}">unitなしテスト</a></li>
+        <li><a href="/structuredTest/settings/" class="hover-link" data-materials="{{ structured_test_texts|join:', ' }}">unitありテスト</a></li>
+        <li><a href="/home">home画面</a></li>
+        <li><a href="/admin_screen/eisai_admin/">管理者画面</a></li>
+        <!-- home画面はまだ未実装 -->
+    </ul>
+    </div>
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

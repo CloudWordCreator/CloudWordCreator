@@ -13,9 +13,11 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 from dotenv import load_dotenv
 import os
+import google.generativeai as genai
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -26,7 +28,10 @@ load_dotenv()
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG')
+
+#DEBUG = os.getenv('DEBUG')
+DEBUG = True
+
 
 ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS')]
 
@@ -40,8 +45,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'EnglishWordTest',
-    'fill_in_the_blank',
+    'csvManager',
+    'flatTestMaker',
+    'structuredTest',
+    'admin_screen',
+    'authentication',
+    'home_screen',
 ]
 
 MIDDLEWARE = [
@@ -108,9 +117,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ja-jp'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tokyo'
 
 USE_I18N = True
 
@@ -137,3 +146,20 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# CSVファイルの保存ディレクトリ
+CSV_UPLOAD_DIR = os.path.join(BASE_DIR, 'csv_uploads')
+
+# ディレクトリが存在しない場合は作成
+if not os.path.exists(CSV_UPLOAD_DIR):
+    os.makedirs(CSV_UPLOAD_DIR)
+
+# ログインURL
+LOGIN_URL = '/login/'
+# ログイン後のリダイレクトURL
+LOGIN_REDIRECT_URL = '/admin_screen/'  # ログイン後にリダイレクトするページ
+
+# gemini 1.5のロード
+AI_APIKEY = os.getenv('Gemini_APIKEY')
+genai.configure(api_key=AI_APIKEY)
+

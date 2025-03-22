@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <title>穴埋め問題結果</title>
+    {% load static %}
+    <link rel="shortcut icon" href="{% static 'images/icon.png' %}" type="logo.icon" />
+    <link rel="icon" href="{% static 'images/icon.png' %}" type="logo.icon" />
+    <!-- 印刷用紙の読み込み -->
+    <link href="{% static 'printer-setup/paper-setup.css' %}" media="print" rel="stylesheet" type="text/css">
+    <!-- 印刷用のcssを読み込み -->
+    <link href="{% static 'printer-setup/flatTestMaker/sentence-print-setup.css' %}" media="print" rel="stylesheet" type="text/css">
+    <!-- スクリーンcssの読み込み -->
+    <link rel="stylesheet" href="{% static 'flatTestMaker/css/sentence_result_style.css' %}" media="screen">
+    <script src="{% static 'flatTestMaker/js/sentence_result_scripts.js' %}"></script>
+</head>
+<body>
+    <div class="header fixed-header">
+        <button id="japanese-available-button" class="button">日本語あり選択肢無し</button>
+        <button id="japanese-unavailable-button" class="button">日本語なし選択肢有り</button>
+        <button onclick="printContent()" class="button">印刷</button>
+        <div class="button-container">
+            <button class="reload-button" onclick="reloadPage()">再生成</button>
+            <a href="{% url 'settings' %}" class="back-button">戻る</a>
+        </div>
+    </div>
+    {% if fill_in_the_blank and options %}
+        <div class="print-area">
+            <!-- 日本語あり -->
+            <div id="japanese-available-content" class="tab">
+                {% if fill_in_the_blank.error %}
+                    <div class="error-message">{{ fill_in_the_blank.error }}</div>
+                    <pre>{{ fill_in_the_blank.response_text }}</pre>
+                {% else %}
+                    <div class="question-container">
+                        <!-- 問題部分: 13問ごとに分割 -->
+                        {% for item in fill_in_the_blank %}
+                            {% if forloop.counter0|divisibleby:13 %}
+                                {% if not forloop.first %}
+                                    <!-- 最初のquestion-sheetを閉じる -->
+                                    </div>
+                                {% endif %}
+                                <div class="question-sheet{{ forloop.counter|divisibleby:14|add:1 }}">
+                                    <div class="sheet-size-setting">
+                                        <p>{{ text }} : {{ start_number }} ～ {{ end_number }}</p>
+                            {% endif %}
+                                        <div class="question">
+                                            <div class="question-number">{{ item.number }}</div>
+                                            <div class="japanese">{{ item.Japanese }}</div>
+                                            <div class="question-phrase">{{ item.questionPhrase }}</div>
+                                        </div>
+                            {% if forloop.counter|divisibleby:13 %}
+                                <!-- sheet-sizeを閉じる -->
+                                </div>
+                            {% elif forloop.last %}
+                                    <!-- 2つ目のsheet-sizeを閉じる -->
+                                    </div>
+                                <!-- 2つ目のquestion-sheetを閉じる -->
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    </div>
+
+                <div class="answer-container">
+                    <!-- 解答部分: 分割せず1枚にまとめる -->
+                    <!-- 左側に 1 ~ 13問 右側に 14 ~ 25問を表示するようにする。 -->
+                    <div class="answer-sheet">
+                        <div class="sheet-size-setting">
+                            <!-- 解答部分: 左右に分割 -->
+                            <p>解答</p>
+                            <div class="sheet-size answers-split">
+                                <div class="answers-left">
+                                    {% for item in fill_in_the_blank %}
+                                        {% if forloop.counter <= 13 %}
+                                            <div class="question">
+                                                <div class="question-number">{{ item.number }}</div>
+                                                <div class="answer-word">{{ item.answerWord }}</div>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                                <div class="answers-right">
+                                    {% for item in fill_in_the_blank %}
+                                        {% if forloop.counter > 13 %}
+                                            <div class="question">
+                                                <div class="question-number">{{ item.number }}</div>
+                                                <div class="answer-word">{{ item.answerWord }}</div>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 日本語なし -->
+            <div id="japanese-unavailable-content" class="tab">
+                <div class="question-container">
+                    <!-- 1枚目: 選択肢 + 1～10問目 -->
+                    <div class="question-sheet1">
+                        <div class="sheet-size">
+                            <p>{{ text }} : {{ start_number }} ～ {{ end_number }}</p>
+                            <h4>選択肢</h4>
+                            <div class="options-grid">
+                                {% for option in options %}
+                                    <div class="option-item">{{ option.english }}</div>
+                                {% endfor %}
+                            </div>
+                            <h4>1～10問目</h4>
+                            {% for item in fill_in_the_blank %}
+                                {% if forloop.counter <= 10 %}
+                                    <div class="question">
+                                        <div class="question-number">{{ item.number }}</div>
+                                        <div class="question-phrase">{{ item.questionPhrase }}</div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- 2枚目: 11～25問目 -->
+                    <div class="question-sheet2">
+                       <div class="sheet-size">
+                            <h4>11～25問目</h4>
+                            {% for item in fill_in_the_blank %}
+                                {% if forloop.counter > 10 %}
+                                    <div class="question">
+                                        <div class="question-number">{{ item.number }}</div>
+                                        <div class="question-phrase">{{ item.questionPhrase }}</div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="answer-container">
+                    <!-- 3枚目: 解答 -->
+                    <div class="answer-sheet">
+                        <div class="sheet-size">
+                            <!-- 解答部分: 左右に分割 (1～12問左、13～25問右) -->
+                            <div class="sheet-size answers-split">
+                                <div class="answers-left">
+                                    {% for item in fill_in_the_blank %}
+                                        {% if forloop.counter <= 12 %}
+                                            <div class="question">
+                                                <div class="question-number">{{ item.number }}</div>
+                                                <div class="japanese">{{ item.Japanese }}</div>
+                                                <div class="answer-word">{{ item.answerWord }}</div>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                                <div class="answers-right">
+                                    {% for item in fill_in_the_blank %}
+                                        {% if forloop.counter > 12 %}
+                                            <div class="question">
+                                                <div class="question-number">{{ item.number }}</div>
+                                                <div class="japanese">{{ item.Japanese }}</div>
+                                                <div class="answer-word">{{ item.answerWord }}</div>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    <script>
+        function showTab(tabId) {
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.style.display = 'none';
+            });
+            document.getElementById(tabId).style.display = 'block';
+        }
+        
+        document.getElementById('japanese-available-button').addEventListener('click', function() {
+            showTab('japanese-available-content');
+        });
+        
+        document.getElementById('japanese-unavailable-button').addEventListener('click', function() {
+            showTab('japanese-unavailable-content');
+        });
+        
+        // 初期状態で表示するタブを設定
+        showTab('japanese-available-content');
+    </script>
+</body>
+</html>

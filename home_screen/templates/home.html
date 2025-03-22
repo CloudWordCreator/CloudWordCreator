@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>home</title>
+    <link rel="shortcut icon" href="#">
+    <link rel="stylesheet" href="https://unpkg.com/primeicons/primeicons.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/primevue@4/umd/primevue.min.js"></script>
+    <script src="https://unpkg.com/@primevue/themes/umd/aura.min.js"></script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'home_screen/css/home_style.css' %}">
+    <link rel="shortcut icon" href="{% static 'images/icon.png' %}" type="logo.icon" />
+    <link rel="icon" href="{% static 'images/icon.png' %}" type="logo.icon" />
+</head>
+<body>
+    <h1>Home</h1>
+    <div id="links">
+        <p-card style="width: 85vh;" :pt="{
+            footer: { style: 'padding: 20px 0px;' }
+        }">
+            <template #title>from 単語帳</template>
+            <template #subtitle>
+                {{ flat_test_texts|join:"、" }}などから問題を作成します
+            </template>
+            <template #content>
+                以下に作成したテストのサンプルを示します
+                <p-scrollpanel style="width: 100%; height: 235px; margin: 10px 0px;">
+                    <img src="{% static 'images/flattestsample.png' %}" alt="テストの例をここに表示" style="width: 100%;">
+                </p-scrollpanel>
+            </template>
+            <template #footer >
+                <p-button as="a" href="/flatTestMaker/settings/" label="作成" icon="pi pi-arrow-right" iconPos="right" variant="outlined" raised rounded style="text-decoration:none;" :pt="{
+                    root: { style: 'padding: 0.5em 1em; font-size: 150%; gap: 1em' },
+                    icon: {style: 'font-size: 100%;'},
+                }" />
+            </template>
+        </p-card>
+        <p-divider layout="vertical" :pt="{
+            content: { style: 'background-color: #f8fafc; font-size: 150%' }
+        }">
+            <b>OR</b>
+        </p-divider>
+        <p-card style="width: 85vh" :pt="{
+            footer: { style: 'padding: 20px 0px;' }
+        }">
+            <template #title>from 教科書</template>
+            <template #subtitle>
+                {{ structured_test_texts|join:"、" }}などから問題を作成します
+            </template>
+            <template #content>
+                以下に作成したテストのサンプルを示します
+                <p-scrollpanel style="width: 100%; height: 235px; margin: 10px 0px;">
+                    <img src="{% static 'images/constructedtestsample.png' %}" alt="テストの例をここに表示" style="width: 100%;">
+                </p-scrollpanel>
+            </template>
+            <template #footer>
+                <p-button as="a" href="/structuredTest/settings/" label="作成" icon="pi pi-arrow-right" iconPos="right" variant="outlined" raised rounded style="text-decoration:none;" :pt="{
+                    root: { style: 'padding: 0.5em 1em; font-size: 150%; gap: 1em' },
+                    icon: {style: 'font-size: 100%;'},
+                }" />
+            </template>
+        </p-card>
+    </div>
+    <div id="speeddial">
+        <p-speeddial :model="items" :radius="100" type="quarter-circle" direction="down-left" tooltipOptions="{ position: 'left', event: 'hover' }" />
+    </div>
+    <div class="contact">
+        <a href="https://github.com/CloudWordCreator">
+            <img src="{% static 'home_screen/images/github-icon.png' %}" alt="GitHub">
+        </a>
+        <a href="https://github.com/CloudWordCreator/.github/blob/main/%E3%82%B9%E3%83%A9%E3%82%A4%E3%83%89.pdf">help</a>
+    </div>
+    <script src="{% static 'home_screen/js/vue_home_screen_scripts.js' %}" type="module"></script>
+</body>
+</html>

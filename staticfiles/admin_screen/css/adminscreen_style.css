@@ -1,0 +1,23 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+.text-list {
+    display: flex;
+    justify-content: space-between;
+}
+
+.text-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.text-item button {
+    margin-left: 10px;
+}
+
+.unit-text, .nounit-text {
+    width: 48%;
+}

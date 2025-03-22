@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>unitテストの生成</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'structuredTest/css/display_data_style.css' %}">
+    <script src="{% static 'structuredTest/js/display_data_scripts.js' %}"></script>
+    <link rel="shortcut icon" href="{% static 'images/icon.png' %}" type="logo.icon" />
+    <link rel="icon" href="{% static 'images/icon.png' %}" type="logo.icon" />
+</head>
+<body>
+    {% load custom_filters %}
+    <div class="container">
+        <h1 class="mt-5">教材選択</h1>
+        <form id="searchForm" class="form-inline mb-3">
+            <input type="text" id="searchInput" class="form-control mr-2" placeholder="教材検索">
+            <button type="button" class="btn btn-primary" onclick="searchText()">検索</button>
+        </form>
+        <form id="testForm" method="POST" action="{% url 'create_test' %}">
+            {% csrf_token %}
+            <ul id="textList">
+                {% for text in texts %}
+                    <li class="text-item">
+                        <input type="checkbox" class="text-checkbox" data-id="text-{{ text.id }}" id="text-checkbox-{{ text.id }}" name="selected_texts" value="{{ text.id }}">
+                        <button type="button" class="btn btn-link text-toggle" data-id="text-{{ text.id }}">{{ text.name }}</button>
+                        <ul id="text-{{ text.id }}" class="nested">
+                            {% for parent in units_by_text|get_item:text.id %}
+                                <li>
+                                    <input type="checkbox" class="unit-checkbox" data-id="unit-{{ parent.id }}" id="unit-checkbox-{{ parent.id }}" name="selected_units" value="{{ parent.id }}"> {{ parent.name }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endfor %}
+            </ul>
+            <!-- 右側に固定表示するチェックボックスとボタン -->
+            <div class="fixed-sidebar">
+                <h5>表示されていない教材はこちら</h5>
+                <li><a href="/flatTestMaker/settings/" class="hover-link" data-materials="{{ flat_test_texts|join:', ' }}">unit無しテスト</a></li>
+                <button type="submit" class="btn btn-primary mt-2">作成</button>
+            </div>
+        </form>
+    </div>
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

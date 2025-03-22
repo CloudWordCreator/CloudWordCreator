@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <title>生成された英単語</title>
+    {% load static %}
+    <!-- 用紙のcss -->
+    <link href="{% static 'printer-setup/paper-setup.css' %}" media="print" rel="stylesheet" type="text/css">
+    <!-- 印刷用のcss -->
+    <link href="{% static 'printer-setup/flatTestMaker/sample50-print-setup.css' %}" media="print" rel="stylesheet" type="text/css">
+    <!-- スクリーン用のcss -->
+    <link rel="stylesheet" media="screen" href="{% static 'flatTestMaker/css/generated_sample50_style.css' %}">
+    <script src="{% static 'flatTestMaker/js/generated_sample50_scripts.js' %}"></script>
+    <link rel="shortcut icon" href="{% static 'images/icon.png' %}" type="logo.icon" />
+    <link rel="icon" href="{% static 'images/icon.png' %}" type="logo.icon" />
+</head>
+<body>
+    <div class="header fixed-header">
+        <button id="english-to-japanese-button" class="button">英語→日本語</button>
+        <button id="japanese-to-english-button" class="button">日本語→英語</button>
+        <button onclick="printContent()" class="button">印刷</button>
+        <a href="{% url 'settings' %}">戻る</a>
+    </div>
+    <div class="print-area">
+        <div id="english-to-japanese-content" class="tab">
+            <div class="question-sheet">
+                <div class="sheet-size-setting">
+                    <div class="table-container">
+                        <table id="first-half-table">
+                            <tr>
+                                <th>番号</th>
+                                <th>単語</th>
+                                <th>意味</th>
+                            </tr>
+                            {% for word in words_first_half %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ word.english }}</td>
+                                <td></td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                        <table id="second-half-table">
+                            <tr>
+                                <th>番号</th>
+                                <th>単語</th>
+                                <th>意味</th>
+                            </tr>
+                            {% for word in words_second_half %}
+                            <tr>
+                                <td>{{ forloop.counter|add:25 }}</td>
+                                <td>{{ word.english }}</td>
+                                <td></td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                    <p class="selected_text">{{ selected_text }}</p>
+                    <p class="test_range">範囲 {{ start_range }} ～ {{ end_range }}</p>
+                    <p class="score"> / {{ amount_count }}</p>
+                </div>
+            </div>
+            <div class="answer-sheet">
+                <div class="sheet-size-setting">
+                    <div class="table-container">
+                        <table id="first-half-table">
+                            <tr>
+                                <th>番号</th>
+                                <th>単語</th>
+                                <th>意味</th>
+                            </tr>
+                            {% for word in words_first_half %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ word.english }}</td>
+                                <td>{{ word.japanese }}</td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                        <table id="second-half-table">
+                            <tr>
+                                <th>番号</th>
+                                <th>単語</th>
+                                <th>意味</th>
+                            </tr>
+                            {% for word in words_second_half %}
+                            <tr>
+                                <td>{{ forloop.counter|add:25 }}</td>
+                                <td>{{ word.english }}</td>
+                                <td>{{ word.japanese }}</td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                    <p class="selected_text">{{ selected_text }}</p>
+                    <p class="test_range">範囲 {{ start_range }} ～ {{ end_range }}</p>
+                    <p class="score"> / {{ amount_count }}</p>
+                </div>
+            </div>
+        </div>
+        <div id="japanese-to-english-content" class="tab" style="display: none;">
+            <div class="question-sheet">
+                <div class="sheet-size-setting">
+                <div class="table-container">
+                    <table id="first-half-table">
+                        <tr>
+                            <th>番号</th>
+                            <th>日本語</th>
+                            <th>英語</th>
+                        </tr>
+                        {% for word in words_first_half %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ word.japanese }}</td>
+                            <td></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    <table id="second-half-table">
+                        <tr>
+                            <th>番号</th>
+                            <th>日本語</th>
+                            <th>英語</th>
+                        </tr>
+                        {% for word in words_second_half %}
+                        <tr>
+                            <td>{{ forloop.counter|add:25 }}</td>
+                            <td>{{ word.japanese }}</td>
+                            <td></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                <p class="selected_text">{{ selected_text }}</p>
+                <p class="test_range">範囲 {{ start_range }} ～ {{ end_range }}</p>
+                <p class="score"> / {{ amount_count }}</p>
+            </div>
+            </div>
+            <div class="answer-sheet">
+                <div class="sheet-size-setting">
+                <div class="table-container">
+                    <table id="first-half-table">
+                        <tr>
+                            <th>番号</th>
+                            <th>日本語</th>
+                            <th>英語</th>
+                        </tr>
+                        {% for word in words_first_half %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ word.japanese }}</td>
+                            <td>{{ word.english }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    <table id="second-half-table">
+                        <tr>
+                            <th>番号</th>
+                            <th>日本語</th>
+                            <th>英語</th>
+                        </tr>
+                        {% for word in words_second_half %}
+                        <tr>
+                            <td>{{ forloop.counter|add:25 }}</td>
+                            <td>{{ word.japanese }}</td>
+                            <td>{{ word.english }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                <p class="selected_text">{{ selected_text }}</p>
+                <p class="test_range">範囲 {{ start_range }} ～ {{ end_range }}</p>
+                <p class="score"> / {{ amount_count }}</p>
+            </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // **タブ切り替え**
+        function showTab(tabId) {
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.style.display = 'none';
+            });
+            document.getElementById(tabId).style.display = 'block';
+        }
+
+        document.getElementById('english-to-japanese-button').addEventListener('click', function() {
+            showTab('english-to-japanese-content');
+        });
+
+        document.getElementById('japanese-to-english-button').addEventListener('click', function() {
+            showTab('japanese-to-english-content');
+        });
+
+        // 初期表示を設定
+        showTab('english-to-japanese-content');
+    </script>
+</body>
+</html>

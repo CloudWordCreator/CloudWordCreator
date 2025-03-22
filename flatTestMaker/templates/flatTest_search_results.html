@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>検索結果</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'flatTestMaker/css/flatTest_search_style.css' %}">
+    <link rel="shortcut icon" href="{% static 'images/icon.png' %}" type="logo.icon" />
+    <link rel="icon" href="{% static 'images/icon.png' %}" type="logo.icon" />
+</head>
+<body>
+    <h1>検索結果</h1>
+    <table>
+        <tr>
+            <th>テキスト</th>
+            <th>番号</th>
+            <th>単語</th>
+            <th>意味</th>
+        </tr>
+        {% for result in results %}
+        <tr>
+            <td>{{ result.text.name }}</td>
+            <td>{{ result.no }}</td>
+            <td>{{ result.english }}</td>
+            <td>{{ result.japanese }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4">該当する結果はありません。</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
