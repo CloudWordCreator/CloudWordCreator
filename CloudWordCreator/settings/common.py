@@ -19,6 +19,7 @@ import google.generativeai as genai
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
@@ -27,9 +28,12 @@ load_dotenv()
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
+
 #DEBUG = os.getenv('DEBUG')
 DEBUG = True
-ALLOWED_HOSTS = []
+
+
+ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS')]
 
 
 # Application definition
@@ -142,6 +146,7 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 # CSVファイルの保存ディレクトリ
 CSV_UPLOAD_DIR = os.path.join(BASE_DIR, 'csv_uploads')
 
@@ -157,3 +162,4 @@ LOGIN_REDIRECT_URL = '/admin_screen/'  # ログイン後にリダイレクトす
 # gemini 1.5のロード
 AI_APIKEY = os.getenv('Gemini_APIKEY')
 genai.configure(api_key=AI_APIKEY)
+
