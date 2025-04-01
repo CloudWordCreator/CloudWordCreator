@@ -16,9 +16,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('info/', include('EnglishWordTest.urls')),
-    path('fill_in_the_blank/', include('fill_in_the_blank.urls')),
+    path('csv_set/', include('csvManager.urls')),
+    path('structuredTest/', include('structuredTest.urls')),
+    path('flatTestMaker/', include('flatTestMaker.urls')),
+    path('admin_screen/', include('admin_screen.urls')),
+    path('login/', include('authentication.urls')),
+    path('home/', include('home_screen.urls')),
+    path('info/', views.info, name='info'),
 ]

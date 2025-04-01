@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>単語 編集</title>
+    <link rel="stylesheet" href="{% static 'admin_screen/css/edit_text_style.css' %}">
+    <script src="{% static 'admin_screen/js/edit_text_scripts.js' %}"></script>
+    <link rel="shortcut icon" href="{% static 'images/icon.png' %}" type="logo.icon" />
+    <link rel="icon" href="{% static 'images/icon.png' %}" type="logo.icon" />
+</head>
+<body>
+    <!-- 暫定機能 -->
+    <!-- 単語を全て表示する Done-->
+    <!-- 単語検索 -->
+    <!-- 単語編集 書き換え削除 -->
+    <!-- 検索フォーム -->
+    <!-- 現在編集中の教材のIDを隠しフィールドに埋め込む -->
+    <input type="hidden" id="currentTextId" value="{{ text.id }}">
+
+    <!-- 検索フォーム -->
+    <div class="searchForm">
+        <input type="text" name="word_query" id="searchInput" placeholder="単語を検索">
+        <button type="button" onclick="searchText()">検索</button>
+    </div>
+
+    <!-- 戻るボタンとホーム画面のボタンを配置 -->
+    <div class="buttons">
+        <a href="{% url 'admin' %}">
+            <img src="{% static 'admin_screen/images/home.png' %}" alt="ホーム画面へ">
+        </a>
+        <a href="{% url 'admin' %}">
+            <img src="{% static 'admin_screen/images/back.png' %}" alt="戻る">
+        </a>
+    </div>
+
+    <!-- 検索結果を表示する部分 -->
+    <div id="searchResults">
+        <p>検索結果</p>
+    </div>
+    <h1>{{ text.name }} の単語一覧</h1>
+    <table border="1">
+        <tr>
+            <th>No.</th>
+            <th>英語</th>
+            <th>日本語</th>
+            <th>アクション</th>
+        </tr>
+        {% for word in words %}
+        <tr>
+            <td>{{ word.no }}</td>
+            <td>{{ word.english }}</td>
+            <td>{{ word.japanese }}</td>
+            <td>
+                <a href="{% url 'edit_word' %}?word_id={{ word.id }}">編集</a>
+                <input type="hidden" id="deleteWordUrl" value="{% url 'delete_word' %}">
+                <button onclick="deleteWord({{ word.id }}, this)">削除</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

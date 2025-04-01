@@ -1,2 +1,15 @@
 csv_data
 .env
+csv_uploads
+config
+__pycache__
+*.pyc
+.venv
+django_env
+
+# dockerファイルを無視
+Dockerfile
+docker-compose.yml
+nginx/default.conf
+uwsgi.ini
+start.sh

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>検索結果</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'admin_screen/css/text_result_style.css' %}">
+    <link rel="shortcut icon" href="{% static 'images/icon.png' %}" type="logo.icon" />
+    <link rel="icon" href="{% static 'images/icon.png' %}" type="logo.icon" />
+</head>
+<body>
+    <div class="search-result">
+        <p>検索結果</p>
+        {% for text in results %}
+            <li>
+                <span>{{ text.name }}</span>
+                <button id='edit-{{ text.id }}' onclick="location.href='{% url 'edit_text' %}?text-id={{ text.id }}'">
+                    <img src="{% static 'admin_screen/images/edit.png' %}" alt="編集">
+                </button>
+            </li>
+        {% endfor %}
+    </div>
+    <div class="back-button">
+        <button onclick="backToHome()">戻る</button>
+    </div>
+    <script>
+        function backToHome() {
+            window.history.back();
+        }
+    </script>
+</body>
+</html>
