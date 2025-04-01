@@ -1,0 +1,99 @@
+*** Starting uWSGI 2.0.28 (64bit) on [Wed Dec  4 03:52:53 2024] ***
+compiled with version: 13.2.0 on 03 December 2024 04:25:18
+os: Linux-6.8.0-1016-aws #17-Ubuntu SMP Mon Sep  2 13:48:07 UTC 2024
+nodename: ip-172-31-12-42
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 1
+current working directory: /home/ubuntu/CloudWordCreator
+detected binary path: /home/ubuntu/django_env/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+chdir() to /home/ubuntu/CloudWordCreator
+your processes number limit is 3769
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address /home/ubuntu/CloudWordCreator/CloudWordCreator.sock fd 3
+Python version: 3.12.3 (main, Dec  2 2024, 15:34:13) [GCC 13.2.0]
+PEP 405 virtualenv detected: /home/ubuntu/CloudWordCreator/django_env
+Set PythonHome to /home/ubuntu/CloudWordCreator/django_env
+Python main interpreter initialized at 0x7488190c7d08
+python threads support enabled
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 364600 bytes (356 KB) for 4 cores
+*** Operational MODE: preforking ***
+WSGI app 0 (mountpoint='') ready in 0 seconds on interpreter 0x7488190c7d08 pid: 34613 (default app)
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI master process (pid: 34613)
+spawned uWSGI worker 1 (pid: 34614, cores: 1)
+spawned uWSGI worker 2 (pid: 34615, cores: 1)
+spawned uWSGI worker 3 (pid: 34616, cores: 1)
+spawned uWSGI worker 4 (pid: 34617, cores: 1)
+*** Starting uWSGI 2.0.28 (64bit) on [Wed Dec  4 03:57:24 2024] ***
+compiled with version: 13.2.0 on 03 December 2024 04:25:18
+os: Linux-6.8.0-1016-aws #17-Ubuntu SMP Mon Sep  2 13:48:07 UTC 2024
+nodename: ip-172-31-12-42
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 1
+current working directory: /home/ubuntu/CloudWordCreator
+detected binary path: /home/ubuntu/django_env/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+chdir() to /home/ubuntu/CloudWordCreator
+your processes number limit is 3769
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address /home/ubuntu/CloudWordCreator/CloudWordCreator.sock fd 3
+Python version: 3.12.3 (main, Dec  2 2024, 15:34:13) [GCC 13.2.0]
+PEP 405 virtualenv detected: /home/ubuntu/CloudWordCreator/django_env
+Set PythonHome to /home/ubuntu/CloudWordCreator/django_env
+Python main interpreter initialized at 0x795a734c7d08
+python threads support enabled
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 364600 bytes (356 KB) for 4 cores
+*** Operational MODE: preforking ***
+WSGI app 0 (mountpoint='') ready in 0 seconds on interpreter 0x795a734c7d08 pid: 34638 (default app)
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI master process (pid: 34638)
+spawned uWSGI worker 1 (pid: 34639, cores: 1)
+spawned uWSGI worker 2 (pid: 34640, cores: 1)
+spawned uWSGI worker 3 (pid: 34641, cores: 1)
+spawned uWSGI worker 4 (pid: 34642, cores: 1)
+*** Starting uWSGI 2.0.28 (64bit) on [Wed Dec  4 03:58:38 2024] ***
+compiled with version: 13.2.0 on 03 December 2024 04:25:18
+os: Linux-6.8.0-1016-aws #17-Ubuntu SMP Mon Sep  2 13:48:07 UTC 2024
+nodename: ip-172-31-12-42
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 1
+current working directory: /home/ubuntu/CloudWordCreator
+detected binary path: /home/ubuntu/django_env/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+chdir() to /home/ubuntu/CloudWordCreator
+your processes number limit is 3769
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address /home/ubuntu/CloudWordCreator/CloudWordCreator.sock fd 3
+Python version: 3.12.3 (main, Dec  2 2024, 15:34:13) [GCC 13.2.0]
+PEP 405 virtualenv detected: /home/ubuntu/CloudWordCreator/django_env
+Set PythonHome to /home/ubuntu/CloudWordCreator/django_env
+Python main interpreter initialized at 0x7a50f16c7d08
+python threads support enabled
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 364600 bytes (356 KB) for 4 cores
+*** Operational MODE: preforking ***
+WSGI app 0 (mountpoint='') ready in 0 seconds on interpreter 0x7a50f16c7d08 pid: 34646 (default app)
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI master process (pid: 34646)
+spawned uWSGI worker 1 (pid: 34647, cores: 1)
+spawned uWSGI worker 2 (pid: 34648, cores: 1)
+spawned uWSGI worker 3 (pid: 34649, cores: 1)
+spawned uWSGI worker 4 (pid: 34650, cores: 1)
