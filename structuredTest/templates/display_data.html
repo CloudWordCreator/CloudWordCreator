@@ -6,11 +6,16 @@
     <title>unitテストの生成</title>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/primeicons/primeicons.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/primevue@4/umd/primevue.min.js"></script>
+    <script src="https://unpkg.com/@primevue/themes/umd/aura.min.js"></script>
     {% load static %}
     <link rel="stylesheet" href="{% static 'structuredTest/css/display_data_style.css' %}">
     <script src="{% static 'structuredTest/js/display_data_scripts.js' %}"></script>
     <link rel="shortcut icon" href="{% static 'images/icon.png' %}" type="logo.icon" />
     <link rel="icon" href="{% static 'images/icon.png' %}" type="logo.icon" />
+    <link rel="stylesheet" href="{% static 'common/css/speeddial.css' %}">
 </head>
 <body>
     {% load custom_filters %}
@@ -45,6 +50,10 @@
             </div>
         </form>
     </div>
+    <div id="speeddial">
+        <p-speeddial :model="items" :radius="100" type="quarter-circle" direction="down-left" tooltipOptions="{ position: 'left', event: 'hover' }" />
+    </div>
+    <script src="{% static 'home_screen/js/vue_report_scripts.js' %}" type="module"></script>
     <!-- Bootstrap JS and dependencies -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>

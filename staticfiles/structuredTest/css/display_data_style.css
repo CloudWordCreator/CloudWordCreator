@@ -6,10 +6,10 @@
 }
 .fixed-sidebar {
     position: fixed;
-    top: 20px;
+    top: 200px;
     right: 20px;
     width: auto;
-    height: 800px;
+    height: auto;
     background-color: #f8f9fa;
     padding: 10px;
     border: 1px solid #ddd;
