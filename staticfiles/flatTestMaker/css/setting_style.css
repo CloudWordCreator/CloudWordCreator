@@ -239,3 +239,8 @@ body {
     cursor: pointer;
     border-radius: 50%;
 }
+#speeddial {
+    position: fixed;
+    top: 5vh;
+    right: 5vh;
+}
