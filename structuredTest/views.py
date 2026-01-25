@@ -27,27 +27,8 @@ def display_data(request):
 def create_test(request):
     """
     チェックボックスの選択内容に基づいてテストを作成し、表示する。
-    returnのjsonファイルについて
-    - 親unit
-    - 子unit
-    - 単語
-    - テーブル番号
-
-    テーブルの番号について :
-    子unitと単語unitが合計25個になったらテーブル番号を更新している
-    Json内はint型で扱う。
-
-    フロントエンドでのテーブル番号の扱いについて :
-    左上をテーブル番号1とすると、右上が2、左下が3、右下が4...
-    example:
-    ```
-    1 2
-    3 4
-    5 6
-    ```
-
-    :return
-        json file (コード見ろ)
+    サーバーサイドで行数計算（25行/列）を行い、ページ（シート）と列（左右）の構造を作成してテンプレートに渡す。
+    これにより、フロントエンドでの複雑な座標計算JSを廃止する。
     """
     if request.method == 'POST':
         # POST データから選択されたユニットとテキストIDを取得
@@ -58,58 +39,62 @@ def create_test(request):
         selected_units = Unit.objects.filter(id__in=selected_unit_ids)
         selected_texts = Text.objects.filter(id__in=selected_text_ids)
 
-        # データを整形して番号付け
-        table_no = 1  # テーブル番号
-        entry_count = 0  # 現在のテーブル内の行数カウント
-        word_index = 1  # 各単語の全体的なインデックス
-
         textbooks = [{"id": text.id, "name": text.name} for text in selected_texts]
+        
+        # 最初のテキスト名と最初のユニット名（ヘッダー用）
+        # 注: 複数選択時は最初のものを表示する既存ロジックを踏襲
+        header_text_name = textbooks[0]['name'] if textbooks else ""
+        header_unit_name = selected_units[0].name if selected_units else ""
+        header_title = f"{header_text_name} {header_unit_name}"
 
-        response_data = {
-            "units": [],
-            "textbooks": textbooks  # ここに追加
-        }
+        sheets = []
+        current_sheet = {"left": [], "right": []}
+        current_column = "left" # 'left' or 'right'
+        current_rows = 0
+        
+        # 行を追加する内部関数
+        def add_row(row_data):
+            nonlocal current_sheet, current_column, current_rows, sheets
+            
+            # 25行を超えたら次の列/シートへ
+            if current_rows >= MAX_ENTRIES_PER_TABLE:
+                if current_column == "left":
+                    current_column = "right"
+                else:
+                    sheets.append(current_sheet)
+                    current_sheet = {"left": [], "right": []}
+                    current_column = "left"
+                current_rows = 0
+            
+            current_sheet[current_column].append(row_data)
+            current_rows += 1
 
         for unit in selected_units.prefetch_related('subunits__words'):
-            unit_data = {
-                "name": unit.name,
-                "sub_units": []
-            }
             for subunit in unit.subunits.all():
-                subunit_data = {
-                    "name": subunit.name,
-                    "position": table_no,  # 子ユニットが属するテーブル番号
-                    "words": []
-                }
+                # SubUnit Header
+                add_row({
+                    "type": "header",
+                    "text": subunit.name
+                })
+                
                 for word in subunit.words.all():
-                    # 各単語を追加し、テーブル番号を考慮した番号付けを行う
-                    subunit_data["words"].append({
-                        "position": table_no, # 単語が属するテーブルの番号
+                    add_row({
+                        "type": "word",
                         "english": word.english,
                         "japanese": word.japanese
                     })
+        
+        # 最後のシートに残りのデータがあれば追加
+        if current_sheet["left"] or current_sheet["right"]:
+            sheets.append(current_sheet)
 
-                    # 単語のカウントを更新
-                    word_index += 1
-                    entry_count += 1
-
-                    # テーブル内の行数が25を超えたら次のテーブルに移動
-                    if entry_count >= MAX_ENTRIES_PER_TABLE:
-                        entry_count = 0
-                        table_no += 1
-
-                unit_data["sub_units"].append(subunit_data)
-
-                # 子ユニット終了時も行数確認
-                entry_count += 1
-                if entry_count >= MAX_ENTRIES_PER_TABLE:
-                    entry_count = 0
-                    table_no += 1
-
-            response_data["units"].append(unit_data)
+        context = {
+            "sheets": sheets,
+            "header_title": header_title,
+        }
 
         # JSON データをテンプレートに渡す
-        return render(request, 'test_result.html', {"data": response_data})
+        return render(request, 'test_result.html', context)
 
     # POST でない場合
     return redirect('display_data')
