@@ -1,106 +1,61 @@
-function toggleVisibility(id) {
-    const element = document.getElementById(id);
-
-    if (element.classList.contains('active')) {
-        element.classList.remove('active');
-    } else {
-        element.classList.add('active');
-    }
-}
-document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.text-toggle').forEach(function(button) {
-        button.addEventListener('click', function() {
-            const id = this.getAttribute('data-id');
-            toggleVisibility(id);
-        });
-    });
-
-    document.querySelectorAll('.unit-toggle').forEach(function(button) {
-        button.addEventListener('click', function() {
-            const id = this.getAttribute('data-id');
-            toggleVisibility(id);
-        });
-    });
-
-    const textCheckboxes = document.querySelectorAll('.text-checkbox');
-    const unitCheckboxes = document.querySelectorAll('.unit-checkbox');
-
-    // Disable all checkboxes initially
-    textCheckboxes.forEach(function(checkbox) {
-        checkbox.disabled = true;
-    });
-
-    unitCheckboxes.forEach(function(checkbox) {
-        checkbox.disabled = false;
-    });
-
-    function handleUnitCheckboxChange(checkbox) {
-        if (checkbox.checked) {
-            // Disable all other unit checkboxes
-            unitCheckboxes.forEach(function(otherCheckbox) {
-                if (otherCheckbox !== checkbox) {
-                    otherCheckbox.disabled = true;
-                }
-            });
-
-            // Enable the corresponding text checkbox
-            const textCheckbox = checkbox.closest('.text-item').querySelector('.text-checkbox');
-            if (textCheckbox) {
-                textCheckbox.checked = true;
-                textCheckbox.disabled = true;
-            }
-        } else {
-            // Enable all unit checkboxes
-            unitCheckboxes.forEach(function(otherCheckbox) {
-                otherCheckbox.disabled = false;
-            });
-
-            // Uncheck the corresponding text checkbox but keep it disabled
-            const textCheckbox = checkbox.closest('.text-item').querySelector('.text-checkbox');
-            if (textCheckbox) {
-                textCheckbox.checked = false;
-                textCheckbox.disabled = true;
-            }
-        }
-    }
-
-    unitCheckboxes.forEach(function(checkbox) {
-        checkbox.addEventListener('change', function() {
-            handleUnitCheckboxChange(checkbox);
-        });
-    });
-
-    document.getElementById("testForm").addEventListener("submit", function(event) {
-        // Check if any checkboxes are checked
-        const anyChecked = document.querySelectorAll('.text-checkbox:checked, .unit-checkbox:checked').length > 0;
-        if (!anyChecked) {
-            event.preventDefault();
-            alert('少なくとも1つのチェックボックスを選択してください。');
-            return;
-        }
-
-        // selected_texts のチェックボックスを手動で追加
-        document.querySelectorAll('.text-checkbox:checked').forEach(checkbox => {
-            let hiddenInput = document.createElement("input");
-            hiddenInput.type = "hidden";
-            hiddenInput.name = "selected_texts";
-            hiddenInput.value = checkbox.value;
-            this.appendChild(hiddenInput);
-        });
-    });
+document.addEventListener('DOMContentLoaded', function () {
+    // Initial update of selected count
+    updateSelectedCount();
 });
 
+// Toggle all units when textbook is selected
+function toggleTextUnits(source, textId) {
+    const checkboxes = document.querySelectorAll(`.unit-group-${textId}`);
+    for (const checkbox of checkboxes) {
+        checkbox.checked = source.checked;
+    }
+    updateSelectedCount();
+}
 
-function searchText() {
-    const query = document.getElementById('searchInput').value.toLowerCase();
-    const textItems = document.querySelectorAll('.text-item');
+// Update selected count and handle child-parent checkbox logic
+document.addEventListener('change', function (e) {
+    if (e.target.classList.contains('unit-checkbox')) {
+        const textId = e.target.getAttribute('data-text-id');
+        const textCheckbox = document.getElementById(`text-checkbox-${textId}`);
 
-    textItems.forEach(item => {
-        const textName = item.querySelector('.text-toggle').textContent.toLowerCase();
-        if (textName.includes(query)) {
-            item.style.display = '';
+        // If a child is checked, ensure parent is checked
+        if (e.target.checked) {
+            if (textCheckbox) textCheckbox.checked = true;
         } else {
-            item.style.display = 'none';
+            // Optional: If all children are unchecked, uncheck parent?
+            // Leaving this commented out to align with previous simple logic
+            /*
+            const allUnits = document.querySelectorAll(`.unit-group-${textId}`);
+            const anyChecked = Array.from(allUnits).some(c => c.checked);
+            if (!anyChecked && textCheckbox) {
+                textCheckbox.checked = false;
+            }
+            */
+        }
+    }
+    updateSelectedCount();
+});
+
+function updateSelectedCount() {
+    const count = document.querySelectorAll('.unit-checkbox:checked').length;
+    const countElement = document.getElementById('selectedCount');
+    if (countElement) {
+        countElement.textContent = `${count} Unit 選択中`;
+    }
+}
+
+// Filter functionality
+function filterTextbooks() {
+    const input = document.getElementById('searchInput');
+    const filter = input.value.toLowerCase();
+    const validItems = document.querySelectorAll('.textbook-item');
+
+    validItems.forEach(item => {
+        const textName = item.querySelector('.card-header label').textContent.toLowerCase();
+        if (textName.includes(filter)) {
+            item.style.display = "";
+        } else {
+            item.style.display = "none";
         }
     });
 }

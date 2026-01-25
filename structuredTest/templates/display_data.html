@@ -1,62 +1,124 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>unitテストの生成</title>
+    <title>Unitテスト作成 | CloudWordCreator</title>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/primeicons/primeicons.css">
+
+    <!-- Libraries -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://unpkg.com/primevue@4/umd/primevue.min.js"></script>
     <script src="https://unpkg.com/@primevue/themes/umd/aura.min.js"></script>
+
     {% load static %}
     <link rel="stylesheet" href="{% static 'structuredTest/css/display_data_style.css' %}">
-    <script src="{% static 'structuredTest/js/display_data_scripts.js' %}"></script>
     <link rel="shortcut icon" href="{% static 'images/icon.png' %}" type="logo.icon" />
-    <link rel="icon" href="{% static 'images/icon.png' %}" type="logo.icon" />
     <link rel="stylesheet" href="{% static 'common/css/speeddial.css' %}">
 </head>
-<body>
+
+<body class="bg-light">
     {% load custom_filters %}
-    <div class="container">
-        <h1 class="mt-5">教材選択</h1>
-        <form id="searchForm" class="form-inline mb-3">
-            <input type="text" id="searchInput" class="form-control mr-2" placeholder="教材検索">
-            <button type="button" class="btn btn-primary" onclick="searchText()">検索</button>
-        </form>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="#">CloudWordCreator</a>
+            <div class="ml-auto">
+                <a href="/flatTestMaker/settings/" class="btn btn-outline-light btn-sm">Unit無しテスト(検索・作成)</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-5 mb-5">
+        <div class="row mb-4 align-items-center">
+            <div class="col-md-8">
+                <h1 class="h2 mb-0">教材選択</h1>
+                <p class="text-muted">テストを作成する教材とUnitを選択してください</p>
+            </div>
+            <div class="col-md-4">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="pi pi-search"></i></span>
+                    </div>
+                    <input type="text" id="searchInput" class="form-control" placeholder="教材を検索..."
+                        onkeyup="filterTextbooks()">
+                </div>
+            </div>
+        </div>
+
         <form id="testForm" method="POST" action="{% url 'create_test' %}">
             {% csrf_token %}
-            <ul id="textList">
+
+            <div class="row" id="textbookGrid">
                 {% for text in texts %}
-                    <li class="text-item">
-                        <input type="checkbox" class="text-checkbox" data-id="text-{{ text.id }}" id="text-checkbox-{{ text.id }}" name="selected_texts" value="{{ text.id }}">
-                        <button type="button" class="btn btn-link text-toggle" data-id="text-{{ text.id }}">{{ text.name }}</button>
-                        <ul id="text-{{ text.id }}" class="nested">
-                            {% for parent in units_by_text|get_item:text.id %}
-                                <li>
-                                    <input type="checkbox" class="unit-checkbox" data-id="unit-{{ parent.id }}" id="unit-checkbox-{{ parent.id }}" name="selected_units" value="{{ parent.id }}"> {{ parent.name }}
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </li>
+                <div class="col-lg-6 mb-4 textbook-item">
+                    <div class="card shadow-sm h-100 border-0">
+                        <div class="card-header bg-white d-flex align-items-center justify-content-between py-3">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input text-checkbox"
+                                    id="text-checkbox-{{ text.id }}" name="selected_texts" value="{{ text.id }}"
+                                    onchange="toggleTextUnits(this, '{{ text.id }}')">
+                                <label class="custom-control-label font-weight-bold ml-2"
+                                    for="text-checkbox-{{ text.id }}">
+                                    {{ text.name }}
+                                </label>
+                            </div>
+                            <button type="button" class="btn btn-light btn-sm rounded-circle" data-toggle="collapse"
+                                data-target="#collapse-{{ text.id }}" aria-expanded="false"
+                                aria-controls="collapse-{{ text.id }}">
+                                <i class="pi pi-chevron-down"></i>
+                            </button>
+                        </div>
+                        <div id="collapse-{{ text.id }}" class="collapse show">
+                            <div class="card-body bg-light-gray">
+                                <div class="unit-list">
+                                    {% for parent in units_by_text|get_item:text.id %}
+                                    <div class="custom-control custom-checkbox py-2 border-bottom-dashed">
+                                        <input type="checkbox"
+                                            class="custom-control-input unit-checkbox unit-group-{{ text.id }}"
+                                            id="unit-checkbox-{{ parent.id }}" name="selected_units"
+                                            value="{{ parent.id }}" data-text-id="{{ text.id }}">
+                                        <label class="custom-control-label w-100 cursor-pointer"
+                                            for="unit-checkbox-{{ parent.id }}">
+                                            {{ parent.name }}
+                                        </label>
+                                    </div>
+                                    {% empty %}
+                                    <p class="text-muted small">Unitがありません</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 {% endfor %}
-            </ul>
-            <!-- 右側に固定表示するチェックボックスとボタン -->
-            <div class="fixed-sidebar">
-                <h5>表示されていない教材はこちら</h5>
-                <li><a href="/flatTestMaker/settings/" class="hover-link" data-materials="{{ flat_test_texts|join:', ' }}">unit無しテスト</a></li>
-                <button type="submit" class="btn btn-primary mt-2">作成</button>
+            </div>
+
+            <!-- Sticky Footer for Actions -->
+            <div class="fixed-bottom bg-white border-top py-3 shadow-lg">
+                <div class="container d-flex justify-content-end align-items-center">
+                    <span class="mr-3 text-muted" id="selectedCount">0 個選択中</span>
+                    <button type="submit" class="btn btn-primary btn-lg px-5 shadow-sm rounded-pill">
+                        <i class="pi pi-print mr-2"></i>テストを作成
+                    </button>
+                </div>
             </div>
         </form>
     </div>
-    <div id="speeddial">
-        <p-speeddial :model="items" :radius="100" type="quarter-circle" direction="down-left" tooltipOptions="{ position: 'left', event: 'hover' }" />
-    </div>
+
     <script src="{% static 'home_screen/js/vue_report_scripts.js' %}" type="module"></script>
+
     <!-- Bootstrap JS and dependencies -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Custom Script for UI Logic -->
+    <script src="{% static 'structuredTest/js/display_data_scripts.js' %}"></script>
 </body>
+
 </html>
