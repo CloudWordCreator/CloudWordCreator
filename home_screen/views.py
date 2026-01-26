@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 import random
 from . import bug_report_writter
 from csvManager.models import UnitWord, NoUnitWord
+import logging
 
 # Create your views here.
 # 暫定作るもの
@@ -30,19 +31,19 @@ def report(request):
 
 def submit_report(request):
     if request.method == 'POST':
+        logger = logging.getLogger(__name__)
         school_name = request.POST.get('school_name')
         material = request.POST.get('material')
         details = request.POST.get('details')
 
-        report_content = {
-            'schoolName': school_name,
-            'material': material,
-            'details': details,
-        }
+        report_content = f"""
+        # 校舎名: {school_name}
+        # 教材名: {material}
+        # 詳細: {details}
+        """
 
-        sheet_writer = bug_report_writter.SpreadSheetWriter(report_content)
-        sheet_writer.write_report()
-
+        if report_content:
+             logger.info(report_content)
         return redirect('home')
     else:
         return render(request, 'report.html')

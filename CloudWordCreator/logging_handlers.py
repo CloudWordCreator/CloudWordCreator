@@ -18,15 +18,26 @@ class DiscordWebhookHandler(logging.Handler):
         try:
             log_entry = self.format(record)
             
+            # ログレベルに応じた色とタイトルの設定
+            if record.levelno <= logging.INFO:
+                color = 65280 # Green
+                title = f"Report / Info : {record.module}"
+            elif record.levelno <= logging.WARNING:
+                color = 16776960 # Yellow
+                title = f"Warning in {record.module}"
+            else:
+                color = 15158332 # Red
+                title = f"Error in {record.module}"
+
             # Create the payload structure
             # Discord embeds are nice for errors
             payload = {
                 "content": None,
                 "embeds": [
                     {
-                        "title": f"Error in {record.module}",
+                        "title": title,
                         "description": f"```{log_entry[:4000]}```", # Discord has a 4096 char limit for descriptions
-                        "color": 15158332, # Red
+                        "color": color,
                         "fields": [
                             {
                                 "name": "Level",
@@ -40,7 +51,7 @@ class DiscordWebhookHandler(logging.Handler):
                             }
                         ],
                         "footer": {
-                            "text": "CloudWordCreator Error Log"
+                            "text": "CloudWordCreator Log"
                         }
                     }
                 ]

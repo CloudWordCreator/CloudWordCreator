@@ -32,7 +32,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 #DEBUG = os.getenv('DEBUG')
 DEBUG = True
 
-ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS'), "localhost", "127.0.0.1"]
+ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS'), "localhost", "127.0.0.1", "10.0.2.2"]
 
 
 # Application definition
@@ -174,13 +174,13 @@ LOGGING = {
             'class': 'logging.StreamHandler',
         },
         'discord': {
-            'level': 'ERROR',
+            'level': 'INFO',
             'class': 'CloudWordCreator.logging_handlers.DiscordWebhookHandler',
         },
     },
     'root': {
-        'handlers': ['console'],
-        'level': 'WARNING',
+        'handlers': ['console', 'discord'],
+        'level': 'INFO',
     },
     'loggers': {
         'django': {
