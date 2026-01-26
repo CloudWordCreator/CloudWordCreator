@@ -3,6 +3,22 @@ import json
 import os
 from urllib import request, error
 
+class IgnoreApiRouteFilter(logging.Filter):
+    """
+    Filter out logs containing specific API routes that cause noise (e.g. from Android tablets).
+    """
+    def filter(self, record):
+        message = record.getMessage()
+        # 特定のパスを含むログは無視する
+        ignored_paths = [
+            "/api/spotify/",
+            "/api/resources",
+            "/api/twitch/",
+        ]
+        if any(path in message for path in ignored_paths):
+            return False
+        return True
+
 class DiscordWebhookHandler(logging.Handler):
     """
     A custom logging handler that sends logs to a Discord Webhook.

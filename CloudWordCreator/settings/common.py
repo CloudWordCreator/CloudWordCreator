@@ -169,6 +169,11 @@ genai.configure(api_key=AI_APIKEY)
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'filters': {
+        'ignore_api': {
+            '()': 'CloudWordCreator.logging_handlers.IgnoreApiRouteFilter',
+        },
+    },
     'handlers': {
         'console': {
             'class': 'logging.StreamHandler',
@@ -176,6 +181,7 @@ LOGGING = {
         'discord': {
             'level': 'INFO',
             'class': 'CloudWordCreator.logging_handlers.DiscordWebhookHandler',
+            'filters': ['ignore_api'],
         },
     },
     'root': {
