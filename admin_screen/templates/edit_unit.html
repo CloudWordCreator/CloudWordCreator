@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>Unit編集</title>
+    <link rel="stylesheet" href="{% static 'admin_screen/css/edit_text_style.css' %}">
+    <link rel="shortcut icon" href="{% static 'images/icon.png' %}" type="logo.icon" />
+    <link rel="icon" href="{% static 'images/icon.png' %}" type="logo.icon" />
+    <style>
+        .form-container {
+            width: 50%;
+            margin: 50px auto;
+            text-align: center;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="buttons">
+        <a href="{% url 'manage_units' %}?text_id={{ unit.text.id }}">
+            <img src="{% static 'admin_screen/images/back.png' %}" alt="戻る">
+        </a>
+    </div>
+
+    <div class="form-container">
+        <h1>Unit編集: {{ unit.name }}</h1>
+        <form action="{% url 'save_unit' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="unit_id" value="{{ unit.id }}">
+            <div>
+                <label for="name">Unit名:</label><br>
+                <input type="text" id="name" name="name" value="{{ unit.name }}" required>
+            </div>
+            <button type="submit">保存</button>
+        </form>
+    </div>
+</body>
+
+</html>

@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from csvManager.models import Text, NoUnitWord, UnitWord
+from csvManager.models import Text, NoUnitWord, UnitWord, Unit
 from django.db import models
 from django.http import JsonResponse, HttpResponseRedirect
 from django.db.models import Q
@@ -181,10 +181,36 @@ def save_word(request):
     # POST以外のリクエストはエラーを返す
     return JsonResponse({'error': 'POSTリクエストを受け付けていません。'}, status=400)
 
-# 教材を削除する
 @login_required(login_url='/login/')
 def delete_text(request):
     text_id = request.GET.get('text_id')
     del_text = Text.objects.get(id=text_id)
     del_text.delete()
     return render(request, 'delete success.html', {'delText': del_text})
+
+# Unit management
+@login_required(login_url='/login/')
+def manage_units(request):
+    text_id = request.GET.get('text_id')
+    text = get_object_or_404(Text, id=text_id)
+    units = Unit.objects.filter(text=text)
+    return render(request, 'manage_units.html', {'text': text, 'units': units})
+
+@login_required(login_url='/login/')
+def edit_unit(request):
+    unit_id = request.GET.get('unit_id')
+    unit = get_object_or_404(Unit, id=unit_id)
+    return render(request, 'edit_unit.html', {'unit': unit})
+
+@login_required(login_url='/login/')
+def save_unit(request):
+    if request.method == 'POST':
+        unit_id = request.POST.get('unit_id')
+        name = request.POST.get('name')
+        
+        unit = get_object_or_404(Unit, id=unit_id)
+        unit.name = name
+        unit.save()
+        
+        return redirect(f"{reverse('manage_units')}?text_id={unit.text.id}")
+    return JsonResponse({'error': 'POST required'}, status=400)

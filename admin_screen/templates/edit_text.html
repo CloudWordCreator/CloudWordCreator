@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     {% load static %}
     <meta charset="UTF-8">
@@ -9,6 +10,7 @@
     <link rel="shortcut icon" href="{% static 'images/icon.png' %}" type="logo.icon" />
     <link rel="icon" href="{% static 'images/icon.png' %}" type="logo.icon" />
 </head>
+
 <body>
     <!-- 暫定機能 -->
     <!-- 単語を全て表示する Done-->
@@ -39,6 +41,12 @@
         <p>検索結果</p>
     </div>
     <h1>{{ text.name }} の単語一覧</h1>
+
+    <div style="text-align: center; margin-bottom: 20px;">
+        <a href="{% url 'manage_units' %}?text_id={{ text.id }}"
+            style="padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px;">Unitを管理する</a>
+    </div>
+
     <table border="1">
         <tr>
             <th>No.</th>
@@ -60,4 +68,5 @@
         {% endfor %}
     </table>
 </body>
+
 </html>
