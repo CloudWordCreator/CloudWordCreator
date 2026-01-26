@@ -188,3 +188,46 @@ def delete_text(request):
     del_text = Text.objects.get(id=text_id)
     del_text.delete()
     return render(request, 'delete success.html', {'delText': del_text})
+
+# Unit management
+@login_required(login_url='/login/')
+def manage_units(request):
+    text_id = request.GET.get('text_id')
+    text = get_object_or_404(Text, id=text_id)
+    units = Unit.objects.filter(text=text)
+    return render(request, 'manage_units.html', {'text': text, 'units': units})
+
+@login_required(login_url='/login/')
+def edit_unit(request):
+    unit_id = request.GET.get('unit_id')
+    unit = get_object_or_404(Unit, id=unit_id)
+    return render(request, 'edit_unit.html', {'unit': unit})
+
+@login_required(login_url='/login/')
+def save_unit(request):
+    if request.method == 'POST':
+        unit_id = request.POST.get('unit_id')
+        name = request.POST.get('name')
+        
+        unit = get_object_or_404(Unit, id=unit_id)
+        unit.name = name
+        unit.save()
+        
+        return redirect(f"{reverse('manage_units')}?text_id={unit.text.id}")
+    return JsonResponse({'error': 'POST required'}, status=400)
+
+@login_required(login_url='/login/')
+def api_search_text(request):
+    """
+    Search texts and return results as JSON for React frontend.
+    """
+    query = request.GET.get('text_query')
+    results = []
+    if query:
+        # 検索ロジック (search_textと同様)
+        texts = Text.objects.filter(models.Q(name__icontains=query))
+        # JSONシリアライズ用に辞書リストへ変換
+        results = [
+            {'id': t.id, 'name': t.name} for t in texts
+        ]
+    return JsonResponse({'results': results})

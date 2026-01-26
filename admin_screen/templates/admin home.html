@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <title>Admin Home</title>
@@ -11,13 +12,15 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'admin_screen/css/admin home_style.css' %}">
 </head>
+
 <body>
-    <form method="GET" action="{% url 'search_text' %}" id="searchForm">
-        <div class="searchForm">
-            <input type="text" name="text_query" id="searchInput" placeholder="教材検索">
-            <button type="button" onclick="searchText()">検索</button>
-        </div>
-    </form>
+    <!-- React App Root -->
+    <div id="root"></div>
+
+    <!-- Load React Assets -->
+    <link rel="stylesheet" href="{% static 'result_frontend/assets/index.css' %}">
+    <script type="module" src="{% static 'result_frontend/assets/index.js' %}"></script>
+
     <div class="admin-home-container">
         <div class="text-list">
             <!-- 教材リスト 表示まで実装 js等の設定はまだ -->
@@ -26,17 +29,19 @@
                 <h2>Unit:</h2>
                 <ul>
                     {% for text in unit_texts %}
-                        <li class="text-item" id='text-{{ text.id }}'>
-                            <span>{{ text.name }}</span>
-                            <!-- 編集ボタン -->
-                            <button id='edit-{{ text.id }}' class="edit-button" onclick="location.href='{% url 'edit_text' %}?text-id={{ text.id }}'">
-                                <i class="pi pi-pen-to-square" style="font-size: 1.5em;"></i>
-                            </button>
-                            <!-- 削除ボタン -->
-                            <button id='delete-{{ text.id }}' class="delete-button" onclick="location.href='{% url 'delete_text' %}?text_id={{ text.id }}'">
-                                <i class="pi pi-trash" style="font-size: 1.5em;"></i>
-                            </button>
-                        </li>
+                    <li class="text-item" id='text-{{ text.id }}'>
+                        <span>{{ text.name }}</span>
+                        <!-- 編集ボタン -->
+                        <button id='edit-{{ text.id }}' class="edit-button"
+                            onclick="location.href='{% url 'edit_text' %}?text-id={{ text.id }}'">
+                            <i class="pi pi-pen-to-square" style="font-size: 1.5em;"></i>
+                        </button>
+                        <!-- 削除ボタン -->
+                        <button id='delete-{{ text.id }}' class="delete-button"
+                            onclick="location.href='{% url 'delete_text' %}?text_id={{ text.id }}'">
+                            <i class="pi pi-trash" style="font-size: 1.5em;"></i>
+                        </button>
+                    </li>
                     {% endfor %}
                 </ul>
             </div>
@@ -45,17 +50,19 @@
                 <h2>No Unit:</h2>
                 <ul>
                     {% for text in no_unit_texts %}
-                        <li class="text-item" id='text-{{ text.id }}'>
-                            <span>{{ text.name }}</span>
-                            <!-- 編集ボタン -->
-                            <button id='edit-{{ text.id }}' class="edit-button" onclick="location.href='{% url 'edit_text' %}?text-id={{ text.id }}'">
-                                <i class="pi pi-pen-to-square" style="font-size: 1.5em;"></i>
-                            </button>
-                            <!-- 削除ボタン -->
-                            <button id='delete-{{ text.id }}' class="delete-button" onclick="location.href='{% url 'delete_text' %}?text_id={{ text.id }}'">
-                                <i class="pi pi-trash" style="font-size: 1.5em;"></i>
-                            </button>
-                        </li>
+                    <li class="text-item" id='text-{{ text.id }}'>
+                        <span>{{ text.name }}</span>
+                        <!-- 編集ボタン -->
+                        <button id='edit-{{ text.id }}' class="edit-button"
+                            onclick="location.href='{% url 'edit_text' %}?text-id={{ text.id }}'">
+                            <i class="pi pi-pen-to-square" style="font-size: 1.5em;"></i>
+                        </button>
+                        <!-- 削除ボタン -->
+                        <button id='delete-{{ text.id }}' class="delete-button"
+                            onclick="location.href='{% url 'delete_text' %}?text_id={{ text.id }}'">
+                            <i class="pi pi-trash" style="font-size: 1.5em;"></i>
+                        </button>
+                    </li>
                     {% endfor %}
                 </ul>
             </div>
@@ -68,11 +75,12 @@
         </div>
     </div>
     <div id="speeddial">
-        <p-speeddial :model="items" :radius="100" type="quarter-circle" direction="down-left" tooltipOptions="{ position: 'left', event: 'hover' }"></p-speeddial>
+        <p-speeddial :model="items" :radius="100" type="quarter-circle" direction="down-left"
+            tooltipOptions="{ position: 'left', event: 'hover' }"></p-speeddial>
     </div>
     <script src="{% static 'common/js/vue_report_scripts.js' %}" type="module"></script>
     <script>
-        document.getElementById('searchInput').addEventListener('keypress', function(event) {
+        document.getElementById('searchInput').addEventListener('keypress', function (event) {
             if (event.key === 'Enter') {
                 event.preventDefault();
                 document.getElementById('searchForm').submit();
@@ -83,4 +91,5 @@
         }
     </script>
 </body>
+
 </html>
