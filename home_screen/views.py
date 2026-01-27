@@ -25,10 +25,54 @@ def home(request):
         'structured_test_texts': structured_test_texts_sample
     })
 
+import json
+import logging
+
+logger = logging.getLogger(__name__)
+
 def report(request):
-    return render(request, 'report.html')
+    """
+    Report画面 (React)
+    """
+    return render(request, 'home_react_base.html')
+
+def api_submit_report(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            school_name = data.get('school_name')
+            material = data.get('material')
+            details = data.get('details')
+
+            report_message = f"""
+# Report Received
+**School Name**: {school_name}
+**Material**: {material}
+**Details**:
+{details}
+            """
+            
+            # Log to Discord via configured logger
+            logger.info(report_message)
+
+            report_content = {
+                'schoolName': school_name,
+                'material': material,
+                'details': details,
+            }
+
+            sheet_writer = bug_report_writter.SpreadSheetWriter(report_content)
+            sheet_writer.write_report()
+
+            return JsonResponse({'success': True})
+        except Exception as e:
+            logger.error(f"Failed to submit report: {e}")
+            return JsonResponse({'success': False, 'error': str(e)}, status=500)
+    
+    return JsonResponse({'error': 'POST required'}, status=400)
 
 def submit_report(request):
+    # Deprecated: Keep for backward compatibility if needed, or remove
     if request.method == 'POST':
         school_name = request.POST.get('school_name')
         material = request.POST.get('material')
