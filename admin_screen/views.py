@@ -231,3 +231,15 @@ def api_search_text(request):
             {'id': t.id, 'name': t.name} for t in texts
         ]
     return JsonResponse({'results': results})
+
+# API for Admin Home React Migration
+@login_required(login_url='/login/')
+def api_get_admin_data(request):
+    unit_texts = Text.objects.filter(units__isnull=False).distinct()
+    no_unit_texts = Text.objects.filter(no_unit_words__isnull=False).distinct()
+    
+    data = {
+        'unit_texts': [{'id': t.id, 'name': t.name} for t in unit_texts],
+        'no_unit_texts': [{'id': t.id, 'name': t.name} for t in no_unit_texts]
+    }
+    return JsonResponse(data)

@@ -7,6 +7,7 @@ urlpatterns = [
     path('eisai_admin/edit_unit/', views.edit_unit, name='edit_unit'),
     path('eisai_admin/save_unit/', views.save_unit, name='save_unit'),
     path('eisai_admin/api/search_text/', views.api_search_text, name='api_search_text'),
+    path('eisai_admin/api/init_data/', views.api_get_admin_data, name='api_get_admin_data'),
     path('eisai_admin/search_word/', views.search_word, name='search_word'),
     path('eisai_admin/edit_word/', views.edit_word, name='edit_word'),
     path('eisai_admin/delete_word/', views.delete_word, name='delete_word'),
