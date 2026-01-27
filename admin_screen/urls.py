@@ -13,4 +13,11 @@ urlpatterns = [
     path('eisai_admin/delete_word/', views.delete_word, name='delete_word'),
     path('eisai_admin/delete_text/', views.delete_text, name='delete_text'),
     path('eisai_admin/save_word/', views.save_word, name='save_word'),
+
+    # APIs
+    path('eisai_admin/api/text_details/', views.api_get_text_details, name='api_get_text_details'),
+    path('eisai_admin/api/save_word/', views.api_save_word, name='api_save_word'),
+    path('eisai_admin/api/delete_word/', views.api_delete_word, name='api_delete_word'),
+    path('eisai_admin/api/save_unit/', views.api_save_unit, name='api_save_unit'),
+    path('eisai_admin/api/delete_unit/', views.api_delete_unit, name='api_delete_unit'),
  ]
