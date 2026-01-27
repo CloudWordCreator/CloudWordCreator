@@ -174,7 +174,7 @@ LOGGING = {
             'class': 'logging.StreamHandler',
         },
         'discord': {
-            'level': 'ERROR',
+            'level': 'INFO',  # Changed from ERROR to INFO
             'class': 'CloudWordCreator.logging_handlers.DiscordWebhookHandler',
         },
     },
@@ -191,6 +191,11 @@ LOGGING = {
         'django.request': {
             'handlers': ['discord', 'console'],
             'level': 'ERROR',
+            'propagate': False,
+        },
+        'home_screen': {  # Added logger for home_screen app
+            'handlers': ['console', 'discord'],
+            'level': 'INFO',
             'propagate': False,
         },
     },
