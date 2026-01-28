@@ -11,7 +11,7 @@ const Home = () => {
 
     useEffect(() => {
         // Fetch random data for cards
-        fetch('/home/api/get_home_data/')
+        fetch('/api/get_home_data/')
             .then(res => res.json())
             .then(data => setHomeData(data))
             .catch(err => console.error(err))
@@ -21,7 +21,7 @@ const Home = () => {
         e.preventDefault()
         if (!searchQuery.trim()) return
 
-        fetch(`/home/api/global_search/?q=${encodeURIComponent(searchQuery)}`)
+        fetch(`/api/global_search/?q=${encodeURIComponent(searchQuery)}`)
             .then(res => res.json())
             .then(data => {
                 setSearchResults(data.results)
@@ -86,13 +86,13 @@ const Home = () => {
                             <span>📚 Textbook Based</span>
                         </div>
                     </div>
-                    <a href="/structuredTest/" className="btn-outline">Select Units</a>
+                    <a href="/structuredTest/settings" className="btn-outline">Select Units</a>
                 </div>
             </div>
 
             <footer className="home-footer">
                 <a href="/report/" className="footer-link">Report Bug / Request Feature</a>
-                <a href="/eisai_admin/" className="footer-link">Admin Dashboard</a>
+                <a href="/login/" className="footer-link">Admin Dashboard</a>
                 <a href="https://github.com/sabax/CloudWordCreator" target="_blank" rel="noopener noreferrer" className="footer-link">GitHub</a>
             </footer>
 

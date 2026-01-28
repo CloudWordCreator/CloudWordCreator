@@ -35,10 +35,10 @@ const Report = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         setStatus('submitting')
-        
+
         try {
             const csrftoken = getCookie('csrftoken')
-            const response = await fetch('/home/api/submit_report/', {
+            const response = await fetch('/api/submit_report/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -46,7 +46,7 @@ const Report = () => {
                 },
                 body: JSON.stringify(formData)
             })
-            
+
             if (response.ok) {
                 setStatus('success')
                 setFormData({ school_name: '', material: '', details: '' })
@@ -78,36 +78,36 @@ const Report = () => {
                     <form onSubmit={handleSubmit}>
                         <div className="form-group">
                             <label htmlFor="school_name">School Name:</label>
-                            <input 
-                                type="text" 
-                                id="school_name" 
-                                name="school_name" 
-                                value={formData.school_name} 
-                                onChange={handleChange} 
+                            <input
+                                type="text"
+                                id="school_name"
+                                name="school_name"
+                                value={formData.school_name}
+                                onChange={handleChange}
                             />
                         </div>
 
                         <div className="form-group">
                             <label htmlFor="material">Material / Range: <span className="required">*</span></label>
-                            <input 
-                                type="text" 
-                                id="material" 
-                                name="material" 
-                                value={formData.material} 
-                                onChange={handleChange} 
-                                required 
+                            <input
+                                type="text"
+                                id="material"
+                                name="material"
+                                value={formData.material}
+                                onChange={handleChange}
+                                required
                             />
                         </div>
 
                         <div className="form-group">
                             <label htmlFor="details">Details: <span className="required">*</span></label>
-                            <textarea 
-                                id="details" 
-                                name="details" 
-                                rows="5" 
-                                value={formData.details} 
-                                onChange={handleChange} 
-                                required 
+                            <textarea
+                                id="details"
+                                name="details"
+                                rows="5"
+                                value={formData.details}
+                                onChange={handleChange}
+                                required
                                 className="form-textarea"
                             ></textarea>
                         </div>

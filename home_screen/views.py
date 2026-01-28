@@ -2,33 +2,75 @@ from django.shortcuts import render, redirect
 import random
 from . import bug_report_writter
 from csvManager.models import UnitWord, NoUnitWord
-
-# Create your views here.
-# 暫定作るもの
-# home画面 - 今まで作った物をまとめるページ
-# バグ/問題報告するロジックとページ
-## バグ報告→Google SpreadSheetに書き込む & gmailに通知
-### gmailはGoogle SpreadSheetのシート2枚目にあるリストに通知をするようにする。
-
-def home(request):
-    unit_words = UnitWord.objects.select_related('unit__text').all()
-    no_unit_words = NoUnitWord.objects.select_related('text').all()
-
-    flat_test_texts = list(set(nuw.text.name for nuw in no_unit_words))
-    structured_test_texts = list(set(uw.unit.text.name for uw in unit_words))
-
-    flat_test_texts_sample = random.sample(flat_test_texts, min(2, len(flat_test_texts)))
-    structured_test_texts_sample = random.sample(structured_test_texts, min(2, len(structured_test_texts)))
-
-    return render(request, 'home.html', {
-        'flat_test_texts': flat_test_texts_sample,
-        'structured_test_texts': structured_test_texts_sample
-    })
-
+from django.http import JsonResponse
+from django.db.models import Q
 import json
 import logging
 
 logger = logging.getLogger(__name__)
+
+# Create your views here.
+
+def home(request):
+    """
+    Home画面 (React)
+    """
+    return render(request, 'home_react_base.html')
+
+def api_get_home_data(request):
+    try:
+        unit_words = UnitWord.objects.select_related('unit__text').all()
+        no_unit_words = NoUnitWord.objects.select_related('text').all()
+
+        flat_test_texts = list(set(nuw.text.name for nuw in no_unit_words))
+        structured_test_texts = list(set(uw.unit.text.name for uw in unit_words))
+
+        flat_test_texts_sample = random.sample(flat_test_texts, min(2, len(flat_test_texts))) if flat_test_texts else []
+        structured_test_texts_sample = random.sample(structured_test_texts, min(2, len(structured_test_texts))) if structured_test_texts else []
+
+        return JsonResponse({
+            'flat_test_texts': flat_test_texts_sample,
+            'structured_test_texts': structured_test_texts_sample
+        })
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+def api_global_search(request):
+    query = request.GET.get('q', '')
+    if not query:
+        return JsonResponse({'results': []})
+    
+    results = []
+    
+    # UnitWord search
+    unit_words = UnitWord.objects.filter(
+        Q(english__icontains=query) | Q(japanese__icontains=query)
+    ).select_related('unit__text')[:10]
+
+    for word in unit_words:
+        results.append({
+            'english': word.english,
+            'japanese': word.japanese,
+            'source': 'Structured',
+            'text': word.unit.text.name,
+            'unit': word.unit.name
+        })
+
+    # NoUnitWord search
+    no_unit_words = NoUnitWord.objects.filter(
+        Q(english__icontains=query) | Q(japanese__icontains=query)
+    ).select_related('text')[:10]
+
+    for word in no_unit_words:
+        results.append({
+            'english': word.english,
+            'japanese': word.japanese,
+            'source': 'Flat',
+            'text': word.text.name,
+            'unit': None
+        })
+    
+    return JsonResponse({'results': results})
 
 def report(request):
     """
