@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const FlatTestMaker = () => {
+    const navigate = useNavigate()
+
     const [texts, setTexts] = useState([])
     const [selectedTextId, setSelectedTextId] = useState('')
     const [startRange, setStartRange] = useState('')
@@ -32,6 +35,18 @@ const FlatTestMaker = () => {
             .catch(err => console.error(err))
     }, [])
 
+    // Helper to find text default range
+    useEffect(() => {
+        if (selectedTextId && texts.length > 0) {
+            const text = texts.find(t => String(t.id) === String(selectedTextId))
+            if (text) {
+                // If inputs are empty, maybe set place holders?
+                // The backend uses defaults if not provided, but UI might want to show them.
+                // For now, leaving inputs empty allows "All" by default or user entry.
+            }
+        }
+    }, [selectedTextId, texts])
+
     const handleTextChange = (e) => {
         setSelectedTextId(e.target.value)
     }
@@ -43,7 +58,6 @@ const FlatTestMaker = () => {
             const cookies = document.cookie.split(';');
             for (let i = 0; i < cookies.length; i++) {
                 const cookie = cookies[i].trim();
-                // Does this cookie string begin with the name we want?
                 if (cookie.substring(0, name.length + 1) === (name + '=')) {
                     cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                     break;
@@ -53,17 +67,59 @@ const FlatTestMaker = () => {
         return cookieValue;
     }
 
+    const handleGenerate = async (type) => {
+        const url = type === 'words'
+            ? '/flatTestMaker/api/generate/words/'
+            : '/flatTestMaker/api/generate/sentences/';
+
+        const payload = {
+            text_id: selectedTextId,
+            start_range: startRange || 1, // Defaulting logic
+            end_range: endRange || 9999,
+            question_count: questionCount,
+            mandatory_words: [], // Feature pending
+            // Advanced options
+            no_unit_words: noUnitWords,
+            limit_to_range: limitToRange
+        }
+
+        try {
+            const res = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify(payload)
+            })
+
+            if (!res.ok) {
+                const errData = await res.json().catch(() => ({}))
+                throw new Error(errData.error || 'Server error')
+            }
+
+            const data = await res.json()
+            if (data.error) {
+                alert("Error: " + data.error)
+                return
+            }
+
+            navigate('/flatTestMaker/result/', { state: { type: type, data: data } })
+        } catch (err) {
+            console.error(err)
+            alert("Error generating test: " + err.message)
+        }
+    }
+
     return (
         <div className="flat-test-maker-container">
             <header className="dashboard-header">
                 <h1>Create Flat Test</h1>
-                <a href="/eisai_admin/" className="btn btn-outline">Back to Dashboard</a>
+                <a href="/login/" className="btn btn-outline">Back to Dashboard</a>
             </header>
 
             <div className="card">
-                <form action="/flatTestMaker/generate/words" method="post">
-                    <input type="hidden" name="csrfmiddlewaretoken" value={getCookie('csrftoken')} />
-
+                <form onSubmit={(e) => e.preventDefault()}>
                     <div className="form-group">
                         <label htmlFor="text_name">Select Text:</label>
                         <select name="text_name" id="text_name" value={selectedTextId} onChange={handleTextChange}>
@@ -76,11 +132,23 @@ const FlatTestMaker = () => {
                     <div className="form-group-row">
                         <div className="form-group">
                             <label htmlFor="start_number">Start No:</label>
-                            <input type="number" name="start_number" id="start_number" value={startRange} onChange={e => setStartRange(e.target.value)} placeholder="All" />
+                            <input
+                                type="number"
+                                id="start_number"
+                                value={startRange}
+                                onChange={e => setStartRange(e.target.value)}
+                                placeholder="All (Min)"
+                            />
                         </div>
                         <div className="form-group">
                             <label htmlFor="end_number">End No:</label>
-                            <input type="number" name="end_number" id="end_number" value={endRange} onChange={e => setEndRange(e.target.value)} placeholder="All" />
+                            <input
+                                type="number"
+                                id="end_number"
+                                value={endRange}
+                                onChange={e => setEndRange(e.target.value)}
+                                placeholder="All (Max)"
+                            />
                         </div>
                     </div>
 
@@ -97,14 +165,14 @@ const FlatTestMaker = () => {
                         <div className="advanced-options">
                             <div className="card-inner">
                                 <label className="checkbox-label">
-                                    <input type="checkbox" name="noUnitWords" checked={noUnitWords} onChange={e => setNoUnitWords(e.target.checked)} />
+                                    <input type="checkbox" checked={noUnitWords} onChange={e => setNoUnitWords(e.target.checked)} />
                                     Include 'No Unit' Words
                                 </label>
                             </div>
 
                             <div className="card-inner">
                                 <label className="checkbox-label">
-                                    <input type="checkbox" name="limit_to_range" checked={limitToRange} onChange={e => setLimitToRange(e.target.checked)} />
+                                    <input type="checkbox" checked={limitToRange} onChange={e => setLimitToRange(e.target.checked)} />
                                     Limit choices to range
                                 </label>
                                 <p className="note">* Choices for multiple choice questions will only be taken from the specified range.</p>
@@ -115,14 +183,12 @@ const FlatTestMaker = () => {
                                 <div className="add-word-container">
                                     <input
                                         type="text"
-                                        name="english"
                                         placeholder="English"
                                         value={english}
                                         onChange={e => setEnglish(e.target.value)}
                                     />
                                     <input
                                         type="text"
-                                        name="japanese"
                                         placeholder="Japanese"
                                         value={japanese}
                                         onChange={e => setJapanese(e.target.value)}
@@ -135,19 +201,26 @@ const FlatTestMaker = () => {
                     )}
 
                     <div className="form-actions">
-                        <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '15px', fontSize: '1.2rem' }}>
+                        <button
+                            type="button"
+                            className="btn btn-primary"
+                            style={{ width: '100%', padding: '15px', fontSize: '1.2rem', marginBottom: '10px' }}
+                            onClick={() => handleGenerate('words')}
+                        >
                             Start Word Test
                         </button>
                     </div>
                 </form>
+
                 <div style={{ textAlign: 'center', marginTop: '10px' }}>
-                    <form action="/flatTestMaker/generate/sentences/" method="post" style={{ display: 'inline' }}>
-                        <input type="hidden" name="csrfmiddlewaretoken" value={getCookie('csrftoken')} />
-                        {/* Hidden inputs to carry over state if needed, or rely on defaults */}
-                        <button type="submit" className="btn" style={{ background: 'none', color: '#666', textDecoration: 'underline' }}>
-                            Generate Sentence Test (Legacy)
-                        </button>
-                    </form>
+                    <button
+                        type="button"
+                        className="btn"
+                        style={{ background: 'none', color: '#666', textDecoration: 'underline' }}
+                        onClick={() => handleGenerate('sentences')}
+                    >
+                        Generate Sentence Test (AI)
+                    </button>
                 </div>
             </div>
         </div>

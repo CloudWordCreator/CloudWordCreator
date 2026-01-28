@@ -3,36 +3,27 @@ import './App.css'
 import Dashboard from './components/Dashboard'
 import EditText from './components/EditText'
 import FlatTestMaker from './components/FlatTestMaker'
+import FlatTestResult from './components/FlatTestResult'
 import Home from './components/Home'
+// import Login from './auth/Login'
 import Report from './components/Report'
 
+import { Routes, Route, Navigate } from 'react-router-dom'
+
 function App() {
-    const [view, setView] = useState('dashboard')
-
-    useEffect(() => {
-        const path = window.location.pathname
-        console.log("Current path:", path)
-
-        if (path === '/' || path.includes('/home/')) {
-            setView('home')
-        } else if (path.includes('/report/')) {
-            setView('report')
-        } else if (path.includes('/edit_text/')) {
-            setView('edit_text')
-        } else if (path.includes('/flatTestMaker/settings/')) {
-            setView('flatTestMaker')
-        } else {
-            setView('dashboard')
-        }
-    }, [])
-
     return (
         <div className="app-container">
-            {view === 'dashboard' && <Dashboard />}
-            {view === 'edit_text' && <EditText />}
-            {view === 'flatTestMaker' && <FlatTestMaker />}
-            {view === 'home' && <Home />}
-            {view === 'report' && <Report />}
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/home/" element={<Home />} />
+                <Route path="/report/" element={<Report />} />
+                <Route path="/flatTestMaker/settings/" element={<FlatTestMaker />} />
+                <Route path="/flatTestMaker/result/" element={<FlatTestResult />} />
+                <Route path="/edit_text/*" element={<EditText />} />
+                {/* Login is server-side */}
+                {/* Fallback to Home or 404 */}
+                <Route path="*" element={<Home />} />
+            </Routes>
         </div>
     )
 }
