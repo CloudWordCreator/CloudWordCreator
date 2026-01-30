@@ -25,6 +25,6 @@ urlpatterns = [
     path('flatTestMaker/', include('flatTestMaker.urls')),
     path('admin_screen/', include('admin_screen.urls')),
     path('login/', include('authentication.urls')),
-    path('home/', include('home_screen.urls')),
+    path('', include('home_screen.urls')),
     path('info/', views.info, name='info'),
 ]
