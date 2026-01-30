@@ -4,6 +4,8 @@ import Dashboard from './components/Dashboard'
 import EditText from './components/EditText'
 import FlatTestMaker from './components/FlatTestMaker'
 import FlatTestResult from './components/FlatTestResult'
+import StructuredTestMaker from './components/StructuredTestMaker'
+import StructuredTestResult from './components/StructuredTestResult'
 import Home from './components/Home'
 // import Login from './auth/Login'
 import Report from './components/Report'
@@ -19,6 +21,8 @@ function App() {
                 <Route path="/report/" element={<Report />} />
                 <Route path="/flatTestMaker/settings/" element={<FlatTestMaker />} />
                 <Route path="/flatTestMaker/result/" element={<FlatTestResult />} />
+                <Route path="/structuredTest/settings/" element={<StructuredTestMaker />} />
+                <Route path="/structuredTest/result/" element={<StructuredTestResult />} />
                 <Route path="/edit_text/*" element={<EditText />} />
                 {/* Login is server-side */}
                 {/* Fallback to Home or 404 */}
