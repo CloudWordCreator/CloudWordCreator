@@ -176,7 +176,6 @@ def save_word(request):
     # POST以外のリクエストはエラーを返す
     return JsonResponse({'error': 'POSTリクエストを受け付けていません。'}, status=400)
 
-# 教材を削除する
 @login_required(login_url='/login/')
 def delete_text(request):
     text_id = request.GET.get('text_id')

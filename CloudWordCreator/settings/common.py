@@ -32,7 +32,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 #DEBUG = os.getenv('DEBUG')
 DEBUG = True
 
-ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS'), "localhost", "127.0.0.1"]
+ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS'), "localhost", "127.0.0.1", "10.0.2.2"]
 
 
 # Application definition
@@ -169,6 +169,11 @@ genai.configure(api_key=AI_APIKEY)
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'filters': {
+        'ignore_api': {
+            '()': 'CloudWordCreator.logging_handlers.IgnoreApiRouteFilter',
+        },
+    },
     'handlers': {
         'console': {
             'class': 'logging.StreamHandler',
@@ -176,11 +181,12 @@ LOGGING = {
         'discord': {
             'level': 'INFO',  # Changed from ERROR to INFO
             'class': 'CloudWordCreator.logging_handlers.DiscordWebhookHandler',
+            'filters': ['ignore_api'],
         },
     },
     'root': {
-        'handlers': ['console'],
-        'level': 'WARNING',
+        'handlers': ['console', 'discord'],
+        'level': 'INFO',
     },
     'loggers': {
         'django': {

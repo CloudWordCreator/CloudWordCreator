@@ -116,19 +116,19 @@ def api_submit_report(request):
 def submit_report(request):
     # Deprecated: Keep for backward compatibility if needed, or remove
     if request.method == 'POST':
+        logger = logging.getLogger(__name__)
         school_name = request.POST.get('school_name')
         material = request.POST.get('material')
         details = request.POST.get('details')
 
-        report_content = {
-            'schoolName': school_name,
-            'material': material,
-            'details': details,
-        }
+        report_content = f"""
+        # 校舎名: {school_name}
+        # 教材名: {material}
+        # 詳細: {details}
+        """
 
-        sheet_writer = bug_report_writter.SpreadSheetWriter(report_content)
-        sheet_writer.write_report()
-
+        if report_content:
+             logger.info(report_content)
         return redirect('home')
     else:
         return render(request, 'report.html')
