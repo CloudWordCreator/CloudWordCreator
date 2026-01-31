@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import NavigationControls from './NavigationControls'
 
 const Report = () => {
     const [formData, setFormData] = useState({
@@ -64,7 +65,7 @@ const Report = () => {
         <div className="report-container">
             <header className="dashboard-header">
                 <h1>Report Bug / Request Feature</h1>
-                <a href="/" className="btn btn-outline">Back to Home</a>
+                <NavigationControls />
             </header>
 
             <div className="card">

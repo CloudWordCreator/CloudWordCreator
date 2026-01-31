@@ -1,4 +1,5 @@
 import { useLocation, Link, Navigate } from 'react-router-dom';
+import NavigationControls from './NavigationControls';
 import { useEffect } from 'react';
 import WordTestResult from './WordTestResult';
 import SentenceTestResult from './SentenceTestResult';

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import NavigationControls from './NavigationControls'
 
 function EditText() {
     const [loading, setLoading] = useState(true)
@@ -158,7 +159,7 @@ function EditText() {
             <header className="dashboard-header">
                 <h1>Edit Text: {textDetails?.name}</h1>
                 <div className="header-actions">
-                    <a href="/admin_screen/eisai_admin/" className="btn">Back to Dashboard</a>
+                    <NavigationControls />
                 </div>
             </header>
 

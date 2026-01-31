@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import NavigationControls from './NavigationControls';
 import { useLocation, Link, Navigate } from 'react-router-dom';
 import { usePageStyles } from '../hooks/usePageStyles';
 

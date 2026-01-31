@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import NavigationControls from './NavigationControls'
 
 const FlatTestMaker = () => {
     const navigate = useNavigate()
@@ -115,7 +116,7 @@ const FlatTestMaker = () => {
         <div className="flat-test-maker-container">
             <header className="dashboard-header">
                 <h1>Create Flat Test</h1>
-                <a href="/" className="btn btn-outline">Back to Dashboard</a>
+                <NavigationControls />
             </header>
 
             <div className="card">

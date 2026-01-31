@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import NavigationControls from './NavigationControls'
 import { useNavigate } from 'react-router-dom'
 import '../App.css' // Or specific CSS
 
@@ -94,7 +95,7 @@ const StructuredTestMaker = () => {
         <div className="structured-test-maker-container">
             <header className="dashboard-header">
                 <h1>Structured Test Maker</h1>
-                <a href="/" className="btn btn-outline">Back to Dashboard</a>
+                <NavigationControls />
             </header>
 
             <div className="layout-columns">

@@ -1,4 +1,5 @@
 import React from 'react'
+import NavigationControls from './NavigationControls'
 
 const Docs = () => {
     return (
@@ -6,7 +7,9 @@ const Docs = () => {
             <header className="home-header" style={{ marginBottom: '30px', textAlign: 'center' }}>
                 <h1>CloudWordCreator Help & Docs</h1>
                 <p>Guide to using the platform effectively</p>
-                <a href="/" className="btn btn-primary" style={{ marginTop: '20px' }}>Back to Home</a>
+                <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}>
+                    <NavigationControls />
+                </div>
             </header>
 
             <section className="card" style={{ marginBottom: '30px' }}>
