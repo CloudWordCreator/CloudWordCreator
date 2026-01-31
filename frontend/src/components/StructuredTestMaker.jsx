@@ -7,6 +7,7 @@ const StructuredTestMaker = () => {
     const [texts, setTexts] = useState([])
     const [selectedTextId, setSelectedTextId] = useState(null)
     const [selectedUnits, setSelectedUnits] = useState({}) // { unitId: boolean }
+    const [orderMode, setOrderMode] = useState('sequential') // 'sequential' or 'random'
 
     useEffect(() => {
         fetch('/structuredTest/api/get_settings/')
@@ -68,7 +69,8 @@ const StructuredTestMaker = () => {
                 },
                 body: JSON.stringify({
                     selected_units: unitIds,
-                    selected_texts: [selectedTextId] // Logic in view uses this to determine header names?
+                    selected_texts: [selectedTextId],
+                    mode: orderMode
                 })
             })
 
@@ -142,6 +144,34 @@ const StructuredTestMaker = () => {
                         <p>Loading or no text selected...</p>
                     )}
                 </div>
+
+                {/* Settings Panel */}
+                <div className="settings-panel card">
+                    <h3>Settings</h3>
+                    <div className="setting-group">
+                        <label>Order:</label>
+                        <div className="radio-group">
+                            <label>
+                                <input
+                                    type="radio"
+                                    value="sequential"
+                                    checked={orderMode === 'sequential'}
+                                    onChange={() => setOrderMode('sequential')}
+                                />
+                                Sequential (Book Order)
+                            </label>
+                            <label>
+                                <input
+                                    type="radio"
+                                    value="random"
+                                    checked={orderMode === 'random'}
+                                    onChange={() => setOrderMode('random')}
+                                />
+                                Random (Shuffle All)
+                            </label>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div className="floating-footer">
@@ -155,8 +185,10 @@ const StructuredTestMaker = () => {
                     display: flex;
                     gap: 20px;
                     padding: 20px;
+                    align-items: flex-start;
                 }
                 .sidebar-texts {
+                    width: 200px;
                     width: 250px;
                     background: #f8f9fa;
                     padding: 15px;
@@ -207,6 +239,22 @@ const StructuredTestMaker = () => {
                 .btn-large {
                     padding: 15px 40px;
                     font-size: 1.2rem;
+                }
+                .settings-panel {
+                    width: 250px;
+                    padding: 20px;
+                }
+                .radio-group {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                    margin-top: 10px;
+                }
+                .radio-group label {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    cursor: pointer;
                 }
             `}</style>
         </div>

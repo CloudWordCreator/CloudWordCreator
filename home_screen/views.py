@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 import random
 from . import bug_report_writter
-from csvManager.models import UnitWord, NoUnitWord
+from csvManager.models import UnitWord, NoUnitWord, Text
 from .models import Announcement
 from django.http import JsonResponse
 from django.db.models import Q
@@ -31,22 +31,29 @@ def api_get_home_data(request):
 
         return JsonResponse({
             'flat_test_texts': flat_test_texts_sample,
-            'structured_test_texts': structured_test_texts_sample
+            'structured_test_texts': structured_test_texts_sample,
+            'all_texts': list(Text.objects.values('id', 'name').order_by('name'))
         })
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
 def api_global_search(request):
     query = request.GET.get('q', '')
+    text_id = request.GET.get('text_id')
+
     if not query:
         return JsonResponse({'results': []})
     
     results = []
     
     # UnitWord search
-    unit_words = UnitWord.objects.filter(
+    unit_words_query = UnitWord.objects.filter(
         Q(english__icontains=query) | Q(japanese__icontains=query)
-    ).select_related('unit__text')[:10]
+    )
+    if text_id:
+        unit_words_query = unit_words_query.filter(unit__text_id=text_id)
+        
+    unit_words = unit_words_query.select_related('unit__text')[:10]
 
     for word in unit_words:
         results.append({
@@ -58,9 +65,13 @@ def api_global_search(request):
         })
 
     # NoUnitWord search
-    no_unit_words = NoUnitWord.objects.filter(
+    no_unit_words_query = NoUnitWord.objects.filter(
         Q(english__icontains=query) | Q(japanese__icontains=query)
-    ).select_related('text')[:10]
+    )
+    if text_id:
+        no_unit_words_query = no_unit_words_query.filter(text_id=text_id)
+
+    no_unit_words = no_unit_words_query.select_related('text')[:10]
 
     for word in no_unit_words:
         results.append({

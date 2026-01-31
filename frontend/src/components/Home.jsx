@@ -10,12 +10,18 @@ const Home = () => {
     const [showResults, setShowResults] = useState(false)
     const [announcements, setAnnouncements] = useState([])
     const [showNotifications, setShowNotifications] = useState(false)
+    // Filter State
+    const [textOptions, setTextOptions] = useState([])
+    const [selectedTextId, setSelectedTextId] = useState('')
 
     useEffect(() => {
-        // Fetch random data for cards
+        // Fetch random data for cards and all texts
         fetch('/api/get_home_data/')
             .then(res => res.json())
-            .then(data => setHomeData(data))
+            .then(data => {
+                setHomeData(data)
+                if (data.all_texts) setTextOptions(data.all_texts)
+            })
             .catch(err => console.error(err))
 
         // Fetch announcements
@@ -31,7 +37,10 @@ const Home = () => {
         e.preventDefault()
         if (!searchQuery.trim()) return
 
-        fetch(`/api/global_search/?q=${encodeURIComponent(searchQuery)}`)
+        let url = `/api/global_search/?q=${encodeURIComponent(searchQuery)}`
+        if (selectedTextId) url += `&text_id=${selectedTextId}`
+
+        fetch(url)
             .then(res => res.json())
             .then(data => {
                 setSearchResults(data.results)
@@ -61,12 +70,24 @@ const Home = () => {
 
             <section className="search-hero">
                 <form onSubmit={handleSearch} className="global-search-form">
-                    <input
-                        type="text"
-                        placeholder="Search for a word (Eng/Jp)..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                    />
+                    <div className="search-inputs">
+                        <select
+                            className="text-filter-select"
+                            value={selectedTextId}
+                            onChange={(e) => setSelectedTextId(e.target.value)}
+                        >
+                            <option value="">All Texts</option>
+                            {textOptions.map(t => (
+                                <option key={t.id} value={t.id}>{t.name}</option>
+                            ))}
+                        </select>
+                        <input
+                            type="text"
+                            placeholder="Search for a word (Eng/Jp)..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                    </div>
                     <button type="submit" className="btn btn-primary">Search</button>
                 </form>
             </section>

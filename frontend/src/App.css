@@ -381,15 +381,32 @@ th {
   color: #2c3e50;
 }
 
+/* Global Search */
 .search-hero {
-  margin-bottom: 50px;
+  margin: 40px auto;
+  max-width: 700px;
 }
 
 .global-search-form {
   display: flex;
-  max-width: 600px;
-  margin: 0 auto;
   gap: 10px;
+  align-items: center;
+}
+
+.search-inputs {
+  display: flex;
+  flex: 1;
+  gap: 10px;
+}
+
+.text-filter-select {
+  padding: 12px;
+  border: 2px solid #eee;
+  border-radius: 30px;
+  font-size: 1rem;
+  max-width: 150px;
+  background: white;
+  cursor: pointer;
 }
 
 .global-search-form input {
@@ -399,6 +416,7 @@ th {
   border-radius: 30px;
   flex: 1;
   transition: border-color 0.3s;
+  width: 100%;
 }
 
 .global-search-form input:focus {

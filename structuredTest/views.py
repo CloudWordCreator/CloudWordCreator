@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+import random as py_random
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from csvManager.models import Text, Unit, UnitWord
@@ -68,6 +69,7 @@ def api_create_structured_test(request):
         try:
             data = json.loads(request.body)
             selected_unit_ids = data.get('selected_units', [])
+            mode = data.get('mode', 'sequential')
 
             # 親ユニットを取得
             selected_units = Unit.objects.filter(id__in=selected_unit_ids)
@@ -103,20 +105,41 @@ def api_create_structured_test(request):
                 current_sheet[current_column].append(row_data)
                 current_rows += 1
 
-            for unit in selected_units.prefetch_related('subunits__words'):
-                for subunit in unit.subunits.all():
-                    # SubUnit Header
-                    add_row({
-                        "type": "header",
-                        "text": subunit.name
-                    })
+            if mode == 'random':
+                # Random Mode: Shuffle all words and ignore subunit structure for headers
+                all_words = []
+                for unit in selected_units.prefetch_related('subunits__words'):
+                    for subunit in unit.subunits.all():
+                        for word in subunit.words.all():
+                            all_words.append({
+                                "type": "word",
+                                "english": word.english,
+                                "japanese": word.japanese
+                            })
+                
+                # Shuffle the words
+                py_random.shuffle(all_words)
+                
+                # Add to sheets
+                for word_data in all_words:
+                    add_row(word_data)
                     
-                    for word in subunit.words.all():
+            else:
+                # Sequential Mode: Keep structure with headers
+                for unit in selected_units.prefetch_related('subunits__words'):
+                    for subunit in unit.subunits.all():
+                        # SubUnit Header
                         add_row({
-                            "type": "word",
-                            "english": word.english,
-                            "japanese": word.japanese
+                            "type": "header",
+                            "text": subunit.name
                         })
+                        
+                        for word in subunit.words.all():
+                            add_row({
+                                "type": "word",
+                                "english": word.english,
+                                "japanese": word.japanese
+                            })
             
             # 最後のシートに残りのデータがあれば追加
             if current_sheet["left"] or current_sheet["right"]:
