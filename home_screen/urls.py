@@ -9,4 +9,5 @@ urlpatterns = [
     path('api/submit_report/', views.api_submit_report, name='api_submit_report'),
     path('submit_report/', views.submit_report, name='submit_report'),
     path('api/get_announcements/', views.api_get_announcements, name='api_get_announcements'),
+    path('docs/', views.home, name='docs'),
 ]

@@ -139,8 +139,9 @@ const Home = () => {
 
             <footer className="home-footer">
                 <a href="/report/" className="footer-link">Report Bug / Request Feature</a>
-                <a href="/login/" className="footer-link">Admin Dashboard</a>
-                <a href="https://github.com/sabax/CloudWordCreator" target="_blank" rel="noopener noreferrer" className="footer-link">GitHub</a>
+                <a href="/docs/" className="footer-link" target="_blank">Help & Docs</a>
+                <a href="/login/" className="footer-link" target="_blank">Admin Dashboard</a>
+                <a href="https://github.com/CloudWordCreator/CloudWordCreator" target="_blank" rel="noopener noreferrer" className="footer-link">GitHub</a>
             </footer>
 
             {

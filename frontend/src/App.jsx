@@ -9,6 +9,7 @@ import StructuredTestResult from './components/StructuredTestResult'
 import Home from './components/Home'
 // import Login from './auth/Login'
 import Report from './components/Report'
+import Docs from './components/Docs'
 
 import { Routes, Route, Navigate } from 'react-router-dom'
 
@@ -19,6 +20,7 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/home/" element={<Home />} />
                 <Route path="/report/" element={<Report />} />
+                <Route path="/docs/" element={<Docs />} />
                 <Route path="/flatTestMaker/settings/" element={<FlatTestMaker />} />
                 <Route path="/flatTestMaker/result/" element={<FlatTestResult />} />
                 <Route path="/structuredTest/settings/" element={<StructuredTestMaker />} />
