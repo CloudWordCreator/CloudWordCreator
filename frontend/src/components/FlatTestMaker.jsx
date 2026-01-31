@@ -115,7 +115,7 @@ const FlatTestMaker = () => {
         <div className="flat-test-maker-container">
             <header className="dashboard-header">
                 <h1>Create Flat Test</h1>
-                <a href="/login/" className="btn btn-outline">Back to Dashboard</a>
+                <a href="/" className="btn btn-outline">Back to Dashboard</a>
             </header>
 
             <div className="card">

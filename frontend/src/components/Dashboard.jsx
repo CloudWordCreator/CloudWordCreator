@@ -141,7 +141,7 @@ function Dashboard() {
                 <h1>Admin Dashboard</h1>
                 <div className="header-buttons">
                     <button className="btn" onClick={openAnnouncementsModal}>🔔 Manage Notifications</button>
-                    <a href="/csvManager/upload_csv/" className="btn btn-primary" target="_blank">教材の追加・取得</a>
+                    <a href="/csv_set/upload_csv/" className="btn btn-primary" target="_blank">教材の追加・取得</a>
                 </div>
             </header>
 

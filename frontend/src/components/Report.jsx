@@ -64,7 +64,7 @@ const Report = () => {
         <div className="report-container">
             <header className="dashboard-header">
                 <h1>Report Bug / Request Feature</h1>
-                <a href="/home/" className="btn btn-outline">Back to Home</a>
+                <a href="/" className="btn btn-outline">Back to Home</a>
             </header>
 
             <div className="card">
