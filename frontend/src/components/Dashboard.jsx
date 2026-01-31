@@ -105,6 +105,28 @@ function Dashboard() {
         } catch (err) { alert('Error: ' + err) }
     }
 
+    const handleDeleteText = async (id) => {
+        if (!confirm('本当に削除しますか？')) return
+        try {
+            const res = await fetch('/admin_screen/eisai_admin/api/delete_text/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+                body: JSON.stringify({ id: id })
+            })
+            const data = await res.json()
+            if (data.success) {
+                // Refresh data
+                setLoadingData(true)
+                // Re-fetch all data
+                // Quick hack: just reload page or refetch logic
+                // Better: extract fetchData logic to a function and call it
+                window.location.reload()
+            } else {
+                alert('Error: ' + data.error)
+            }
+        } catch (err) { alert('Error: ' + err) }
+    }
+
     const handleSearch = async () => {
         if (!query) return
         setSearching(true)
@@ -128,9 +150,7 @@ function Dashboard() {
             <span className="text-name">{text.name}</span>
             <div className="actions">
                 <a href={`/admin_screen/eisai_admin/edit_text/?text-id=${text.id}`} className="btn btn-edit">Edit</a>
-                <a href={`/admin_screen/eisai_admin/delete_text/?text_id=${text.id}`} className="btn btn-delete" onClick={(e) => {
-                    if (!confirm('本当に削除しますか？')) e.preventDefault()
-                }}>Delete</a>
+                <button className="btn btn-delete" onClick={() => handleDeleteText(text.id)}>Delete</button>
             </div>
         </div>
     )

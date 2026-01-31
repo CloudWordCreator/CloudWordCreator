@@ -39,24 +39,7 @@ def api_get_settings(request):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
-def search(request):
-    """
-    英単語(Unit構造でない)を検索するページ 
-    テキスト事の検索と全ての検索付けて、日本語英語の検索に対応させる 
-    """
-    query = request.GET.get('q')
-    selected_text_id = request.GET.get('mySelect')
-    results = []
-    if query:
-        results = NoUnitWord.objects.filter(
-            models.Q(english__icontains=query) | models.Q(japanese__icontains=query)
-        ).select_related('text')
-        if selected_text_id:
-            results = results.filter(text_id=selected_text_id)
-    return render(request, 'flatTest_search_results.html', {
-        'results': results,
-        'selected_text_id': selected_text_id,
-    })
+
 
 
 def api_generate_words(request):

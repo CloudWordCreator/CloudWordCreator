@@ -125,25 +125,7 @@ def api_submit_report(request):
     
     return JsonResponse({'error': 'POST required'}, status=400)
 
-def submit_report(request):
-    # Deprecated: Keep for backward compatibility if needed, or remove
-    if request.method == 'POST':
-        logger = logging.getLogger(__name__)
-        school_name = request.POST.get('school_name')
-        material = request.POST.get('material')
-        details = request.POST.get('details')
 
-        report_content = f"""
-        # 校舎名: {school_name}
-        # 教材名: {material}
-        # 詳細: {details}
-        """
-
-        if report_content:
-             logger.info(report_content)
-        return redirect('home')
-    else:
-        return render(request, 'report.html')
 
 def api_get_announcements(request):
     try:

@@ -3,6 +3,7 @@ import random as py_random
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from csvManager.models import Text, Unit, UnitWord
+import json
 
 # global
 
@@ -52,14 +53,7 @@ def api_get_structured_settings(request):
         return JsonResponse({'error': str(e)}, status=500)
 
 
-def create_test(request):
-    """
-    チェックボックスの選択内容に基づいてテストを作成し、表示する。
-    サーバーサイドで行数計算（25行/列）を行い、ページ（シート）と列（左右）の構造を作成してテンプレートに渡す。
-    これにより、フロントエンドでの複雑な座標計算JSを廃止する。
-    """
 
-import json
 
 def api_create_structured_test(request):
     """
