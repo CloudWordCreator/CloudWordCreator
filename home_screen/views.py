@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 import random
 from . import bug_report_writter
 from csvManager.models import UnitWord, NoUnitWord
+from .models import Announcement
 from django.http import JsonResponse
 from django.db.models import Q
 import json
@@ -87,11 +88,11 @@ def api_submit_report(request):
             details = data.get('details')
 
             report_message = f"""
-# Report Received
-**School Name**: {school_name}
-**Material**: {material}
-**Details**:
-{details}
+                # Report Received
+                **School Name**: {school_name}
+                **Material**: {material}
+                **Details**:
+                {details}
             """
             
             # Log to Discord via configured logger
@@ -132,3 +133,20 @@ def submit_report(request):
         return redirect('home')
     else:
         return render(request, 'report.html')
+
+def api_get_announcements(request):
+    try:
+        announcements = Announcement.objects.filter(is_active=True)[:10]
+        data = []
+        for a in announcements:
+            data.append({
+                'id': a.id,
+                'title': a.title,
+                'content': a.content,
+                'category': a.category,
+                'category_display': a.get_category_display(),
+                'created_at': a.created_at.strftime('%Y-%m-%d'),
+            })
+        return JsonResponse({'announcements': data})
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)

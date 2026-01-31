@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from csvManager.models import Text, NoUnitWord, UnitWord, Unit
+from home_screen.models import Announcement
 from django.db import models
 from django.http import JsonResponse, HttpResponseRedirect
 from django.db.models import Q
@@ -395,6 +396,66 @@ def api_delete_unit(request):
         unit_id = data.get('id')
         unit = get_object_or_404(Unit, id=unit_id)
         unit.delete()
+        return JsonResponse({'success': True})
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+# Notification Management APIs
+@login_required(login_url='/login/')
+def api_get_all_announcements(request):
+    try:
+        announcements = Announcement.objects.all().order_by('-created_at')
+        data = []
+        for a in announcements:
+            data.append({
+                'id': a.id,
+                'title': a.title,
+                'content': a.content,
+                'category': a.category,
+                'is_active': a.is_active,
+                'created_at': a.created_at.strftime('%Y-%m-%d %H:%M')
+            })
+        return JsonResponse({'announcements': data})
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+@login_required(login_url='/login/')
+def api_save_announcement(request):
+    if request.method != 'POST':
+        return JsonResponse({'error': 'POST request required'}, status=400)
+    
+    try:
+        data = json.loads(request.body)
+        announcement_id = data.get('id')
+        
+        if announcement_id:
+            announcement = get_object_or_404(Announcement, id=announcement_id)
+        else:
+            announcement = Announcement()
+            
+        announcement.title = data.get('title')
+        announcement.content = data.get('content', '')
+        announcement.category = data.get('category', 'INFO')
+        announcement.is_active = data.get('is_active', True)
+        
+        announcement.save()
+        
+        return JsonResponse({'success': True})
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+@login_required(login_url='/login/')
+def api_delete_announcement(request):
+    if request.method != 'POST':
+        return JsonResponse({'error': 'POST request required'}, status=400)
+    
+    try:
+        data = json.loads(request.body)
+        announcement_id = data.get('id')
+        announcement = get_object_or_404(Announcement, id=announcement_id)
+        announcement.delete()
         return JsonResponse({'success': True})
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)

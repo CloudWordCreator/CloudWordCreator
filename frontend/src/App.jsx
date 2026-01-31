@@ -23,6 +23,8 @@ function App() {
                 <Route path="/flatTestMaker/result/" element={<FlatTestResult />} />
                 <Route path="/structuredTest/settings/" element={<StructuredTestMaker />} />
                 <Route path="/structuredTest/result/" element={<StructuredTestResult />} />
+                <Route path="/admin_screen/eisai_admin/" element={<Dashboard />} />
+                <Route path="/admin_screen/eisai_admin/edit_text/" element={<EditText />} />
                 <Route path="/edit_text/*" element={<EditText />} />
                 {/* Login is server-side */}
                 {/* Fallback to Home or 404 */}

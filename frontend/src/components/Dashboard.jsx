@@ -11,6 +11,11 @@ function Dashboard() {
     const [searchResults, setSearchResults] = useState([])
     const [searching, setSearching] = useState(false)
 
+    // Notification Management States
+    const [showAnnouncementsModal, setShowAnnouncementsModal] = useState(false)
+    const [announcements, setAnnouncements] = useState([])
+    const [editingAnnouncement, setEditingAnnouncement] = useState(null)
+
     // Fetch initial data on mount
     useEffect(() => {
         console.log('Fetching admin data...')
@@ -32,6 +37,74 @@ function Dashboard() {
     }, [])
 
     // Search Logic
+    const getCookie = (name) => {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    const fetchAnnouncements = () => {
+        fetch('/admin_screen/eisai_admin/api/get_announcements/')
+            .then(res => res.json())
+            .then(data => {
+                if (data.announcements) setAnnouncements(data.announcements)
+            })
+            .catch(err => console.error(err))
+    }
+
+    const openAnnouncementsModal = () => {
+        fetchAnnouncements()
+        setShowAnnouncementsModal(true)
+        setEditingAnnouncement(null)
+    }
+
+    const handleSaveAnnouncement = async (e) => {
+        e.preventDefault()
+        const formData = new FormData(e.target)
+        const annData = {
+            id: editingAnnouncement?.id,
+            title: formData.get('title'),
+            content: formData.get('content'),
+            category: formData.get('category'),
+            is_active: formData.get('is_active') === 'on'
+        }
+
+        try {
+            const res = await fetch('/admin_screen/eisai_admin/api/save_announcement/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+                body: JSON.stringify(annData)
+            })
+            if (res.ok) {
+                fetchAnnouncements()
+                setEditingAnnouncement(null)
+            } else {
+                alert('Save failed')
+            }
+        } catch (err) { alert('Error: ' + err) }
+    }
+
+    const handleDeleteAnnouncement = async (id) => {
+        if (!confirm('Delete this announcement?')) return
+        try {
+            const res = await fetch('/admin_screen/eisai_admin/api/delete_announcement/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+                body: JSON.stringify({ id: id })
+            })
+            if (res.ok) fetchAnnouncements()
+        } catch (err) { alert('Error: ' + err) }
+    }
+
     const handleSearch = async () => {
         if (!query) return
         setSearching(true)
@@ -66,8 +139,82 @@ function Dashboard() {
         <div className="admin-dashboard">
             <header className="dashboard-header">
                 <h1>Admin Dashboard</h1>
-                <a href="/csvManager/upload_csv/" className="btn btn-primary" target="_blank">教材の追加・取得</a>
+                <div className="header-buttons">
+                    <button className="btn" onClick={openAnnouncementsModal}>🔔 Manage Notifications</button>
+                    <a href="/csvManager/upload_csv/" className="btn btn-primary" target="_blank">教材の追加・取得</a>
+                </div>
             </header>
+
+            {/* Notifications Modal */}
+            {showAnnouncementsModal && (
+                <div className="modal-overlay" onClick={() => setShowAnnouncementsModal(false)}>
+                    <div className="modal card" onClick={e => e.stopPropagation()} style={{ maxWidth: '800px' }}>
+                        <div className="modal-header">
+                            <h3>Manage Notifications</h3>
+                            <button onClick={() => setShowAnnouncementsModal(false)} className="icon-btn">✕</button>
+                        </div>
+
+                        <div className="content-grid" style={{ gridTemplateColumns: '1fr 1fr' }}>
+                            {/* List Section */}
+                            <div className="ann-list-section">
+                                <div className="toolbar" style={{ marginBottom: '10px' }}>
+                                    <button className="btn btn-primary btn-sm" onClick={() => setEditingAnnouncement({})}>+ New Notification</button>
+                                </div>
+                                <div className="text-list" style={{ maxHeight: '400px', overflowY: 'auto' }}>
+                                    {announcements.map(ann => (
+                                        <div key={ann.id} className="text-item" style={{ opacity: ann.is_active ? 1 : 0.6 }}>
+                                            <div>
+                                                <span className={`ann-tag tag-${ann.category.toLowerCase()}`}>{ann.category}</span>
+                                                <span style={{ fontWeight: 'bold', marginLeft: '10px' }}>{ann.title}</span>
+                                            </div>
+                                            <div className="actions">
+                                                <button className="icon-btn" onClick={() => setEditingAnnouncement(ann)}>✎</button>
+                                                <button className="icon-btn delete" onClick={() => handleDeleteAnnouncement(ann.id)}>×</button>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Edit/Create Section */}
+                            {editingAnnouncement && (
+                                <div className="ann-edit-section" style={{ borderLeft: '1px solid #eee', paddingLeft: '20px' }}>
+                                    <h4>{editingAnnouncement.id ? 'Edit Notification' : 'New Notification'}</h4>
+                                    <form onSubmit={handleSaveAnnouncement}>
+                                        <div className="form-group">
+                                            <label>Title</label>
+                                            <input name="title" defaultValue={editingAnnouncement.title || ''} required />
+                                        </div>
+                                        <div className="form-group">
+                                            <label>Content</label>
+                                            <textarea className="form-textarea" name="content" defaultValue={editingAnnouncement.content || ''} rows="4"></textarea>
+                                        </div>
+                                        <div className="form-group">
+                                            <label>Category</label>
+                                            <select name="category" defaultValue={editingAnnouncement.category || 'INFO'}>
+                                                <option value="INFO">Information</option>
+                                                <option value="UPDATE">Update</option>
+                                                <option value="MATERIAL">New Material</option>
+                                                <option value="MAINTENANCE">Maintenance</option>
+                                            </select>
+                                        </div>
+                                        <div className="form-group">
+                                            <label className="checkbox-label">
+                                                <input type="checkbox" name="is_active" defaultChecked={editingAnnouncement.is_active !== false} />
+                                                Active (Visible to users)
+                                            </label>
+                                        </div>
+                                        <div className="form-actions">
+                                            <button type="submit" className="btn btn-primary">Save</button>
+                                            <button type="button" className="btn" onClick={() => setEditingAnnouncement(null)}>Cancel</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
 
             <div className="search-section card">
                 <h2>教材検索</h2>
