@@ -2,12 +2,12 @@ import { useState, useEffect } from 'react'
 import NavigationControls from './NavigationControls'
 import { useNavigate } from 'react-router-dom'
 import '../App.css' // Or specific CSS
-// unit選択は1つのみにする。
+
 const StructuredTestMaker = () => {
     const navigate = useNavigate()
     const [texts, setTexts] = useState([])
     const [selectedTextId, setSelectedTextId] = useState(null)
-    const [selectedUnits, setSelectedUnits] = useState({}) // { unitId: boolean }
+    const [selectedUnitId, setSelectedUnitId] = useState(null) // Single ID
     const [orderMode, setOrderMode] = useState('sequential') // 'sequential' or 'random'
 
     useEffect(() => {
@@ -24,26 +24,19 @@ const StructuredTestMaker = () => {
 
     const handleTextChange = (textId) => {
         setSelectedTextId(textId)
-        // Optionally clear selections? Or keep them?
-        // Default behavior: user switches text, units displayed change.
+        setSelectedUnitId(null) // Reset selection when changing text
     }
 
-    const toggleUnit = (unitId) => {
-        setSelectedUnits(prev => ({
-            ...prev,
-            [unitId]: !prev[unitId]
-        }))
+    const handleUnitSelect = (unitId) => {
+        setSelectedUnitId(unitId)
     }
-
-    // Checkbox for "Select All" in a text?
-    // Maybe later.
 
     const handleGenerate = async () => {
-        const unitIds = Object.keys(selectedUnits).filter(id => selectedUnits[id]).map(Number)
-        if (unitIds.length === 0) {
-            alert("No units selected")
+        if (!selectedUnitId) {
+            alert("No unit selected")
             return
         }
+        const unitIds = [selectedUnitId]
 
         try {
             // Need CSRF token
@@ -125,9 +118,10 @@ const StructuredTestMaker = () => {
                                     <div key={unit.id} className="unit-item">
                                         <label className="checkbox-label">
                                             <input
-                                                type="checkbox"
-                                                checked={!!selectedUnits[unit.id]}
-                                                onChange={() => toggleUnit(unit.id)}
+                                                type="radio"
+                                                name="unit_selection"
+                                                checked={selectedUnitId === unit.id}
+                                                onChange={() => handleUnitSelect(unit.id)}
                                             />
                                             <span className="unit-name">{unit.name}</span>
                                             <span className="unit-count">({unit.subunits.length} parts)</span>
