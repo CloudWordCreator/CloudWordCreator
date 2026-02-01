@@ -149,8 +149,8 @@ function Dashboard() {
         <div className="text-item">
             <span className="text-name">{text.name}</span>
             <div className="actions">
-                <a href={`/admin_screen/eisai_admin/edit_text/?text-id=${text.id}`} className="btn btn-edit">Edit</a>
-                <button className="btn btn-delete" onClick={() => handleDeleteText(text.id)}>Delete</button>
+                <a href={`/admin_screen/eisai_admin/edit_text/?text-id=${text.id}`} className="btn btn-edit">編集</a>
+                <button className="btn btn-delete" onClick={() => handleDeleteText(text.id)}>削除</button>
             </div>
         </div>
     )
@@ -160,7 +160,7 @@ function Dashboard() {
             <header className="dashboard-header">
                 <h1>Admin Dashboard</h1>
                 <div className="header-buttons">
-                    <button className="btn" onClick={openAnnouncementsModal}>🔔 Manage Notifications</button>
+                    <button className="btn" onClick={openAnnouncementsModal}>🔔 お知らせ管理</button>
                     <a href="/csv_set/upload_csv/" className="btn btn-primary" target="_blank">教材の追加・取得</a>
                 </div>
             </header>
@@ -170,7 +170,7 @@ function Dashboard() {
                 <div className="modal-overlay" onClick={() => setShowAnnouncementsModal(false)}>
                     <div className="modal card" onClick={e => e.stopPropagation()} style={{ maxWidth: '800px' }}>
                         <div className="modal-header">
-                            <h3>Manage Notifications</h3>
+                            <h3>お知らせ管理</h3>
                             <button onClick={() => setShowAnnouncementsModal(false)} className="icon-btn">✕</button>
                         </div>
 
@@ -178,7 +178,7 @@ function Dashboard() {
                             {/* List Section */}
                             <div className="ann-list-section">
                                 <div className="toolbar" style={{ marginBottom: '10px' }}>
-                                    <button className="btn btn-primary btn-sm" onClick={() => setEditingAnnouncement({})}>+ New Notification</button>
+                                    <button className="btn btn-primary btn-sm" onClick={() => setEditingAnnouncement({})}>+ 新規お知らせ</button>
                                 </div>
                                 <div className="text-list" style={{ maxHeight: '400px', overflowY: 'auto' }}>
                                     {announcements.map(ann => (
@@ -199,34 +199,34 @@ function Dashboard() {
                             {/* Edit/Create Section */}
                             {editingAnnouncement && (
                                 <div className="ann-edit-section" style={{ borderLeft: '1px solid #eee', paddingLeft: '20px' }}>
-                                    <h4>{editingAnnouncement.id ? 'Edit Notification' : 'New Notification'}</h4>
+                                    <h4>{editingAnnouncement.id ? 'お知らせの編集' : '新規お知らせ'}</h4>
                                     <form onSubmit={handleSaveAnnouncement}>
                                         <div className="form-group">
-                                            <label>Title</label>
+                                            <label>タイトル</label>
                                             <input name="title" defaultValue={editingAnnouncement.title || ''} required />
                                         </div>
                                         <div className="form-group">
-                                            <label>Content</label>
+                                            <label>内容</label>
                                             <textarea className="form-textarea" name="content" defaultValue={editingAnnouncement.content || ''} rows="4"></textarea>
                                         </div>
                                         <div className="form-group">
-                                            <label>Category</label>
+                                            <label>カテゴリー</label>
                                             <select name="category" defaultValue={editingAnnouncement.category || 'INFO'}>
-                                                <option value="INFO">Information</option>
-                                                <option value="UPDATE">Update</option>
-                                                <option value="MATERIAL">New Material</option>
-                                                <option value="MAINTENANCE">Maintenance</option>
+                                                <option value="INFO">お知らせ</option>
+                                                <option value="UPDATE">更新</option>
+                                                <option value="MATERIAL">教材</option>
+                                                <option value="MAINTENANCE">メンテナンス</option>
                                             </select>
                                         </div>
                                         <div className="form-group">
                                             <label className="checkbox-label">
                                                 <input type="checkbox" name="is_active" defaultChecked={editingAnnouncement.is_active !== false} />
-                                                Active (Visible to users)
+                                                公開する
                                             </label>
                                         </div>
                                         <div className="form-actions">
-                                            <button type="submit" className="btn btn-primary">Save</button>
-                                            <button type="button" className="btn" onClick={() => setEditingAnnouncement(null)}>Cancel</button>
+                                            <button type="submit" className="btn btn-primary">保存</button>
+                                            <button type="button" className="btn" onClick={() => setEditingAnnouncement(null)}>キャンセル</button>
                                         </div>
                                     </form>
                                 </div>
@@ -244,10 +244,10 @@ function Dashboard() {
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                         onKeyDown={handleKeyDown}
-                        placeholder="Search for text..."
+                        placeholder="検索..."
                     />
                     <button onClick={handleSearch} disabled={searching} className="btn btn-search">
-                        {searching ? 'Searching...' : 'Search'}
+                        {searching ? '検索中...' : '検索'}
                     </button>
                 </div>
                 {searchResults.length > 0 && (

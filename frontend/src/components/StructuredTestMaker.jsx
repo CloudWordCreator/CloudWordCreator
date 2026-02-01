@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import NavigationControls from './NavigationControls'
 import { useNavigate } from 'react-router-dom'
 import '../App.css' // Or specific CSS
-
+// unit選択は1つのみにする。
 const StructuredTestMaker = () => {
     const navigate = useNavigate()
     const [texts, setTexts] = useState([])
@@ -94,14 +94,14 @@ const StructuredTestMaker = () => {
     return (
         <div className="structured-test-maker-container">
             <header className="dashboard-header">
-                <h1>Structured Test Maker</h1>
+                <h1>From 教科書</h1>
                 <NavigationControls />
             </header>
 
             <div className="layout-columns">
                 {/* Sidebar for Texts */}
                 <div className="sidebar-texts">
-                    <h3>Textbooks</h3>
+                    <h3>対応教科書</h3>
                     <ul>
                         {texts.map(text => (
                             <li
@@ -119,7 +119,7 @@ const StructuredTestMaker = () => {
                 <div className="main-units card">
                     {currentText ? (
                         <>
-                            <h2>Units in {currentText.name}</h2>
+                            <h2>{currentText.name}</h2>
                             <div className="units-grid">
                                 {currentText.units.map(unit => (
                                     <div key={unit.id} className="unit-item">
@@ -148,9 +148,9 @@ const StructuredTestMaker = () => {
 
                 {/* Settings Panel */}
                 <div className="settings-panel card">
-                    <h3>Settings</h3>
+                    <h3>設定</h3>
                     <div className="setting-group">
-                        <label>Order:</label>
+                        <label>並び順:</label>
                         <div className="radio-group">
                             <label>
                                 <input
@@ -159,7 +159,7 @@ const StructuredTestMaker = () => {
                                     checked={orderMode === 'sequential'}
                                     onChange={() => setOrderMode('sequential')}
                                 />
-                                Sequential (Book Order)
+                                順番通り
                             </label>
                             <label>
                                 <input
@@ -168,7 +168,7 @@ const StructuredTestMaker = () => {
                                     checked={orderMode === 'random'}
                                     onChange={() => setOrderMode('random')}
                                 />
-                                Random (Shuffle All)
+                                ランダム
                             </label>
                         </div>
                     </div>
@@ -177,7 +177,7 @@ const StructuredTestMaker = () => {
 
             <div className="floating-footer">
                 <button className="btn btn-primary btn-large" onClick={handleGenerate}>
-                    Generate Test
+                    作成
                 </button>
             </div>
 

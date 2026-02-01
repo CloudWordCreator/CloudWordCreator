@@ -25,14 +25,14 @@ const NavigationControls = ({ style }) => {
 
     return (
         <div style={containerStyle} className="nav-controls">
-            <button style={btnStyle} onClick={() => navigate(-1)} title="Go Back">
-                ← Back
+            <button style={btnStyle} onClick={() => navigate(-1)} title="戻る">
+                ← 戻る
             </button>
-            <button style={btnStyle} onClick={() => navigate(1)} title="Go Forward">
-                Forward →
+            <button style={btnStyle} onClick={() => navigate(1)} title="進む">
+                進む →
             </button>
-            <button style={btnStyle} onClick={() => navigate('/')} title="Go Home">
-                🏠 Home
+            <button style={btnStyle} onClick={() => navigate('/')} title="ホーム">
+                🏠 ホーム
             </button>
         </div>
     )

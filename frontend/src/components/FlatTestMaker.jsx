@@ -19,6 +19,21 @@ const FlatTestMaker = () => {
     // Add Word
     const [english, setEnglish] = useState('')
     const [japanese, setJapanese] = useState('')
+    const [tempWords, setTempWords] = useState([])
+
+    const handleAddTempWord = () => {
+        if (!english.trim() || !japanese.trim()) {
+            alert('Please enter both English and Japanese')
+            return
+        }
+        setTempWords([...tempWords, { id: Date.now(), english, japanese }])
+        setEnglish('')
+        setJapanese('')
+    }
+
+    const handleDeleteTempWord = (id) => {
+        setTempWords(tempWords.filter(w => w.id !== id))
+    }
 
     useEffect(() => {
         // Fetch initialization data
@@ -78,10 +93,10 @@ const FlatTestMaker = () => {
             start_range: startRange || 1, // Defaulting logic
             end_range: endRange || 9999,
             question_count: questionCount,
-            mandatory_words: [], // Feature pending
-            // Advanced options
-            no_unit_words: noUnitWords,
-            limit_to_range: limitToRange
+            mandatory_words: tempWords.map(w => `${w.english}:${w.japanese}`),
+            // Advanced options (removed)
+            no_unit_words: false,
+            limit_to_range: false
         }
 
         try {
@@ -108,21 +123,21 @@ const FlatTestMaker = () => {
             navigate('/flatTestMaker/result/', { state: { type: type, data: data } })
         } catch (err) {
             console.error(err)
-            alert("Error generating test: " + err.message)
+            alert("テスト作成エラー: " + err.message)
         }
     }
 
     return (
         <div className="flat-test-maker-container">
             <header className="dashboard-header">
-                <h1>Create Flat Test</h1>
+                <h1>単語テスト作成</h1>
                 <NavigationControls />
             </header>
 
             <div className="card">
                 <form onSubmit={(e) => e.preventDefault()}>
                     <div className="form-group">
-                        <label htmlFor="text_name">Select Text:</label>
+                        <label htmlFor="text_name">教材を選択:</label>
                         <select name="text_name" id="text_name" value={selectedTextId} onChange={handleTextChange}>
                             {texts.map(text => (
                                 <option key={text.id} value={text.id}>{text.name}</option>
@@ -132,74 +147,74 @@ const FlatTestMaker = () => {
 
                     <div className="form-group-row">
                         <div className="form-group">
-                            <label htmlFor="start_number">Start No:</label>
+                            <label htmlFor="start_number">開始範囲:</label>
                             <input
                                 type="number"
                                 id="start_number"
                                 value={startRange}
                                 onChange={e => setStartRange(e.target.value)}
-                                placeholder="All (Min)"
+                                placeholder="最初から (Min)"
                             />
                         </div>
                         <div className="form-group">
-                            <label htmlFor="end_number">End No:</label>
+                            <label htmlFor="end_number">終了範囲:</label>
                             <input
                                 type="number"
                                 id="end_number"
                                 value={endRange}
                                 onChange={e => setEndRange(e.target.value)}
-                                placeholder="All (Max)"
+                                placeholder="最後まで (Max)"
                             />
                         </div>
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="question_count">Number of Questions:</label>
+                        <label htmlFor="question_count">問題数:</label>
                         <input type="number" name="question_count" id="question_count" value={questionCount} onChange={e => setQuestionCount(e.target.value)} />
                     </div>
 
-                    <button type="button" className="toggle-advanced btn" onClick={() => setShowAdvanced(!showAdvanced)}>
-                        {showAdvanced ? 'Hide Advanced Options ▲' : 'Show Advanced Options ▼'}
-                    </button>
-
-                    {showAdvanced && (
-                        <div className="advanced-options">
-                            <div className="card-inner">
-                                <label className="checkbox-label">
-                                    <input type="checkbox" checked={noUnitWords} onChange={e => setNoUnitWords(e.target.checked)} />
-                                    Include 'No Unit' Words
-                                </label>
-                            </div>
-
-                            <div className="card-inner">
-                                <label className="checkbox-label">
-                                    <input type="checkbox" checked={limitToRange} onChange={e => setLimitToRange(e.target.checked)} />
-                                    Limit choices to range
-                                </label>
-                                <p className="note">* Choices for multiple choice questions will only be taken from the specified range.</p>
-                            </div>
-
-                            <div className="card-inner">
-                                <h3>Add Temporary Word</h3>
-                                <div className="add-word-container">
-                                    <input
-                                        type="text"
-                                        placeholder="English"
-                                        value={english}
-                                        onChange={e => setEnglish(e.target.value)}
-                                    />
-                                    <input
-                                        type="text"
-                                        placeholder="Japanese"
-                                        value={japanese}
-                                        onChange={e => setJapanese(e.target.value)}
-                                    />
-                                    <button type="button" className="btn-small">+</button>
-                                </div>
-                                <p className="note">* Currently UI only. Implementation pending.</p>
-                            </div>
+                    {/* Temporary Word Addition Section - Always Visible */}
+                    <div className="card-inner" style={{ marginTop: '20px', borderTop: '1px solid #eee', paddingTop: '15px' }}>
+                        <h3>一時的な単語の追加</h3>
+                        <p style={{ fontSize: '0.9rem', color: '#666', marginBottom: '10px' }}>
+                            ここに登録した単語は、必ずテストに出題されます。
+                        </p>
+                        <div className="add-word-container" style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
+                            <input
+                                type="text"
+                                placeholder="English"
+                                value={english}
+                                onChange={e => setEnglish(e.target.value)}
+                                style={{ flex: 1, padding: '8px' }}
+                            />
+                            <input
+                                type="text"
+                                placeholder="Japanese"
+                                value={japanese}
+                                onChange={e => setJapanese(e.target.value)}
+                                style={{ flex: 1, padding: '8px' }}
+                            />
+                            <button type="button" className="btn-small" onClick={handleAddTempWord} style={{ padding: '0 15px', fontSize: '20px' }}>+</button>
                         </div>
-                    )}
+
+                        {/* List of temp words */}
+                        {tempWords.length > 0 && (
+                            <ul className="temp-words-list" style={{ listStyle: 'none', padding: 0 }}>
+                                {tempWords.map(w => (
+                                    <li key={w.id} style={{ display: 'flex', justifyContent: 'space-between', padding: '5px 0', borderBottom: '1px solid #eee' }}>
+                                        <span>{w.english} - {w.japanese}</span>
+                                        <button
+                                            type="button"
+                                            onClick={() => handleDeleteTempWord(w.id)}
+                                            style={{ background: 'none', border: 'none', color: 'red', cursor: 'pointer' }}
+                                        >
+                                            ✕
+                                        </button>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
 
                     <div className="form-actions">
                         <button
@@ -208,7 +223,7 @@ const FlatTestMaker = () => {
                             style={{ width: '100%', padding: '15px', fontSize: '1.2rem', marginBottom: '10px' }}
                             onClick={() => handleGenerate('words')}
                         >
-                            Start Word Test
+                            単語テストの作成
                         </button>
                     </div>
                 </form>
@@ -220,7 +235,7 @@ const FlatTestMaker = () => {
                         style={{ background: 'none', color: '#666', textDecoration: 'underline' }}
                         onClick={() => handleGenerate('sentences')}
                     >
-                        Generate Sentence Test (AI)
+                        文章テストの作成 (AI)
                     </button>
                 </div>
             </div>

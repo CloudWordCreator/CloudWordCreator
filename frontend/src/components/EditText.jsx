@@ -157,7 +157,7 @@ function EditText() {
     return (
         <div className="edit-text-container">
             <header className="dashboard-header">
-                <h1>Edit Text: {textDetails?.name}</h1>
+                <h1>{textDetails?.name}</h1>
                 <div className="header-actions">
                     <NavigationControls />
                 </div>
@@ -167,18 +167,18 @@ function EditText() {
             {editingWord !== null && (
                 <div className="modal-overlay">
                     <div className="modal card">
-                        <h3>{editingWord.id ? 'Edit Word' : 'Add Word'}</h3>
+                        <h3>{editingWord.id ? '単語の編集' : '単語の追加'}</h3>
                         <form onSubmit={handleSaveWord}>
                             <div className="form-group">
                                 <label>No.</label>
                                 <input name="no" type="number" defaultValue={editingWord.no || ''} required />
                             </div>
                             <div className="form-group">
-                                <label>English</label>
+                                <label>英語</label>
                                 <input name="english" type="text" defaultValue={editingWord.english || ''} required />
                             </div>
                             <div className="form-group">
-                                <label>Japanese</label>
+                                <label>日本語</label>
                                 <input name="japanese" type="text" defaultValue={editingWord.japanese || ''} required />
                             </div>
                             <div className="form-group">
@@ -239,14 +239,14 @@ function EditText() {
                     </select>
                 </div>
                 <div className="toolbar-buttons">
-                    <button className="btn btn-primary" onClick={() => setEditingWord({})}>Add New Word</button>
-                    <button className="btn" onClick={() => setEditingUnit({})}>Add Unit</button>
+                    <button className="btn btn-primary" onClick={() => setEditingWord({})}>単語の追加</button>
+                    <button className="btn" onClick={() => setEditingUnit({})}>Unitの追加</button>
                 </div>
             </div>
 
             {/* Unit List (Mini management) */}
             <div className="units-list card">
-                <h3>Manage Units</h3>
+                <h3>Unitの編集</h3>
                 <div className="tags">
                     {units.map(u => (
                         <span key={u.id} className="tag">
@@ -264,10 +264,10 @@ function EditText() {
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>English</th>
-                            <th>Japanese</th>
+                            <th>英語</th>
+                            <th>日本語</th>
                             <th>Unit</th>
-                            <th>Actions</th>
+                            <th>操作</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -278,8 +278,8 @@ function EditText() {
                                 <td>{word.japanese}</td>
                                 <td>{units.find(u => u.id === word.unit_id)?.name || '-'}</td>
                                 <td>
-                                    <button className="btn btn-edit" onClick={() => setEditingWord(word)}>Edit</button>
-                                    <button className="btn btn-delete" onClick={() => handleDeleteWord(word.id, word.type)}>Delete</button>
+                                    <button className="btn btn-edit" onClick={() => setEditingWord(word)}>編集</button>
+                                    <button className="btn btn-delete" onClick={() => handleDeleteWord(word.id, word.type)}>削除</button>
                                 </td>
                             </tr>
                         ))}

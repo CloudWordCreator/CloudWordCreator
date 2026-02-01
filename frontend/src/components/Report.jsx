@@ -64,21 +64,21 @@ const Report = () => {
     return (
         <div className="report-container">
             <header className="dashboard-header">
-                <h1>Report Bug / Request Feature</h1>
+                <h1>不具合報告・機能要望</h1>
                 <NavigationControls />
             </header>
 
             <div className="card">
                 {status === 'success' ? (
                     <div className="success-message">
-                        <h3>Thank you for your report!</h3>
-                        <p>We have received your feedback.</p>
-                        <button className="btn btn-primary" onClick={() => setStatus('idle')}>Submit another report</button>
+                        <h3>ご報告ありがとうございます！</h3>
+                        <p>フィードバックを受け付けました。</p>
+                        <button className="btn btn-primary" onClick={() => setStatus('idle')}>続けて報告する</button>
                     </div>
                 ) : (
                     <form onSubmit={handleSubmit}>
                         <div className="form-group">
-                            <label htmlFor="school_name">School Name:</label>
+                            <label htmlFor="school_name">校舎名:</label>
                             <input
                                 type="text"
                                 id="school_name"
@@ -89,7 +89,7 @@ const Report = () => {
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="material">Material / Range: <span className="required">*</span></label>
+                            <label htmlFor="material">教材/範囲: <span className="required">*</span></label>
                             <input
                                 type="text"
                                 id="material"
@@ -101,7 +101,7 @@ const Report = () => {
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="details">Details: <span className="required">*</span></label>
+                            <label htmlFor="details">詳細: <span className="required">*</span></label>
                             <textarea
                                 id="details"
                                 name="details"
@@ -117,7 +117,7 @@ const Report = () => {
 
                         <div className="form-actions">
                             <button type="submit" className="btn btn-primary" disabled={status === 'submitting'}>
-                                {status === 'submitting' ? 'Sending...' : 'Submit Report'}
+                                {status === 'submitting' ? '送信中...' : '送信'}
                             </button>
                         </div>
                     </form>

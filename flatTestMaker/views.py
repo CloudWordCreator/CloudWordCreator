@@ -157,4 +157,3 @@ def api_generate_sentences(request):
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
     return JsonResponse({'error': 'POST method required'}, status=400)
-

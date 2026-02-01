@@ -58,7 +58,6 @@ const Home = () => {
         <div className="home-container">
             <header className="home-header">
                 <h1>CloudWordCreator</h1>
-                <p>Smart English Learning Platform</p>
 
                 <div className="notification-wrapper">
                     <button className="notification-btn" onClick={() => setShowNotifications(true)}>
@@ -76,19 +75,19 @@ const Home = () => {
                             value={selectedTextId}
                             onChange={(e) => setSelectedTextId(e.target.value)}
                         >
-                            <option value="">All Texts</option>
+                            <option value="">すべての教材</option>
                             {textOptions.map(t => (
                                 <option key={t.id} value={t.id}>{t.name}</option>
                             ))}
                         </select>
                         <input
                             type="text"
-                            placeholder="Search for a word (Eng/Jp)..."
+                            placeholder="検索 (英/日)..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
                     </div>
-                    <button type="submit" className="btn btn-primary">Search</button>
+                    <button type="submit" className="btn btn-primary">検索</button>
                 </form>
             </section>
 
@@ -97,12 +96,12 @@ const Home = () => {
                 <div className="modal-overlay" onClick={() => setShowNotifications(false)}>
                     <div className="modal notification-modal" onClick={e => e.stopPropagation()}>
                         <div className="modal-header">
-                            <h3>📢 What's New</h3>
+                            <h3>📢 お知らせ</h3>
                             <button onClick={() => setShowNotifications(false)} className="icon-btn">✕</button>
                         </div>
                         <div className="announcements-list">
                             {announcements.length === 0 ? (
-                                <p className="no-data">No new announcements.</p>
+                                <p className="no-data">お知らせはありません。</p>
                             ) : (
                                 announcements.map(ann => (
                                     <div key={ann.id} className={`announcement-item ${ann.category.toLowerCase()}`}>
@@ -125,44 +124,44 @@ const Home = () => {
             <div className="cards-container">
                 <div className="action-card card">
                     <div className="card-content">
-                        <h2>Flat Test Maker</h2>
-                        <p className="subtitle">Create tests from word lists (CSV)</p>
+                        <h2>From 単語帳</h2>
+                        <p className="subtitle">単語帳からテストを作成</p>
                         <ul>
                             {homeData.flat_test_texts.map((text, idx) => (
                                 <li key={idx}> {text} </li>
                             ))}
                         </ul>
                         <div className="img-placeholder">
-                            <span>📄 List Based</span>
+                            <span>📄 リスト形式</span>
                         </div>
                     </div>
-                    <a href="/flatTestMaker/settings/" className="btn-outline">Create Test</a>
+                    <a href="/flatTestMaker/settings/" className="btn-outline">作成</a>
                 </div>
 
                 <div className="divider">OR</div>
 
                 <div className="action-card card">
                     <div className="card-content">
-                        <h2>Structured Test</h2>
-                        <p className="subtitle">Create tests from Textbooks</p>
+                        <h2>From 教科書</h2>
+                        <p className="subtitle">教科書からテストを作成</p>
                         <ul>
                             {homeData.structured_test_texts.map((text, idx) => (
                                 <li key={idx}> {text} </li>
                             ))}
                         </ul>
                         <div className="img-placeholder">
-                            <span>📚 Textbook Based</span>
+                            <span>📚 教科書形式</span>
                         </div>
                     </div>
-                    <a href="/structuredTest/settings" className="btn-outline">Select Units</a>
+                    <a href="/structuredTest/settings" className="btn-outline">作成</a>
                 </div>
             </div>
 
             <footer className="home-footer">
-                <a href="/report/" className="footer-link">Report Bug / Request Feature</a>
-                <a href="/docs/" className="footer-link" target="_blank">Help & Docs</a>
-                <a href="/login/" className="footer-link" target="_blank">Admin Dashboard</a>
-                <a href="https://github.com/CloudWordCreator/CloudWordCreator" target="_blank" rel="noopener noreferrer" className="footer-link">GitHub</a>
+                <a href="/report/" className="footer-link">不具合報告・機能要望</a>
+                <a href="/docs/" className="footer-link" target="_blank">ヘルプ</a>
+                <a href="/login/" className="footer-link" target="_blank">管理者ダッシュボード</a>
+                <a href="https://github.com/CloudWordCreator" target="_blank" rel="noopener noreferrer" className="footer-link">GitHub</a>
             </footer>
 
             {
@@ -170,12 +169,12 @@ const Home = () => {
                     <div className="modal-overlay" onClick={closeResults}>
                         <div className="modal results-modal" onClick={e => e.stopPropagation()}>
                             <div className="modal-header">
-                                <h3>Search Results: "{searchQuery}"</h3>
+                                <h3>検索結果: "{searchQuery}"</h3>
                                 <button onClick={closeResults} className="icon-btn">✕</button>
                             </div>
                             <div className="results-list">
                                 {searchResults.length === 0 ? (
-                                    <p>No words found.</p>
+                                    <p>見つかりませんでした。</p>
                                 ) : (
                                     searchResults.map((result, idx) => (
                                         <div key={idx} className="result-item">
