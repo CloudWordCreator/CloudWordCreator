@@ -36,7 +36,10 @@ class DiscordWebhookHandler(logging.Handler):
             log_entry = self.format(record)
             
             # ログレベルに応じた色とタイトルの設定
-            if record.levelno <= logging.INFO:
+            if "Report Received" in log_entry:
+                color = 3447003 # Blue
+                title = f"📢 New User Report"
+            elif record.levelno <= logging.INFO:
                 color = 65280 # Green
                 title = f"Report / Info : {record.module}"
             elif record.levelno <= logging.WARNING:
