@@ -6,23 +6,21 @@ const Docs = () => {
         <div className="home-container" style={{ textAlign: 'left', maxWidth: '800px' }}>
             <header className="home-header" style={{ marginBottom: '30px', textAlign: 'center' }}>
                 <h1>CloudWordCreator Help & Docs</h1>
-                <p>Guide to using the platform effectively</p>
-                <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}>
-                    <NavigationControls />
-                </div>
+                <p>使い方ガイド</p>
             </header>
 
             <section className="card" style={{ marginBottom: '30px' }}>
-                <h2>📚 Introduction</h2>
+                <h2>CloudWordCreatorとは</h2>
                 <p>
-                    CloudWordCreator is a tool designed to help teachers create English vocabulary and sentence tests easily.
-                    It supports two main modes of test creation: <strong>Flat Test</strong> (List-based) and <strong>Structured Test</strong> (Textbook-based).
+                    CloudWordCreatorは、教師が英語の単語や文のテストを簡単に作成できるツールです。
+                    2つの主要なテスト作成モードをサポートします： <strong>From 単語帳</strong> (List-based) と <strong>From 教科書</strong> (Textbook-based)。
+                    このツールを使うことにより机から離れずに英語の単語や文のテストを作成することができます。
                 </p>
             </section>
 
             <section className="card" style={{ marginBottom: '30px' }}>
-                <h2>📄 Flat Test Maker</h2>
-                <p>Use this tool when you want to create a test from a simple list of words or specific CSV data.</p>
+                <h2>From 単語帳</h2>
+                <p>番号のみで指定することで、単語帳から単語を選び、英語の単語や文のテストを作成することができます。</p>
                 <ul>
                     <li><strong>Settings:</strong> Select the text (book) you want to use. You can specify a range of "No" (number) to filter words.</li>
                     <li><strong>Word Test:</strong> Generates a test where students translate between English and Japanese.</li>
@@ -32,8 +30,8 @@ const Docs = () => {
             </section>
 
             <section className="card" style={{ marginBottom: '30px' }}>
-                <h2>📚 Structured Test</h2>
-                <p>Use this tool when you are following a specific textbook structure (Units/Chapters).</p>
+                <h2>From 教科書</h2>
+                <p>教科書のUnitや章番号を指定することで、英語の単語テストを作成することができます。</p>
                 <ul>
                     <li><strong>Selection:</strong> Choose the Text, then expand to select specific Units or Sub-units.</li>
                     <li><strong>Preview:</strong> You can see which units are selected before creating the test.</li>
@@ -42,17 +40,17 @@ const Docs = () => {
             </section>
 
             <section className="card" style={{ marginBottom: '30px' }}>
-                <h2>🔍 Global Search</h2>
+                <h2>検索</h2>
                 <p>
-                    On the Home screen, use the search bar to find any word across all registered materials.
-                    You can search by English word or Japanese meaning to quickly find which text or unit a word belongs to.
+                    登録されているすべての資料を検索することができます。英語の単語や日本語の意味を入力することで、該当する単語を検索することができます。
+                    主に生徒が「覚えていない」と言い訳されたときに逃げれないようにするために作成しました。
                 </p>
             </section>
 
             <section className="card" style={{ marginBottom: '30px' }}>
-                <h2>📢 Notifications</h2>
+                <h2>通知</h2>
                 <p>
-                    Check the 🔔 icon on the top right of the Home screen for updates, new materials, and maintenance information.
+                    Home画面の右上にある🔔アイコンを押すと、更新情報や新しい資料、メンテナンス情報などを確認することができます。
                 </p>
             </section>
 
@@ -75,7 +73,7 @@ const Docs = () => {
                 </p>
                 <h3>連絡先</h3>
                 <p>
-
+                    <a href="https://discord.gg/adbN4qPfdW" target="_blank">Discord Server</a>
                 </p>
                 <p>
                     2026年
@@ -85,7 +83,7 @@ const Docs = () => {
             <footer className="home-footer" style={{ justifyContent: 'center' }}>
                 <p style={{ color: '#999' }}>© CloudWordCreator</p>
             </footer>
-        </div>
+        </div >
     )
 }
 
