@@ -127,6 +127,8 @@ const FlatTestMaker = () => {
         }
     }
 
+    const isFormValid = startRange && endRange;
+
     return (
         <div className="flat-test-maker-container">
             <header className="dashboard-header">
@@ -220,8 +222,16 @@ const FlatTestMaker = () => {
                         <button
                             type="button"
                             className="btn btn-primary"
-                            style={{ width: '100%', padding: '15px', fontSize: '1.2rem', marginBottom: '10px' }}
+                            style={{
+                                width: '100%',
+                                padding: '15px',
+                                fontSize: '1.2rem',
+                                marginBottom: '10px',
+                                opacity: isFormValid ? 1 : 0.5,
+                                cursor: isFormValid ? 'pointer' : 'not-allowed'
+                            }}
                             onClick={() => handleGenerate('words')}
+                            disabled={!isFormValid}
                         >
                             単語テストの作成
                         </button>
@@ -232,8 +242,15 @@ const FlatTestMaker = () => {
                     <button
                         type="button"
                         className="btn"
-                        style={{ background: 'none', color: '#666', textDecoration: 'underline' }}
+                        style={{
+                            background: 'none',
+                            color: '#666',
+                            textDecoration: 'underline',
+                            opacity: isFormValid ? 1 : 0.5,
+                            cursor: isFormValid ? 'pointer' : 'not-allowed'
+                        }}
                         onClick={() => handleGenerate('sentences')}
+                        disabled={!isFormValid}
                     >
                         文章テストの作成 (AI)
                     </button>
