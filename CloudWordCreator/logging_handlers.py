@@ -29,6 +29,7 @@ class DiscordWebhookHandler(logging.Handler):
 
     def emit(self, record):
         if not self.webhook_url:
+            print("WARNING: DISCORD_WEBHOOK_URL is not set or empty.")
             return
 
         try:

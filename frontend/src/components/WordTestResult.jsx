@@ -66,116 +66,120 @@ const WordTestResult = ({ data }) => {
         <div className="print-area">
             {/* English to Japanese Tab */}
             <div id="english-to-japanese-content" className="tab" style={{ display: activeTab === 'english-to-japanese-content' ? 'block' : 'none' }}>
-                <div className="question-sheet">
-                    <div className="sheet-size-setting">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>番号</th>
-                                    <th>〇/×</th>
-                                    <th>単語</th>
-                                    <th>意味</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {words.map((word, idx) => (
-                                    <tr key={idx}>
-                                        <td>{idx + 1}</td>
-                                        <td></td>
-                                        <td>{word.english}</td>
-                                        <td></td>
+                <div className="sheets-container">
+                    <div className="question-sheet">
+                        <div className="sheet-size-setting">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>番号</th>
+                                        <th>〇/×</th>
+                                        <th>単語</th>
+                                        <th>意味</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                        <p className="selected_text">{selected_text}</p>
-                        <p className="test_range">範囲 {start_range} ～ {end_range}</p>
-                        <p className="score"> / {amount_count}</p>
+                                </thead>
+                                <tbody>
+                                    {words.map((word, idx) => (
+                                        <tr key={idx}>
+                                            <td>{idx + 1}</td>
+                                            <td></td>
+                                            <td>{word.english}</td>
+                                            <td></td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                            <p className="selected_text">{selected_text}</p>
+                            <p className="test_range">範囲 {start_range} ～ {end_range}</p>
+                            <p className="score"> / {amount_count}</p>
+                        </div>
                     </div>
-                </div>
-                <div className="answer-sheet">
-                    <div className="sheet-size-setting">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>番号</th>
-                                    <th>〇/×</th>
-                                    <th>単語</th>
-                                    <th>意味</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {words.map((word, idx) => (
-                                    <tr key={idx}>
-                                        <td>{idx + 1}</td>
-                                        <td></td>
-                                        <td>{word.english}</td>
-                                        <td>{word.japanese}</td>
+                    <div className="answer-sheet">
+                        <div className="sheet-size-setting">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>番号</th>
+                                        <th>〇/×</th>
+                                        <th>単語</th>
+                                        <th>意味</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                        <p className="selected_text">{selected_text}</p>
-                        <p className="test_range">範囲 {start_range} ～ {end_range}</p>
-                        <p className="score"> / {amount_count}</p>
+                                </thead>
+                                <tbody>
+                                    {words.map((word, idx) => (
+                                        <tr key={idx}>
+                                            <td>{idx + 1}</td>
+                                            <td></td>
+                                            <td>{word.english}</td>
+                                            <td>{word.japanese}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                            <p className="selected_text">{selected_text}</p>
+                            <p className="test_range">範囲 {start_range} ～ {end_range}</p>
+                            <p className="score"> / {amount_count}</p>
+                        </div>
                     </div>
                 </div>
             </div>
 
             {/* Japanese to English Tab */}
             <div id="japanese-to-english-content" className="tab" style={{ display: activeTab === 'japanese-to-english-content' ? 'block' : 'none' }}>
-                <div className="question-sheet">
-                    <div className="sheet-size-setting">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>番号</th>
-                                    <th>〇/×</th>
-                                    <th>日本語</th>
-                                    <th>英語</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {words.map((word, idx) => (
-                                    <tr key={idx}>
-                                        <td>{idx + 1}</td>
-                                        <td></td>
-                                        <td>{word.japanese}</td>
-                                        <td></td>
+                <div className="sheets-container">
+                    <div className="question-sheet">
+                        <div className="sheet-size-setting">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>番号</th>
+                                        <th>〇/×</th>
+                                        <th>日本語</th>
+                                        <th>英語</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                        <p className="selected_text">{selected_text}</p>
-                        <p className="test_range">範囲 {start_range} ～ {end_range}</p>
-                        <p className="score"> / {amount_count}</p>
+                                </thead>
+                                <tbody>
+                                    {words.map((word, idx) => (
+                                        <tr key={idx}>
+                                            <td>{idx + 1}</td>
+                                            <td></td>
+                                            <td>{word.japanese}</td>
+                                            <td></td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                            <p className="selected_text">{selected_text}</p>
+                            <p className="test_range">範囲 {start_range} ～ {end_range}</p>
+                            <p className="score"> / {amount_count}</p>
+                        </div>
                     </div>
-                </div>
-                <div className="answer-sheet">
-                    <div className="sheet-size-setting">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>番号</th>
-                                    <th>〇/×</th>
-                                    <th>日本語</th>
-                                    <th>英語</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {words.map((word, idx) => (
-                                    <tr key={idx}>
-                                        <td>{idx + 1}</td>
-                                        <td></td>
-                                        <td>{word.japanese}</td>
-                                        <td>{word.english}</td>
+                    <div className="answer-sheet">
+                        <div className="sheet-size-setting">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>番号</th>
+                                        <th>〇/×</th>
+                                        <th>日本語</th>
+                                        <th>英語</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                        <p className="selected_text">{selected_text}</p>
-                        <p className="test_range">範囲 {start_range} ～ {end_range}</p>
-                        <p className="score"> / {amount_count}</p>
+                                </thead>
+                                <tbody>
+                                    {words.map((word, idx) => (
+                                        <tr key={idx}>
+                                            <td>{idx + 1}</td>
+                                            <td></td>
+                                            <td>{word.japanese}</td>
+                                            <td>{word.english}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                            <p className="selected_text">{selected_text}</p>
+                            <p className="test_range">範囲 {start_range} ～ {end_range}</p>
+                            <p className="score"> / {amount_count}</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -189,107 +193,111 @@ const WordTestResult = ({ data }) => {
         return (
             <div className="print-area">
                 <div id="english-to-japanese-content" className="tab" style={{ display: activeTab === 'english-to-japanese-content' ? 'block' : 'none' }}>
-                    <div className="question-sheet">
-                        <div className="sheet-size-setting">
-                            <div className="table-container">
-                                <table id="first-half-table">
-                                    <thead><tr><th>番号</th><th>単語</th><th>意味</th></tr></thead>
-                                    <tbody>
-                                        {firstHalf.map((word, idx) => (
-                                            <tr key={idx}><td>{idx + 1}</td><td>{word.english}</td><td></td></tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                                <table id="second-half-table">
-                                    <thead><tr><th>番号</th><th>単語</th><th>意味</th></tr></thead>
-                                    <tbody>
-                                        {secondHalf.map((word, idx) => (
-                                            <tr key={idx}><td>{idx + 26}</td><td>{word.english}</td><td></td></tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                    <div className="sheets-container">
+                        <div className="question-sheet">
+                            <div className="sheet-size-setting">
+                                <div className="table-container">
+                                    <table id="first-half-table">
+                                        <thead><tr><th>番号</th><th>単語</th><th>意味</th></tr></thead>
+                                        <tbody>
+                                            {firstHalf.map((word, idx) => (
+                                                <tr key={idx}><td>{idx + 1}</td><td>{word.english}</td><td></td></tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                    <table id="second-half-table">
+                                        <thead><tr><th>番号</th><th>単語</th><th>意味</th></tr></thead>
+                                        <tbody>
+                                            {secondHalf.map((word, idx) => (
+                                                <tr key={idx}><td>{idx + 26}</td><td>{word.english}</td><td></td></tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <p className="selected_text">{selected_text}</p>
+                                <p className="test_range">範囲 {start_range} ～ {end_range}</p>
+                                <p className="score"> / {amount_count}</p>
                             </div>
-                            <p className="selected_text">{selected_text}</p>
-                            <p className="test_range">範囲 {start_range} ～ {end_range}</p>
-                            <p className="score"> / {amount_count}</p>
                         </div>
-                    </div>
-                    <div className="answer-sheet">
-                        <div className="sheet-size-setting">
-                            <div className="table-container">
-                                <table id="first-half-table">
-                                    <thead><tr><th>番号</th><th>単語</th><th>意味</th></tr></thead>
-                                    <tbody>
-                                        {firstHalf.map((word, idx) => (
-                                            <tr key={idx}><td>{idx + 1}</td><td>{word.english}</td><td>{word.japanese}</td></tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                                <table id="second-half-table">
-                                    <thead><tr><th>番号</th><th>単語</th><th>意味</th></tr></thead>
-                                    <tbody>
-                                        {secondHalf.map((word, idx) => (
-                                            <tr key={idx}><td>{idx + 26}</td><td>{word.english}</td><td>{word.japanese}</td></tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                        <div className="answer-sheet">
+                            <div className="sheet-size-setting">
+                                <div className="table-container">
+                                    <table id="first-half-table">
+                                        <thead><tr><th>番号</th><th>単語</th><th>意味</th></tr></thead>
+                                        <tbody>
+                                            {firstHalf.map((word, idx) => (
+                                                <tr key={idx}><td>{idx + 1}</td><td>{word.english}</td><td>{word.japanese}</td></tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                    <table id="second-half-table">
+                                        <thead><tr><th>番号</th><th>単語</th><th>意味</th></tr></thead>
+                                        <tbody>
+                                            {secondHalf.map((word, idx) => (
+                                                <tr key={idx}><td>{idx + 26}</td><td>{word.english}</td><td>{word.japanese}</td></tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <p className="selected_text">{selected_text}</p>
+                                <p className="test_range">範囲 {start_range} ～ {end_range}</p>
+                                <p className="score"> / {amount_count}</p>
                             </div>
-                            <p className="selected_text">{selected_text}</p>
-                            <p className="test_range">範囲 {start_range} ～ {end_range}</p>
-                            <p className="score"> / {amount_count}</p>
                         </div>
                     </div>
                 </div>
 
                 <div id="japanese-to-english-content" className="tab" style={{ display: activeTab === 'japanese-to-english-content' ? 'block' : 'none' }}>
-                    <div className="question-sheet">
-                        <div className="sheet-size-setting">
-                            <div className="table-container">
-                                <table id="first-half-table">
-                                    <thead><tr><th>番号</th><th>日本語</th><th>英語</th></tr></thead>
-                                    <tbody>
-                                        {firstHalf.map((word, idx) => (
-                                            <tr key={idx}><td>{idx + 1}</td><td>{word.japanese}</td><td></td></tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                                <table id="second-half-table">
-                                    <thead><tr><th>番号</th><th>日本語</th><th>英語</th></tr></thead>
-                                    <tbody>
-                                        {secondHalf.map((word, idx) => (
-                                            <tr key={idx}><td>{idx + 26}</td><td>{word.japanese}</td><td></td></tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                    <div className="sheets-container">
+                        <div className="question-sheet">
+                            <div className="sheet-size-setting">
+                                <div className="table-container">
+                                    <table id="first-half-table">
+                                        <thead><tr><th>番号</th><th>日本語</th><th>英語</th></tr></thead>
+                                        <tbody>
+                                            {firstHalf.map((word, idx) => (
+                                                <tr key={idx}><td>{idx + 1}</td><td>{word.japanese}</td><td></td></tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                    <table id="second-half-table">
+                                        <thead><tr><th>番号</th><th>日本語</th><th>英語</th></tr></thead>
+                                        <tbody>
+                                            {secondHalf.map((word, idx) => (
+                                                <tr key={idx}><td>{idx + 26}</td><td>{word.japanese}</td><td></td></tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <p className="selected_text">{selected_text}</p>
+                                <p className="test_range">範囲 {start_range} ～ {end_range}</p>
+                                <p className="score"> / {amount_count}</p>
                             </div>
-                            <p className="selected_text">{selected_text}</p>
-                            <p className="test_range">範囲 {start_range} ～ {end_range}</p>
-                            <p className="score"> / {amount_count}</p>
                         </div>
-                    </div>
-                    <div className="answer-sheet">
-                        <div className="sheet-size-setting">
-                            <div className="table-container">
-                                <table id="first-half-table">
-                                    <thead><tr><th>番号</th><th>日本語</th><th>英語</th></tr></thead>
-                                    <tbody>
-                                        {firstHalf.map((word, idx) => (
-                                            <tr key={idx}><td>{idx + 1}</td><td>{word.japanese}</td><td>{word.english}</td></tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                                <table id="second-half-table">
-                                    <thead><tr><th>番号</th><th>日本語</th><th>英語</th></tr></thead>
-                                    <tbody>
-                                        {secondHalf.map((word, idx) => (
-                                            <tr key={idx}><td>{idx + 26}</td><td>{word.japanese}</td><td>{word.english}</td></tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                        <div className="answer-sheet">
+                            <div className="sheet-size-setting">
+                                <div className="table-container">
+                                    <table id="first-half-table">
+                                        <thead><tr><th>番号</th><th>日本語</th><th>英語</th></tr></thead>
+                                        <tbody>
+                                            {firstHalf.map((word, idx) => (
+                                                <tr key={idx}><td>{idx + 1}</td><td>{word.japanese}</td><td>{word.english}</td></tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                    <table id="second-half-table">
+                                        <thead><tr><th>番号</th><th>日本語</th><th>英語</th></tr></thead>
+                                        <tbody>
+                                            {secondHalf.map((word, idx) => (
+                                                <tr key={idx}><td>{idx + 26}</td><td>{word.japanese}</td><td>{word.english}</td></tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <p className="selected_text">{selected_text}</p>
+                                <p className="test_range">範囲 {start_range} ～ {end_range}</p>
+                                <p className="score"> / {amount_count}</p>
                             </div>
-                            <p className="selected_text">{selected_text}</p>
-                            <p className="test_range">範囲 {start_range} ～ {end_range}</p>
-                            <p className="score"> / {amount_count}</p>
                         </div>
                     </div>
                 </div>

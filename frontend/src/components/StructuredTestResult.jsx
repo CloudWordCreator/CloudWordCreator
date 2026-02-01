@@ -37,7 +37,7 @@ const StructuredTestResult = () => {
     const RenderSheet = ({ sheet, showAnswer, mode }) => {
         return (
             <div className="sheet-size-setting">
-                <p>{header_title}</p>
+                <p>{header_title} {showAnswer ? '(模範解答)' : '(問題用紙)'}</p>
                 <div className="sheet-content">
                     {/* Left Column */}
                     <div className="column left-column">
@@ -47,14 +47,17 @@ const StructuredTestResult = () => {
                                     {sheet.left.map((item, idx) => (
                                         <tr key={idx} className={item.type}>
                                             {item.type === 'header' ? (
-                                                <td colSpan="2" className="subunit-heading">{item.text}</td>
+                                                <td colSpan="2" className="subunit-heading" style={{ backgroundColor: '#f0f0f0', fontWeight: 'bold' }}>{item.text}</td>
                                             ) : (
                                                 <>
-                                                    <td width="50%">
+                                                    <td style={{ width: '50%' }}>
                                                         {mode === 'E2J' ? item.english : item.japanese}
                                                     </td>
-                                                    <td width="50%">
-                                                        {showAnswer ? (mode === 'E2J' ? item.japanese : item.english) : ''}
+                                                    <td style={{ width: '50%' }}>
+                                                        {showAnswer
+                                                            ? (mode === 'E2J' ? item.japanese : item.english)
+                                                            : ''
+                                                        }
                                                     </td>
                                                 </>
                                             )}
@@ -73,14 +76,17 @@ const StructuredTestResult = () => {
                                         {sheet.right.map((item, idx) => (
                                             <tr key={idx} className={item.type}>
                                                 {item.type === 'header' ? (
-                                                    <td colSpan="2" className="subunit-heading">{item.text}</td>
+                                                    <td colSpan="2" className="subunit-heading" style={{ backgroundColor: '#f0f0f0', fontWeight: 'bold' }}>{item.text}</td>
                                                 ) : (
                                                     <>
-                                                        <td width="50%">
+                                                        <td style={{ width: '50%' }}>
                                                             {mode === 'E2J' ? item.english : item.japanese}
                                                         </td>
-                                                        <td width="50%">
-                                                            {showAnswer ? (mode === 'E2J' ? item.japanese : item.english) : ''}
+                                                        <td style={{ width: '50%' }}>
+                                                            {showAnswer
+                                                                ? (mode === 'E2J' ? item.japanese : item.english)
+                                                                : ''
+                                                            }
                                                         </td>
                                                     </>
                                                 )}
@@ -118,37 +124,41 @@ const StructuredTestResult = () => {
             <div className="print-area">
                 {/* English to Japanese Tab */}
                 <div id="english-to-japanese-content" className="tab" style={{ display: activeTab === 'english-to-japanese-content' ? 'block' : 'none' }}>
-                    <div className="question-sheet">
-                        {sheets.map((sheet, index) => (
-                            <div key={`q-e2j-${index}`} className="sheet">
-                                <RenderSheet sheet={sheet} showAnswer={false} mode="E2J" />
-                            </div>
-                        ))}
-                    </div>
-                    <div className="answer-sheet">
-                        {sheets.map((sheet, index) => (
-                            <div key={`a-e2j-${index}`} className="sheet">
-                                <RenderSheet sheet={sheet} showAnswer={true} mode="E2J" />
-                            </div>
-                        ))}
+                    <div className="sheets-container">
+                        <div className="question-sheet">
+                            {sheets.map((sheet, index) => (
+                                <div key={`q-e2j-${index}`} className="sheet">
+                                    <RenderSheet sheet={sheet} showAnswer={false} mode="E2J" />
+                                </div>
+                            ))}
+                        </div>
+                        <div className="answer-sheet">
+                            {sheets.map((sheet, index) => (
+                                <div key={`a-e2j-${index}`} className="sheet">
+                                    <RenderSheet sheet={sheet} showAnswer={true} mode="E2J" />
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
 
                 {/* Japanese to English Tab */}
                 <div id="japanese-to-english-content" className="tab" style={{ display: activeTab === 'japanese-to-english-content' ? 'block' : 'none' }}>
-                    <div className="question-sheet">
-                        {sheets.map((sheet, index) => (
-                            <div key={`q-j2e-${index}`} className="sheet">
-                                <RenderSheet sheet={sheet} showAnswer={false} mode="J2E" />
-                            </div>
-                        ))}
-                    </div>
-                    <div className="answer-sheet">
-                        {sheets.map((sheet, index) => (
-                            <div key={`a-j2e-${index}`} className="sheet">
-                                <RenderSheet sheet={sheet} showAnswer={true} mode="J2E" />
-                            </div>
-                        ))}
+                    <div className="sheets-container">
+                        <div className="question-sheet">
+                            {sheets.map((sheet, index) => (
+                                <div key={`q-j2e-${index}`} className="sheet">
+                                    <RenderSheet sheet={sheet} showAnswer={false} mode="J2E" />
+                                </div>
+                            ))}
+                        </div>
+                        <div className="answer-sheet">
+                            {sheets.map((sheet, index) => (
+                                <div key={`a-j2e-${index}`} className="sheet">
+                                    <RenderSheet sheet={sheet} showAnswer={true} mode="J2E" />
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>

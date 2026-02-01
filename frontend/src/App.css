@@ -17,13 +17,52 @@
   margin: 0 auto;
   padding: 20px;
   color: var(--text-color);
+  margin: 0 auto;
+  padding: 20px;
+  color: var(--text-color);
+}
+
+@media (max-width: 768px) {
+
+  .admin-dashboard,
+  .edit-text-container,
+  .home-container,
+  .report-container,
+  .flat-test-maker-container {
+    padding: 15px;
+    width: 100%;
+    box-sizing: border-box;
+  }
 }
 
 .dashboard-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 30px;
+  flex-wrap: wrap;
+  /* Allow wrapping */
+  gap: 15px;
+}
+
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .header-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .header-buttons .btn {
+    width: 100%;
+  }
 }
 
 .header-buttons {
@@ -287,6 +326,14 @@ th {
 
 .form-group-row .form-group {
   flex: 1;
+  flex: 1;
+}
+
+@media (max-width: 768px) {
+  .form-group-row {
+    flex-direction: column;
+    gap: 10px;
+  }
 }
 
 .toggle-advanced {
@@ -320,6 +367,8 @@ th {
   gap: 10px;
   cursor: pointer;
   font-weight: normal !important;
+  /* Larger touch target for mobile */
+  padding: 5px 0;
 }
 
 .checkbox-label input[type="checkbox"] {
@@ -331,6 +380,18 @@ th {
   display: flex;
   gap: 10px;
   margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .add-word-container input {
+    flex: 1 1 100% !important;
+    /* Stack inputs */
+  }
+
+  .add-word-container button {
+    flex: 1 1 100%;
+  }
 }
 
 .btn-small {
@@ -437,6 +498,20 @@ th {
   gap: 40px;
   margin-bottom: 50px;
   flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .cards-container {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .divider {
+    width: 100%;
+    justify-content: center;
+    margin: 10px 0;
+  }
 }
 
 .action-card {
@@ -756,6 +831,26 @@ th {
 .ann-content p {
   margin: 0;
   font-size: 0.95rem;
-  color: #666;
   line-height: 1.4;
+}
+
+/* Sheets Container for Test Results */
+.sheets-container {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  justify-content: center;
+}
+
+.sheets-container>div {
+  flex: 1;
+  min-width: 0;
+  /* Prevent overflow issue in flex items */
+}
+
+@media (max-width: 768px) {
+  .sheets-container {
+    flex-direction: column;
+    align-items: center;
+  }
 }

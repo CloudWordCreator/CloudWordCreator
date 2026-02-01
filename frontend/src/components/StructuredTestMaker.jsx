@@ -250,6 +250,36 @@ const StructuredTestMaker = () => {
                     align-items: center;
                     gap: 8px;
                     cursor: pointer;
+                    padding: 5px 0;
+                }
+
+                @media (max-width: 900px) {
+                    .layout-columns {
+                        flex-direction: column;
+                        align-items: stretch;
+                    }
+                    .sidebar-texts {
+                        width: 100%;
+                        max-height: 200px;
+                        overflow-y: auto;
+                        margin-bottom: 10px;
+                    }
+                    .settings-panel {
+                        width: 100%;
+                    }
+                    .main-units {
+                        padding: 15px;
+                    }
+                    .units-grid {
+                        grid-template-columns: 1fr; /* Single column on mobile for units */
+                    }
+                    .floating-footer {
+                         padding: 10px;
+                    }
+                    .btn-large {
+                        width: 100%;
+                        padding: 12px;
+                    }
                 }
             `}</style>
         </div>

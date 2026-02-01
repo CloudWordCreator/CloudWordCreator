@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 import random
-from . import bug_report_writter
 from csvManager.models import UnitWord, NoUnitWord, Text
 from .models import Announcement
 from django.http import JsonResponse
@@ -108,16 +107,6 @@ def api_submit_report(request):
             
             # Log to Discord via configured logger
             logger.info(report_message)
-
-            report_content = {
-                'schoolName': school_name,
-                'material': material,
-                'details': details,
-            }
-
-            sheet_writer = bug_report_writter.SpreadSheetWriter(report_content)
-            sheet_writer.write_report()
-
             return JsonResponse({'success': True})
         except Exception as e:
             logger.error(f"Failed to submit report: {e}")
