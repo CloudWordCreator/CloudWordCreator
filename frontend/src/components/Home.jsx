@@ -132,7 +132,7 @@ const Home = () => {
                             ))}
                         </ul>
                         <div className="img-placeholder">
-                            <span>📄 リスト形式</span>
+                            <img src="static/images/flattestsample.png" alt="flattest sample" />
                         </div>
                     </div>
                     <a href="/flatTestMaker/settings/" className="btn-outline">作成</a>
@@ -150,7 +150,7 @@ const Home = () => {
                             ))}
                         </ul>
                         <div className="img-placeholder">
-                            <span>📚 教科書形式</span>
+                            <img src="static/images/constructedtestsample.png" alt="constructedtest sample" />
                         </div>
                     </div>
                     <a href="/structuredTest/settings" className="btn-outline">作成</a>
