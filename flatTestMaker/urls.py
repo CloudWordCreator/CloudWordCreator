@@ -3,7 +3,8 @@ from . import views
 
 urlpatterns = [
     path('settings/', views.settings, name='settings'),
-    path('search/', views.search, name='search'),
-    path('generate/words', views.generate_words, name='generate_words'),
-    path('generate/sentences/', views.generate_sentences, name='generate_sentences'),
+    path('api/get_settings/', views.api_get_settings, name='api_get_settings'),
+    path('api/generate/words/', views.api_generate_words, name='api_generate_words'),
+    path('api/generate/sentences/', views.api_generate_sentences, name='api_generate_sentences'),
+    path('result/', views.settings, name='result'), # Serve React app
 ]

@@ -13,3 +13,12 @@ docker-compose.yml
 nginx/default.conf
 uwsgi.ini
 start.sh
+
+# Frontend (React)
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.local
+frontend/.env.*.local
+# Django static output for frontend (generated files)
+static/result_frontend/
