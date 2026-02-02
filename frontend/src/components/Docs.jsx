@@ -63,7 +63,30 @@ const Docs = () => {
 
             <section className="card" style={{ marginBottom: '30px' }}>
                 <h2>From 単語帳</h2>
-
+                <p>単語帳からテストを作成します。</p>
+                <img src="/static/images/docs_img/flatTestMaker_setting_screen.png" alt="設定画面" style={{ width: '100%', marginBottom: '20px' }} />
+                <h3>基本的な作成手順</h3>
+                <p>
+                    1. 「教材を選択」から作成したい単語帳を選択します。
+                    2. 開始範囲から終了範囲までを選択します。
+                    3. 「作成」ボタンを押下します。
+                </p>
+                <p>すると以下のような画面が表示されます。「日本語→英語」「英語→日本語」を選択し「印刷」ボタンを押下されることで印刷されます。用紙などの設定はブラウザの印刷設定から行うことができます。</p>
+                <img src="/static/images/docs_img/flatTestMaker_test_screen.png" alt="テスト画面" style={{ width: '100%', marginBottom: '20px' }} />
+                <p>
+                    また問題数を変更したり、一時的に単語を追加することも可能です。例えば「生徒が前回間違えた単語を重点的に出題したい」という要望に応えることができます。
+                    追加の仕方は画像を確認してください。特に緑色の「+」ボタンを押下することで単語を追加することができます。
+                </p>
+                <p>以下は問題数を変更し、一時的に単語を追加した例です。</p>
+                <img src="/static/images/docs_img/flatTestMaker_setting_screen_2.png" alt="設定画面2" style={{ width: '100%', marginBottom: '20px' }} />
+                <img src="/static/images/docs_img/flatTestMaker_test_screen_2.png" alt="テスト画面2" style={{ width: '100%', marginBottom: '20px' }} />
+                <p>
+                    2枚目の作成されたテスト画面では3番目に1枚目に追加した「Temporary addition of words」が追加されていることが確認できます。
+                </p>
+                <h3>AIを用いた文章作成</h3>
+                <p>
+                    ただいま準備中です。
+                </p>
             </section>
 
             <section className="card" style={{ marginBottom: '30px' }}>
