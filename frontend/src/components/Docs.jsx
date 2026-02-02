@@ -19,39 +19,56 @@ const Docs = () => {
             </section>
 
             <section className="card" style={{ marginBottom: '30px' }}>
-                <h2>From 単語帳</h2>
-                <p>番号のみで指定することで、単語帳から単語を選び、英語の単語や文のテストを作成することができます。</p>
+                <h2>Home画面</h2>
+                <img src="/static/images/docs_img/homeScreen.png" alt="Home画面" style={{ width: '100%', marginBottom: '20px' }} />
+                <p>
+                    Home画面では作成したいテストの選択を主な機能としています。その他には単語の検索、通知の確認、不具合報告・機能要望等があります。
+                </p>
+                <h3>作成したいテストの選択</h3>
+                <p>
+                    作成したいテストを選択します。選択肢は以下の通りです。
+                </p>
                 <ul>
-                    <li><strong>Settings:</strong> Select the text (book) you want to use. You can specify a range of "No" (number) to filter words.</li>
-                    <li><strong>Word Test:</strong> Generates a test where students translate between English and Japanese.</li>
-                    <li><strong>Sentence Test:</strong> Generates fill-in-the-blank sentence questions (AI-powered).</li>
-                    <li><strong>Printing:</strong> The result screen is optimized for printing. Use your browser's "Print" function (Ctrl+P / Cmd+P) to save as PDF or print.</li>
+                    <li><strong>From 単語帳:</strong> 単語帳から単語を選び、英語の単語や文のテストを作成することができます。</li>
+                    <li><strong>From 教科書:</strong> 教科書のUnitや章番号を指定することで、英語の単語テストを作成することができます。</li>
                 </ul>
+                <p>
+                    画面中央の左側が単語帳から、右手が教科書となっています。それぞれ「作成ボタン」を押下することでテスト作成画面へ遷移します。
+                </p>
+                <h3>単語の検索</h3>
+                <p>
+                    画面上部の検索バーから単語を検索することができます。日英問わず検索可能です。また教材事で検索フィルターをかけることもできます。画像は検索時の画面です。
+                </p>
+                <img src="/static/images/docs_img/searchResultDef.png" alt="検索結果" style={{ width: '100%', marginBottom: '20px' }} />
+                <img src="/static/images/docs_img/searchResultFilter.png" alt="検索結果フィルター" style={{ width: '100%', marginBottom: '20px' }} />
+                <h3>通知</h3>
+                <p>
+                    画面右上のベルのアイコンから通知を確認することができます。通知欄では機能のアップデート、教材の追加など配信をする予定です。
+                </p>
+                <img src="/static/images/docs_img/mention.png" alt="通知" style={{ width: '100%', marginBottom: '20px' }} />
+                <h3>不具合報告・機能要望</h3>
+                <p>
+                    画面下部の「不具合報告・機能要望」から不具合報告や機能要望を送ることができます。送っていただいた内容は開発の参考にさせていただきます。
+                </p>
+                <img src="/static/images/docs_img/report.png" alt="不具合報告・機能要望" style={{ width: '100%', marginBottom: '20px' }} />
+                <h3>ヘルプ</h3>
+                <p>
+                    画面右下の「ヘルプ」からヘルプを確認することができます。ヘルプでは機能の使い方を説明しています。実際に今開いている画面がヘルプ画面です。
+                </p>
+                <h3>その他</h3>
+                <p>
+                    「管理者ダッシュボード」では主に単語の追加・削除、編集を行う画面です。パスワード入力が必要です。またその右隣にある「GitHub」では開発コードとなります。興味のある方はぜひ見てみてください。
+                </p>
+            </section>
+
+            <section className="card" style={{ marginBottom: '30px' }}>
+                <h2>From 単語帳</h2>
+
             </section>
 
             <section className="card" style={{ marginBottom: '30px' }}>
                 <h2>From 教科書</h2>
-                <p>教科書のUnitや章番号を指定することで、英語の単語テストを作成することができます。</p>
-                <ul>
-                    <li><strong>Selection:</strong> Choose the Text, then expand to select specific Units or Sub-units.</li>
-                    <li><strong>Preview:</strong> You can see which units are selected before creating the test.</li>
-                    <li><strong>Tabs:</strong> The result screen has tabs for "English → Japanese" and "Japanese → English". Switching tabs allows you to print different versions of the test.</li>
-                </ul>
-            </section>
 
-            <section className="card" style={{ marginBottom: '30px' }}>
-                <h2>検索</h2>
-                <p>
-                    登録されているすべての資料を検索することができます。英語の単語や日本語の意味を入力することで、該当する単語を検索することができます。
-                    主に生徒が「覚えていない」と言い訳されたときに逃げれないようにするために作成しました。
-                </p>
-            </section>
-
-            <section className="card" style={{ marginBottom: '30px' }}>
-                <h2>通知</h2>
-                <p>
-                    Home画面の右上にある🔔アイコンを押すと、更新情報や新しい資料、メンテナンス情報などを確認することができます。
-                </p>
             </section>
 
             <section className="card" style={{ marginBottom: '30px' }}>
