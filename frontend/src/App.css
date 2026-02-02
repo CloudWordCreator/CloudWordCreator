@@ -863,3 +863,109 @@ th {
     align-items: center;
   }
 }
+
+/* Docs Layout */
+.docs-layout {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 30px;
+  padding: 20px;
+  align-items: flex-start;
+}
+
+.docs-sidebar {
+  width: 250px;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 20px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.docs-sidebar h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 10px;
+  font-size: 1.1rem;
+}
+
+.docs-sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.docs-sidebar li {
+  margin-bottom: 8px;
+}
+
+.docs-sidebar a {
+  text-decoration: none;
+  color: #555;
+  display: block;
+  padding: 5px 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s, color 0.2s;
+  font-size: 0.95rem;
+}
+
+.docs-sidebar a:hover {
+  background-color: #f0f0f0;
+  color: var(--primary-color);
+}
+
+.docs-sidebar .sub-link {
+  margin-left: 15px;
+  font-size: 0.9rem;
+  color: #777;
+}
+
+.docs-content {
+  flex: 1;
+  min-width: 0;
+  /* Prevent flex overflow */
+}
+
+/* Adjust card margin in docs content */
+.docs-content .card {
+  margin-bottom: 40px;
+}
+
+.docs-content p {
+  text-align: justify;
+  text-align-last: left;
+  text-indent: 1em;
+  line-height: 1.8;
+  margin-bottom: 20px;
+}
+
+/* Remove indent for images or special elements if needed */
+.docs-content img {
+  display: block;
+  margin: 0 auto 20px auto;
+}
+
+/* Smooth Scrolling Offset for Fixed Headers if needed, though here we use simple IDs */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Mobile Responsive for Docs */
+@media (max-width: 768px) {
+  .docs-layout {
+    flex-direction: column;
+  }
+
+  .docs-sidebar {
+    width: 100%;
+    position: static;
+    max-height: none;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+  }
+}
