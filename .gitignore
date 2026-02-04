@@ -22,3 +22,13 @@ frontend/.env.local
 frontend/.env.*.local
 # Django static output for frontend (generated files)
 static/result_frontend/
+
+node_modules/
+dist/
+build/
+*.log
+*.pid
+*.sock
+.env
+__pycache__/
+staticfiles/
