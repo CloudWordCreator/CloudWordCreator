@@ -8,128 +8,154 @@ from . import ai_prompt as prompt
 DEFAULT_COUNT = 25
 
 # Create your views here.
+from django.http import JsonResponse
+from django.views.decorators.csrf import ensure_csrf_cookie
+import json
+
+@ensure_csrf_cookie
 def settings(request):
     """
-    情報を入力するページ 
+    Flat Test Maker (React)
     """
-    # NoUnitWordに関連するTextを取得
-    texts = Text.objects.filter(no_unit_words__isnull=False).distinct()
-    text_counts = {text.id: text.no_unit_words.count() for text in texts}
-    
-    return render(request, 'setting.html', {
-        'texts': texts,
-        'text_counts': text_counts,
-    })
+    return render(request, 'flat_test_react_base.html')
 
-def search(request):
-    """
-    英単語(Unit構造でない)を検索するページ 
-    テキスト事の検索と全ての検索付けて、日本語英語の検索に対応させる 
-    """
-    query = request.GET.get('q')
-    selected_text_id = request.GET.get('mySelect')
-    results = []
-    if query:
-        results = NoUnitWord.objects.filter(
-            models.Q(english__icontains=query) | models.Q(japanese__icontains=query)
-        ).select_related('text')
-        if selected_text_id:
-            results = results.filter(text_id=selected_text_id)
-    return render(request, 'flatTest_search_results.html', {
-        'results': results,
-        'selected_text_id': selected_text_id,
-    })
-
-def generate_words(request):
-    """
-    単語を生成するページ
-    問題数が25以下の場合 sample25.htmlを使用
-    問題数が25以上の場合 sample50.htmlを使用
-    """
-    if request.method == 'POST':
-        # フォームからの情報を取得
-        text_id = request.POST.get('mySelect')
-        start_range = int(request.POST.get('startNumber'))
-        end_range = int(request.POST.get('endNumber'))
-        question_count = request.POST.get('questionCount')
-        mandatory_words = request.POST.getlist('mandatoryWords[]')
-
-        text = Text.objects.get(id=text_id).name
-
-        # 問題数の設定
-        # デフォルト値(フォームが空)ならDEFAULT_COUNTを使用
-        # そうでない場合はフォームの値を使用
-        count = int(question_count) if question_count else DEFAULT_COUNT
-        count -= len(mandatory_words)
-        
-        # 範囲の設定 
-        range_size = end_range - start_range + 1
-        if count > range_size:
-            # 問題数が範囲の数を超えている場合、範囲の下図に合わせる 
-            count = range_size
-        
-        ids = random.sample(range(start_range, end_range + 1), count)
-        words = list(NoUnitWord.objects.filter(text_id=text_id, no__in=ids))
-        
-        for mondatory_word in mandatory_words:
-            english_word, japanese_word = mondatory_word.split(':')
-            words.append({'english': english_word, 'japanese': japanese_word})
-        
-        random.shuffle(words)
-        
-        if count <= 25:
-            while len(words) < 25:
-                words.append("")
+def api_get_settings(request):
+    try:
+        texts = Text.objects.filter(no_unit_words__isnull=False).distinct()
+        text_data = []
+        for text in texts:
+             # Get min and max 'no' for this text to help frontend set default range
+            words = text.no_unit_words.all()
+            min_no = words.aggregate(models.Min('no'))['no__min'] or 1
+            max_no = words.aggregate(models.Max('no'))['no__max'] or 100
             
-            return render(request, 'generated_sample25.html', {
-                'words': words,
-                'selected_text': text,
-                'start_range': start_range,
-                'end_range': end_range,
-                'question_count': count,
+            text_data.append({
+                'id': text.id,
+                'name': text.name,
+                'count': words.count(),
+                'min_no': min_no,
+                'max_no': max_no
             })
-        else:
-            while len(words) < 50:
-                words.append("")
-            words_first_half = words[:25]
-            words_second_half = words[25:]
-            number_first_half = [i for i in range(1, 26)]
-            number_secound_half = [i for i in range(26, 51)]
-            return render(request, 'generated_sample50.html', {
-                'words_first_half': words_first_half,
-                'words_second_half': words_second_half,
-                'number_first_half': number_first_half,
-                'number_secound_half': number_secound_half,
-                'amount_count': count,
-                'selected_text': text,
-                'start_range': start_range,
-                'end_range': end_range,
-            })
+            
+        return JsonResponse({'texts': text_data})
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
 
-def generate_sentences(request):
+
+
+
+def api_generate_words(request):
     """
-    文を生成するページ 
-    gemini flash 1.5のAPIを使用して文を生成する。 
+    単語生成API
     """
     if request.method == 'POST':
-        # フォームから情報を取得 
-        text_id = request.POST.get('mySelect')
-        start_range = int(request.POST.get('startNumber'))
-        end_range = int(request.POST.get('endNumber'))
-        
-        text = Text.objects.get(id=text_id).name
+        try:
+            data = json.loads(request.body)
+            text_id = data.get('text_id')
+            start_range = int(data.get('start_range'))
+            end_range = int(data.get('end_range'))
+            question_count = data.get('question_count')
+            mandatory_words = data.get('mandatory_words', [])
 
-        # 範囲の設定
-        ids = random.sample(range(start_range, end_range + 1), DEFAULT_COUNT)
-        words = list(NoUnitWord.objects.filter(text_id=text_id, no__in=ids))
-        phrase = prompt.ai_prompt(words, DEFAULT_COUNT)
-        options = words.copy()
-        random.shuffle(options)
+            text_obj = Text.objects.get(id=text_id)
+            text_name = text_obj.name
 
-        return render(request, 'sentence_result.html',{
-                'fill_in_the_blank': phrase,
-                'text' : text,
+            # default logic
+            count = int(question_count) if question_count else DEFAULT_COUNT
+            count -= len(mandatory_words)
+            
+            range_size = end_range - start_range + 1
+            if count > range_size:
+                count = range_size
+            
+            # Avoid error if range is invalid or empty
+            if range_size <= 0:
+                available_ids = []
+            else:
+                available_ids = list(range(start_range, end_range + 1))
+            
+            ids = random.sample(available_ids, min(len(available_ids), count))
+            words_qs = NoUnitWord.objects.filter(text_id=text_id, no__in=ids)
+            
+            words_list = []
+            for w in words_qs:
+                words_list.append({
+                    'english': w.english,
+                    'japanese': w.japanese,
+                    'no': w.no # useful for sorting if needed
+                })
+
+            for m_word in mandatory_words:
+                if ':' in m_word:
+                    eng, jp = m_word.split(':')
+                    words_list.append({'english': eng, 'japanese': jp})
+            
+            random.shuffle(words_list)
+            
+            # Padding for print layout consistency
+            target_len = 50 if len(words_list) > 25 else 25
+            while len(words_list) < target_len:
+                 words_list.append({'english': '', 'japanese': ''})
+
+            return JsonResponse({
+                'words': words_list,
+                'selected_text': text_name,
+                'start_range': start_range,
+                'end_range': end_range,
+                'amount_count': len(words_list) # logical count (before padding?) or just used for display
+            })
+
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    return JsonResponse({'error': 'POST method required'}, status=400)
+
+
+
+def api_generate_sentences(request):
+    """
+    文生成API
+    """
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            text_id = data.get('text_id')
+            start_range = int(data.get('start_range'))
+            end_range = int(data.get('end_range'))
+            # question_count logic if needed, but previously fixed to DEFAULT_COUNT (25?)
+
+            text_obj = Text.objects.get(id=text_id)
+            text_name = text_obj.name
+
+            # 範囲の設定
+            available_ids = list(range(start_range, end_range + 1))
+            # Safety check
+            if not available_ids:
+                return JsonResponse({'error': 'Invalid range'}, status=400)
+                
+            ids = random.sample(available_ids, min(len(available_ids), DEFAULT_COUNT))
+            words_qs = list(NoUnitWord.objects.filter(text_id=text_id, no__in=ids))
+            
+            # Call AI Prompt
+            # Warning: prompt.ai_prompt expects objects with .english, .japanese
+            # It returns a list of dicts (or objects?) - let's assume dicts based on context
+            phrase_data = prompt.ai_prompt(words_qs, DEFAULT_COUNT)
+            
+            # Serialize words_qs for options
+            options_list = []
+            for w in words_qs:
+                options_list.append({
+                    'english': w.english,
+                    'japanese': w.japanese
+                })
+            random.shuffle(options_list)
+
+            return JsonResponse({
+                'fill_in_the_blank': phrase_data, # Assuming this is JSON serializable
+                'text': text_name,
                 'start_number': start_range,
                 'end_number': end_range,
-                'options': options,
-        })
+                'options': options_list
+            })
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    return JsonResponse({'error': 'POST method required'}, status=400)
