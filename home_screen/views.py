@@ -83,6 +83,8 @@ def api_global_search(request):
             'text': word.text.name,
             'unit': None
         })
+    
+    return JsonResponse({'results': results})
 
 @ensure_csrf_cookie
 def report(request):
