@@ -29,9 +29,26 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-DEBUG = os.getenv('DEBUG')
+#DEBUG = os.getenv('DEBUG')
+DEBUG = False
 
-ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS'), "localhost", "127.0.0.1"]
+ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS'), "localhost", "127.0.0.1", "10.0.2.2", "34.56.233.74", "cloudwordcreator.duckdns.org"]
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://cloudwordcreator.duckdns.org',
+]
+
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
+# 3. Cookieが送信される際の属性を調整（これを追加すると直ることが多いです）
+CSRF_COOKIE_SAMESITE = 'None'  # もしAPIとして別のオリジンから叩くなら 'None'、自サイト内なら 'Lax'
+SESSION_COOKIE_SAMESITE = 'Lax'
+
+# 4. プロキシ（Nginx）越しであることをDjangoに認識させる
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
 # Application definition
@@ -133,10 +150,14 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # 静的ファイルのディレクトリ
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+#STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
 
 # 静的ファイルの収集先ディレクトリ
-STATIC_ROOT = "/var/static"
+#STATIC_ROOT = "/var/static"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -155,7 +176,51 @@ LOGIN_URL = '/login/'
 # ログイン後のリダイレクトURL
 LOGIN_REDIRECT_URL = '/admin_screen/'  # ログイン後にリダイレクトするページ
 
+
 # gemini 1.5のロード
 AI_APIKEY = os.getenv('Gemini_APIKEY')
 genai.configure(api_key=AI_APIKEY)
+
+# Logging Configuration
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'ignore_api': {
+            '()': 'CloudWordCreator.logging_handlers.IgnoreApiRouteFilter',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+        'discord': {
+            'level': 'INFO',  # Changed from ERROR to INFO
+            'class': 'CloudWordCreator.logging_handlers.DiscordWebhookHandler',
+            'filters': ['ignore_api'],
+        },
+    },
+    'root': {
+        'handlers': ['console', 'discord'],
+        'level': 'INFO',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'discord'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'django.request': {
+            'handlers': ['discord', 'console'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'home_screen': {  # Added logger for home_screen app
+            'handlers': ['console', 'discord'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}
+
 

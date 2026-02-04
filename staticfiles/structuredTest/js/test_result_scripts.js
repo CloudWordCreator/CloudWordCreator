@@ -27,7 +27,7 @@ function attachEventListeners() {
 }
 
 // DOM が読み込まれた後にイベントを設定
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     attachEventListeners();
     showTab('english-to-japanese-content'); // 初期表示
 });
