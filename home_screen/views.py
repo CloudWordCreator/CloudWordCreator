@@ -3,10 +3,7 @@ import random
 from csvManager.models import UnitWord, NoUnitWord, Text
 from .models import Announcement
 from django.http import JsonResponse
-<<<<<<< HEAD
 from django.views.decorators.csrf import ensure_csrf_cookie
-=======
->>>>>>> 19cadfdacbf248f9bed1546aa41b6f40ee9255b5
 from django.db.models import Q
 import json
 import logging
@@ -32,8 +29,6 @@ def api_get_home_data(request):
 
         flat_test_texts_sample = random.sample(flat_test_texts, min(2, len(flat_test_texts))) if flat_test_texts else []
         structured_test_texts_sample = random.sample(structured_test_texts, min(2, len(structured_test_texts))) if structured_test_texts else []
-<<<<<<< HEAD
-=======
 
         return JsonResponse({
             'flat_test_texts': flat_test_texts_sample,
@@ -43,6 +38,7 @@ def api_get_home_data(request):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
+	
 def api_global_search(request):
     query = request.GET.get('q', '')
     text_id = request.GET.get('text_id')
@@ -87,64 +83,6 @@ def api_global_search(request):
             'text': word.text.name,
             'unit': None
         })
-    
-    return JsonResponse({'results': results})
->>>>>>> 19cadfdacbf248f9bed1546aa41b6f40ee9255b5
-
-        return JsonResponse({
-            'flat_test_texts': flat_test_texts_sample,
-            'structured_test_texts': structured_test_texts_sample,
-            'all_texts': list(Text.objects.values('id', 'name').order_by('name'))
-        })
-    except Exception as e:
-        return JsonResponse({'error': str(e)}, status=500)
-
-def api_global_search(request):
-    query = request.GET.get('q', '')
-    text_id = request.GET.get('text_id')
-
-    if not query:
-        return JsonResponse({'results': []})
-    
-    results = []
-    
-    # UnitWord search
-    unit_words_query = UnitWord.objects.filter(
-        Q(english__icontains=query) | Q(japanese__icontains=query)
-    )
-    if text_id:
-        unit_words_query = unit_words_query.filter(unit__text_id=text_id)
-        
-    unit_words = unit_words_query.select_related('unit__text')[:10]
-
-    for word in unit_words:
-        results.append({
-            'english': word.english,
-            'japanese': word.japanese,
-            'source': 'Structured',
-            'text': word.unit.text.name,
-            'unit': word.unit.name
-        })
-
-    # NoUnitWord search
-    no_unit_words_query = NoUnitWord.objects.filter(
-        Q(english__icontains=query) | Q(japanese__icontains=query)
-    )
-    if text_id:
-        no_unit_words_query = no_unit_words_query.filter(text_id=text_id)
-
-    no_unit_words = no_unit_words_query.select_related('text')[:10]
-
-    for word in no_unit_words:
-        results.append({
-            'english': word.english,
-            'japanese': word.japanese,
-            'source': 'Flat',
-            'text': word.text.name,
-            'unit': None
-        })
-    
-    return JsonResponse({'results': results})
 
 @ensure_csrf_cookie
 def report(request):
