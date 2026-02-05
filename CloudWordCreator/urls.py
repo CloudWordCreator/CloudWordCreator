@@ -27,8 +27,8 @@ urlpatterns = [
     path('flatTestMaker/', include('flatTestMaker.urls')),
     path('admin_screen/', include('admin_screen.urls')),
     path('login/', include('authentication.urls')),
-    path('login/', include('authentication.urls')),
     path('', include('home_screen.urls')),
+    path('login/', include('authentication.urls')),
     path('toeic_admin/', toeic_views.toeic_frontend, name='toeic_admin'), # Protected Frontend route
     path('toeic/', include('toeicManager.urls')),
     path('info/', views.info, name='info'),
