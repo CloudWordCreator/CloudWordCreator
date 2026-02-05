@@ -9,7 +9,7 @@ const ToeicTestResult = () => {
     // Use existing styles for layout compatibility
     usePageStyles([
         '/static/printer-setup/paper-setup.css',
-        '/static/flatTestMaker/css/generated_sample25_style.css'
+        '/static/toeicManager/css/toeic_result.css'
     ]);
 
     const [showAnswers, setShowAnswers] = useState(false);
@@ -132,11 +132,11 @@ const ToeicTestResult = () => {
                             <thead>
                                 <tr>
                                     <th width="5%">No</th>
-                                    <th width="40%">
+                                    <th width="45%">
                                         {testType === 'phrase' ? 'Question (Phrase Cloze)' :
                                             wordMode === 'jp_to_en' ? 'Question (Japanese)' : 'Question (English)'}
                                     </th>
-                                    <th width="10%">Result</th>
+                                    <th className="result">Result</th>
                                     <th width="25%">
                                         {testType === 'phrase' ? 'Input (Missing Word)' :
                                             wordMode === 'jp_to_en' ? 'Input (English)' : 'Input (Japanese)'}
