@@ -58,8 +58,13 @@ const ToeicTestResult = () => {
 
     const handleKeyDown = (e, idx) => {
         if (e.key === 'Enter') {
+            // IME check: Do not submit if composing (Japanese input)
+            if (e.nativeEvent.isComposing || e.isComposing) return;
+
             e.preventDefault();
-            checkAnswer(idx);
+            // Pass current value from event target to ensure freshness
+            checkAnswer(idx, e.target.value);
+
             // Move to next input
             const nextIdx = idx + 1;
             if (nextIdx < words.length && inputRefs.current[nextIdx]) {
@@ -68,9 +73,11 @@ const ToeicTestResult = () => {
         }
     };
 
-    const checkAnswer = (idx) => {
+    const checkAnswer = (idx, currentValue) => {
         const word = words[idx];
-        const userVal = inputs[idx].value.trim().toLowerCase();
+        // Use passed value or fallback to state
+        const valToTest = currentValue !== undefined ? currentValue : inputs[idx].value;
+        const userVal = valToTest.trim().toLowerCase();
         let correctVal = '';
 
         if (testType === 'phrase') {
@@ -85,12 +92,12 @@ const ToeicTestResult = () => {
             }
         }
 
-        // Exact match check (can be improved with fuzzy later)
+        // Exact match check
         const isCorrect = userVal === correctVal;
 
         setInputs(prev => ({
             ...prev,
-            [idx]: { ...prev[idx], status: isCorrect ? 'correct' : 'incorrect' }
+            [idx]: { ...prev[idx], value: valToTest, status: isCorrect ? 'correct' : 'incorrect' }
         }));
     };
 
@@ -287,7 +294,7 @@ const ToeicTestResult = () => {
                                             />
                                         </td>
                                         <td>
-                                            {showAnswers && (
+                                            {(showAnswers || (inputs[idx]?.status && inputs[idx]?.status !== 'neutral')) && (
                                                 <span style={{ color: 'blue', fontWeight: 'bold' }}>
                                                     {testType === 'phrase' ? word.english :
                                                         (wordMode === 'jp_to_en' ? word.english : word.japanese)}
