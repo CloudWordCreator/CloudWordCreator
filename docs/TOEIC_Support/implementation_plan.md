@@ -61,10 +61,19 @@ TOEIC形式のCSV (`No,score,phrase,phraseJP,英語,日本語`) を読み込む�
 - **New Feature**: ユーザー要望の「インタラクティブなテスト（入力→正誤判定）」は新規コンポーネントとして実装、または `ToeicTestResult` 内の新しいモードとして追加します。
     - テーブルのセルを `<input>` にし、Enterキーで判定ロジックを実行。
 
+#### [NEW] `src/components/ToeicAdmin.jsx` & `ToeicEdit.jsx`
+- 既存の `Dashboard.jsx`, `EditText.jsx` を参考にTOEIC用の管理画面を作成。
+- `/toeic_admin` ルートでアクセス。
+- **機能**:
+    - 単語一覧表示 (ページネーションまたは無限スクロール推奨)
+    - 単語の追加・削除・編集機能
+    - CSVインポート機能へのリンク
+
 ## 検証計画
 
 ### 自動テスト
 - `csv_importer.py` の単体テストを作成し、サンプルCSVが正しくDBに格納されるか確認します。
+- `ToeicWord` のCRUD操作を行うAPIのテスト。
 
 ### 手動検証
 1. **データ取り込み**: `TOEIC金フレ.csv` をインポートし、Admin画面で正しく登録されているか確認。
@@ -75,3 +84,6 @@ TOEIC形式のCSV (`No,score,phrase,phraseJP,英語,日本語`) を読み込む�
     - 設定画面 (`ToeicTestMaker`) で範囲や条件を指定できること。
     - テスト画面で表形式の入力ができ、正誤判定が機能すること。
     - 印刷プレビューが既存のテスト同様に綺麗に表示されること。
+4. **管理画面**:
+    - `/toeic_admin` で単語リストが見れること。
+    - 編集・追加・削除が反映されること。

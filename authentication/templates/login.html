@@ -21,6 +21,9 @@
             <label for="password">パスワード:</label>
             <input type="password" id="password" name="password" required>
         </div>
+        {% if next %}
+            <input type="hidden" name="next" value="{{ next }}">
+        {% endif %}
         <button type="submit">ログイン</button>
         {% if error %}
             <p style="color: red;">{{ error }}</p>

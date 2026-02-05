@@ -1,6 +1,6 @@
 # TOEIC Support Implementation Tasks
 
-- [ ] **Backend: Initialize `toeicManager` App**
+- [/] **Backend: Initialize `toeicManager` App**
     - [ ] Create new Django app `toeicManager`
     - [ ] Define `ToeicWord` model
     - [ ] Create migration files
@@ -15,7 +15,9 @@
     - [ ] Create `ToeicHome` component (protected route)
     - [ ] Create `ToeicTest` component (table-based UI)
     - [ ] Add route `/toeic` in `App.jsx`
-- [ ] **Verification**
+    - [x] Create `ToeicAdmin` component (Edit words)
+- [/] **Verification**
+    - [x] Add login check for `/toeic` and `/toeic_admin`
     - [ ] Verify CSV import
     - [ ] Verify permission restrictions
     - [ ] Verify test functionality
