@@ -1,0 +1,28 @@
+# TOEIC Support Implementation Tasks
+
+- [/] **Backend: Initialize `toeicManager` App**
+    - [x] Create app `python manage.py startapp toeicManager`
+    - [x] Create `ToeicWord` Model
+    - [ ] Create `ToeicMaterial` Model & Update `ToeicWord`
+    - [x] Create CSV Importer Logic
+    - [ ] Update CSV Importer for Material
+    - [x] Register to `INSTALLED_APPS`settings.py`
+- [ ] **Backend: Data Import Logic**
+    - [ ] Implement CSV importer for TOEIC format in `toeicManager/csv_importer.py`
+    - [ ] Create management command or admin view for uploading TOEIC CSV
+- [ ] **Backend: API & Permissions**
+    - [ ] Create API endpoints for fetching TOEIC words
+    - [ ] Implement permission    - [x] Create `ToeicHome` component
+    - [ ] Create `ToeicTestMaker` component (Settings/Start)
+        - [ ] Add Material Selection
+    - [x] Create `ToeicTestResult` component (Test UI/Results)
+    - [ ] Create `ToeicTest` component (table-based UI)
+    - [x] Add route `/toeic` in `App.jsx`
+    - [x] Create `ToeicAdmin` component (Edit words)
+    - [x] Add CSV upload UI to `ToeicAdmin`
+        - [ ] Add Material Selection for Upload
+- [/] **Verification**
+    - [x] Add login check for `/toeic` and `/toeic_admin`
+    - [ ] Verify CSV import
+    - [ ] Verify permission restrictions
+    - [ ] Verify test functionality

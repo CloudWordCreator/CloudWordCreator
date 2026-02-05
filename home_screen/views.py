@@ -6,11 +6,12 @@ from django.http import JsonResponse
 from django.db.models import Q
 import json
 import logging
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 logger = logging.getLogger(__name__)
 
 # Create your views here.
-
+@ensure_csrf_cookie
 def home(request):
     """
     Home画面 (React)
@@ -83,6 +84,7 @@ def api_global_search(request):
     
     return JsonResponse({'results': results})
 
+@ensure_csrf_cookie
 def report(request):
     """
     Report画面 (React)
