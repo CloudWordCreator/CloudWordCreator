@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { usePageStyles } from '../hooks/usePageStyles';
 
 const ToeicTestMaker = () => {
+    // Load the new CSS
+    usePageStyles(['/static/toeicManager/css/toeic_settings.css']);
+
     const navigate = useNavigate()
     const [materials, setMaterials] = useState([])
     const [selectedMaterial, setSelectedMaterial] = useState('')
@@ -68,7 +72,6 @@ const ToeicTestMaker = () => {
                 url += `&start=${seqStartNo}&order_type=sequential`
                 requestParams.start = seqStartNo;
                 requestParams.order_type = 'sequential';
-                // End is implicitly open or handled by backend pagination logic
             } else {
                 // Random Mode
                 if (mode === 'range') {
@@ -76,8 +79,6 @@ const ToeicTestMaker = () => {
                     requestParams.start = startNo;
                     requestParams.end = endNo;
                 }
-                // Random 'all' logic doesn't need start/end params usually, 
-                // but if we want to be safe we can omit them.
             }
 
             const res = await fetch(url)
@@ -106,19 +107,20 @@ const ToeicTestMaker = () => {
     }
 
     return (
-        <div className="container">
+        <div className="container toeic-settings-container">
             <header className="dashboard-header">
-                <h1>Test Settings</h1>
+                <h1>TOEIC Test Settings</h1>
                 <Link to="/toeic/" className="button">Back</Link>
             </header>
 
-            <div className="card" style={{ maxWidth: '900px', margin: '0 auto' }}>
-                <div className="form-group">
-                    <label style={{ fontSize: '1.2em', fontWeight: 'bold' }}>Select Material</label>
+            <div className="toeic-card">
+                {/* Global Filters */}
+                <div className="settings-section">
+                    <label className="settings-label">Select Material</label>
                     <select
                         value={selectedMaterial}
                         onChange={e => setSelectedMaterial(e.target.value)}
-                        style={{ width: '100%', padding: '10px', fontSize: '16px', marginTop: '10px' }}
+                        className="settings-select"
                     >
                         {materials.map(m => (
                             <option key={m.id} value={m.id}>
@@ -128,12 +130,12 @@ const ToeicTestMaker = () => {
                     </select>
                 </div>
 
-                <div className="form-group" style={{ marginTop: '15px' }}>
-                    <label style={{ fontSize: '1.2em', fontWeight: 'bold' }}>Target Score (Optional)</label>
+                <div className="settings-section">
+                    <label className="settings-label">Target Score (Optional)</label>
                     <select
                         value={selectedScore}
                         onChange={e => setSelectedScore(e.target.value)}
-                        style={{ width: '100%', padding: '10px', fontSize: '16px', marginTop: '10px' }}
+                        className="settings-select"
                     >
                         <option value="all">All Scores</option>
                         {scores.map((s, idx) => {
@@ -144,38 +146,39 @@ const ToeicTestMaker = () => {
                     </select>
                 </div>
 
-                <div className="form-group" style={{ marginTop: '15px' }}>
-                    <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', fontWeight: 'bold' }}>
+                <div className="settings-section">
+                    <label className="checkbox-label">
                         <input
                             type="checkbox"
                             checked={showHint}
                             onChange={e => setShowHint(e.target.checked)}
-                            style={{ marginRight: '8px', transform: 'scale(1.2)' }}
+                            className="checkbox-input"
                         />
                         Show Japanese Hint (Phrase Test Only)
                     </label>
                 </div>
 
-                <hr style={{ margin: '30px 0', border: 'none', borderTop: '1px solid #ddd' }} />
+                <hr className="divider" />
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '20px' }}>
+                {/* Mode Selection Grid */}
+                <div className="options-grid">
                     {/* LEFT: Random All */}
-                    <div>
-                        <h3 style={{ marginBottom: '15px', color: '#2c3e50' }}>All (Random)</h3>
-                        <p style={{ color: '#666', fontSize: '0.9em', marginBottom: '15px' }}>
-                            Test randomly from entire book.
+                    <div className="option-column">
+                        <h3 className="column-title">All (Random)</h3>
+                        <p className="column-desc">
+                            Test randomly from the entire material.
                         </p>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                        <div className="action-buttons">
                             <button
                                 onClick={() => startTest('all', 'word')}
-                                className="button btn-primary"
+                                className="mode-btn btn-blue"
                                 disabled={loading}
                             >
                                 Word Test
                             </button>
                             <button
                                 onClick={() => startTest('all', 'phrase')}
-                                className="button btn-secondary"
+                                className="mode-btn btn-gray"
                                 disabled={loading}
                             >
                                 Phrase Test
@@ -184,28 +187,44 @@ const ToeicTestMaker = () => {
                     </div>
 
                     {/* MIDDLE: Random Range */}
-                    <div style={{ borderLeft: '1px solid #eee', paddingLeft: '20px' }}>
-                        <h3 style={{ marginBottom: '15px', color: '#2c3e50' }}>Range (Random)</h3>
-                        <p style={{ color: '#666', fontSize: '0.9em', marginBottom: '10px' }}>
-                            Test randomly from range.
+                    <div className="option-column middle">
+                        <h3 className="column-title">Range (Random)</h3>
+                        <p className="column-desc">
+                            Test randomly from a specific range.
                         </p>
 
-                        <div className="form-group-row" style={{ flexDirection: 'column', gap: '10px', marginBottom: '15px' }}>
-                            <label>Start: <input type="number" value={startNo} onChange={e => setStartNo(e.target.value)} style={{ width: '80px' }} /></label>
-                            <label>End: <input type="number" value={endNo} onChange={e => setEndNo(e.target.value)} style={{ width: '80px' }} /></label>
+                        <div className="range-group">
+                            <label className="range-label">
+                                Start:
+                                <input
+                                    type="number"
+                                    className="range-input"
+                                    value={startNo}
+                                    onChange={e => setStartNo(e.target.value)}
+                                />
+                            </label>
+                            <label className="range-label">
+                                End:
+                                <input
+                                    type="number"
+                                    className="range-input"
+                                    value={endNo}
+                                    onChange={e => setEndNo(e.target.value)}
+                                />
+                            </label>
                         </div>
 
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                        <div className="action-buttons">
                             <button
                                 onClick={() => startTest('range', 'word')}
-                                className="button btn-primary"
+                                className="mode-btn btn-blue"
                                 disabled={loading}
                             >
                                 Word Test
                             </button>
                             <button
                                 onClick={() => startTest('range', 'phrase')}
-                                className="button btn-secondary"
+                                className="mode-btn btn-gray"
                                 disabled={loading}
                             >
                                 Phrase Test
@@ -214,36 +233,34 @@ const ToeicTestMaker = () => {
                     </div>
 
                     {/* RIGHT: Sequential Start */}
-                    <div style={{ borderLeft: '1px solid #eee', paddingLeft: '20px', background: '#fcfcfc' }}>
-                        <h3 style={{ marginBottom: '15px', color: '#e67e22' }}>Sequential</h3>
-                        <p style={{ color: '#666', fontSize: '0.9em', marginBottom: '10px' }}>
-                            Show in order from Start No.
+                    <div className="option-column sequential">
+                        <h3 className="column-title highlight">Sequential</h3>
+                        <p className="column-desc">
+                            Test in order starting from a specific number.
                         </p>
 
-                        <div style={{ marginBottom: '15px' }}>
-                            <label style={{ display: 'block' }}>Start No:</label>
+                        <div className="range-group">
+                            <label className="settings-label" style={{ fontSize: '0.9em' }}>Start No:</label>
                             <input
                                 type="number"
+                                className="full-width-input"
                                 value={seqStartNo}
                                 onChange={e => setSeqStartNo(e.target.value)}
-                                style={{ width: '100%', padding: '8px', border: '1px solid #e67e22' }}
                             />
                         </div>
 
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                        <div className="action-buttons" style={{ marginTop: 'auto' }}>
                             <button
                                 onClick={() => startTest('range', 'word', true)}
-                                className="button"
+                                className="mode-btn btn-orange"
                                 disabled={loading}
-                                style={{ background: '#e67e22', color: 'white', border: 'none' }}
                             >
                                 Word Check
                             </button>
                             <button
                                 onClick={() => startTest('range', 'phrase', true)}
-                                className="button"
+                                className="mode-btn btn-dark-orange"
                                 disabled={loading}
-                                style={{ background: '#d35400', color: 'white', border: 'none' }}
                             >
                                 Phrase Check
                             </button>
