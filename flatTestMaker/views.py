@@ -10,7 +10,10 @@ DEFAULT_COUNT = 25
 # Create your views here.
 from django.http import JsonResponse
 import json
+from django.views.decorators.csrf import ensure_csrf_cookie
 
+
+@ensure_csrf_cookie
 def settings(request):
     """
     Flat Test Maker (React)
