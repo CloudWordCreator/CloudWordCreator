@@ -100,6 +100,7 @@ def generate_test(request):
     count = int(request.GET.get('count', 10))
     test_type = request.GET.get('test_type', 'word') # 'word' or 'phrase'
     score = request.GET.get('score') # score filter
+    order_type = request.GET.get('order_type', 'random') # 'random' or 'sequential'
     
     queryset = ToeicWord.objects.all()
     
@@ -113,21 +114,33 @@ def generate_test(request):
     if test_type == 'phrase':
         queryset = queryset.exclude(phrase__isnull=True).exclude(phrase__exact='')
         
-    if start and end:
+    if start:
         try:
-            queryset = queryset.filter(no__gte=int(start), no__lte=int(end))
+            queryset = queryset.filter(no__gte=int(start))
         except ValueError:
             pass
             
-    # Optimize random fetch:
-    # If count is small compared to total, getting IDs first is better
-    pks = list(queryset.values_list('pk', flat=True))
-    
-    if not pks:
-        return JsonResponse({'words': []})
+    if end:
+        try:
+            queryset = queryset.filter(no__lte=int(end))
+        except ValueError:
+            pass
+            
+    # Sequential Logic
+    if order_type == 'sequential':
+        queryset = queryset.order_by('no')
+        words_qs = list(queryset[:count]) # Slice first 'count' items
+        # Ensure we have the list
+    else:
+        # Optimized Random Logic
+        pks = list(queryset.values_list('pk', flat=True))
         
-    selected_pks = random.sample(pks, min(len(pks), count))
-    words_qs = ToeicWord.objects.filter(pk__in=selected_pks)
+        if not pks:
+            return JsonResponse({'words': []})
+            
+        selected_pks = random.sample(pks, min(len(pks), count))
+        words_qs = list(ToeicWord.objects.filter(pk__in=selected_pks))
+        random.shuffle(words_qs) # Shuffle explicitly
     
     words = []
     for w in words_qs:
@@ -141,9 +154,6 @@ def generate_test(request):
             'id': w.id,
             'material': w.material.name if w.material else None
         })
-        
-    # Shuffle again because filter(pk__in=...) might not preserve random order (usually PK order)
-    random.shuffle(words)
         
     return JsonResponse({'words': words})
 

@@ -9,6 +9,7 @@ const ToeicTestMaker = () => {
     const [selectedScore, setSelectedScore] = useState('all')
     const [startNo, setStartNo] = useState('')
     const [endNo, setEndNo] = useState('')
+    const [seqStartNo, setSeqStartNo] = useState('') // New state for sequential start
     const [loading, setLoading] = useState(false)
     const [stats, setStats] = useState(null) // Stats for selected material
     const [showHint, setShowHint] = useState(true) // Phrase test hint option
@@ -20,7 +21,6 @@ const ToeicTestMaker = () => {
                 if (res.ok) {
                     const data = await res.json()
                     setMaterials(data.materials)
-                    // setScores(data.scores) // Removed global score set
                     if (data.materials.length > 0) {
                         setSelectedMaterial(data.materials[0].id)
                         setStats(data.materials[0])
@@ -40,22 +40,44 @@ const ToeicTestMaker = () => {
                 setStats(m)
                 setStartNo(m.min)
                 setEndNo(m.max)
-                setScores(m.scores || []) // Set scores from material
+                setSeqStartNo(m.min) // Default sequential start
+                setScores(m.scores || [])
             }
         }
     }, [selectedMaterial, materials])
 
-    const startTest = async (mode, testType) => {
-        // mode: 'all' | 'range'
-        // testType: 'word' | 'phrase'
+    const startTest = async (mode, testType, isSequential = false) => {
         setLoading(true)
         try {
             let url = `/toeic/api/generate_test/?material_id=${selectedMaterial}&count=25&test_type=${testType}`
+
             if (selectedScore && selectedScore !== 'all') {
                 url += `&score=${selectedScore}`
             }
-            if (mode === 'range') {
-                url += `&start=${startNo}&end=${endNo}`
+
+            let requestParams = {
+                material_id: selectedMaterial,
+                score: selectedScore,
+                test_type: testType,
+                count: 25,
+                order_type: 'random' // Default
+            };
+
+            if (isSequential) {
+                // Sequential Mode
+                url += `&start=${seqStartNo}&order_type=sequential`
+                requestParams.start = seqStartNo;
+                requestParams.order_type = 'sequential';
+                // End is implicitly open or handled by backend pagination logic
+            } else {
+                // Random Mode
+                if (mode === 'range') {
+                    url += `&start=${startNo}&end=${endNo}`
+                    requestParams.start = startNo;
+                    requestParams.end = endNo;
+                }
+                // Random 'all' logic doesn't need start/end params usually, 
+                // but if we want to be safe we can omit them.
             }
 
             const res = await fetch(url)
@@ -68,13 +90,13 @@ const ToeicTestMaker = () => {
                 return
             }
 
-            // Navigate to result/runner page
             navigate('/toeic/result/', {
                 state: {
                     words: data.words,
                     mode: 'test',
                     testType: testType,
-                    showHint: showHint // Pass hint setting
+                    showHint: showHint,
+                    requestParams: requestParams
                 }
             })
         } catch (e) {
@@ -90,7 +112,7 @@ const ToeicTestMaker = () => {
                 <Link to="/toeic/" className="button">Back</Link>
             </header>
 
-            <div className="card" style={{ maxWidth: '800px', margin: '0 auto' }}>
+            <div className="card" style={{ maxWidth: '900px', margin: '0 auto' }}>
                 <div className="form-group">
                     <label style={{ fontSize: '1.2em', fontWeight: 'bold' }}>Select Material</label>
                     <select
@@ -136,76 +158,94 @@ const ToeicTestMaker = () => {
 
                 <hr style={{ margin: '30px 0', border: 'none', borderTop: '1px solid #ddd' }} />
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '30px' }}>
-                    {/* LEFT COLUMN: Random from All */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '20px' }}>
+                    {/* LEFT: Random All */}
                     <div>
-                        <h3 style={{ marginBottom: '15px' }}>Random from All</h3>
-                        <p style={{ color: '#666', marginBottom: '20px' }}>
-                            Test from entire material ({stats ? `${stats.min}-${stats.max}` : '-'})
+                        <h3 style={{ marginBottom: '15px', color: '#2c3e50' }}>All (Random)</h3>
+                        <p style={{ color: '#666', fontSize: '0.9em', marginBottom: '15px' }}>
+                            Test randomly from entire book.
                         </p>
-
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                             <button
                                 onClick={() => startTest('all', 'word')}
                                 className="button btn-primary"
                                 disabled={loading}
-                                style={{ padding: '15px', fontSize: '16px' }}
                             >
-                                Start Word Test (25)
+                                Word Test
                             </button>
                             <button
                                 onClick={() => startTest('all', 'phrase')}
                                 className="button btn-secondary"
                                 disabled={loading}
-                                style={{ padding: '15px', fontSize: '16px', background: '#e0e0e0', color: '#333' }}
                             >
-                                Start Phrase Test (25)
+                                Phrase Test
                             </button>
                         </div>
                     </div>
 
-                    {/* RIGHT COLUMN: Random from Range */}
-                    <div style={{ borderLeft: '1px solid #eee', paddingLeft: '30px' }}>
-                        <h3 style={{ marginBottom: '15px' }}>Random from Range</h3>
-                        <p style={{ color: '#666', marginBottom: '10px' }}>Specify question range</p>
+                    {/* MIDDLE: Random Range */}
+                    <div style={{ borderLeft: '1px solid #eee', paddingLeft: '20px' }}>
+                        <h3 style={{ marginBottom: '15px', color: '#2c3e50' }}>Range (Random)</h3>
+                        <p style={{ color: '#666', fontSize: '0.9em', marginBottom: '10px' }}>
+                            Test randomly from range.
+                        </p>
 
-                        <div className="form-group-row" style={{ marginBottom: '20px' }}>
-                            <label style={{ flex: 1 }}>
-                                Start No
-                                <input
-                                    type="number"
-                                    value={startNo}
-                                    onChange={e => setStartNo(e.target.value)}
-                                    style={{ width: '100%', padding: '8px' }}
-                                />
-                            </label>
-                            <label style={{ flex: 1 }}>
-                                End No
-                                <input
-                                    type="number"
-                                    value={endNo}
-                                    onChange={e => setEndNo(e.target.value)}
-                                    style={{ width: '100%', padding: '8px' }}
-                                />
-                            </label>
+                        <div className="form-group-row" style={{ flexDirection: 'column', gap: '10px', marginBottom: '15px' }}>
+                            <label>Start: <input type="number" value={startNo} onChange={e => setStartNo(e.target.value)} style={{ width: '80px' }} /></label>
+                            <label>End: <input type="number" value={endNo} onChange={e => setEndNo(e.target.value)} style={{ width: '80px' }} /></label>
                         </div>
 
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                             <button
                                 onClick={() => startTest('range', 'word')}
                                 className="button btn-primary"
                                 disabled={loading}
-                                style={{ padding: '15px', fontSize: '16px' }}
                             >
-                                Start Word Test (25)
+                                Word Test
                             </button>
                             <button
                                 onClick={() => startTest('range', 'phrase')}
                                 className="button btn-secondary"
                                 disabled={loading}
-                                style={{ padding: '15px', fontSize: '16px', background: '#e0e0e0', color: '#333' }}
                             >
-                                Start Phrase Test (25)
+                                Phrase Test
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* RIGHT: Sequential Start */}
+                    <div style={{ borderLeft: '1px solid #eee', paddingLeft: '20px', background: '#fcfcfc' }}>
+                        <h3 style={{ marginBottom: '15px', color: '#e67e22' }}>Sequential</h3>
+                        <p style={{ color: '#666', fontSize: '0.9em', marginBottom: '10px' }}>
+                            Show in order from Start No.
+                        </p>
+
+                        <div style={{ marginBottom: '15px' }}>
+                            <label style={{ display: 'block' }}>Start No:</label>
+                            <input
+                                type="number"
+                                value={seqStartNo}
+                                onChange={e => setSeqStartNo(e.target.value)}
+                                style={{ width: '100%', padding: '8px', border: '1px solid #e67e22' }}
+                            />
+                        </div>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                            <button
+                                onClick={() => startTest('range', 'word', true)}
+                                className="button"
+                                disabled={loading}
+                                style={{ background: '#e67e22', color: 'white', border: 'none' }}
+                            >
+                                Word Check
+                            </button>
+                            <button
+                                onClick={() => startTest('range', 'phrase', true)}
+                                className="button"
+                                disabled={loading}
+                                style={{ background: '#d35400', color: 'white', border: 'none' }}
+                            >
+                                Phrase Check
                             </button>
                         </div>
                     </div>

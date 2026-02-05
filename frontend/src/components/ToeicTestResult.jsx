@@ -1,10 +1,19 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { usePageStyles } from '../hooks/usePageStyles';
 
 const ToeicTestResult = () => {
     const location = useLocation();
-    const { words, info, testType, showHint = true } = location.state || { words: [], info: {}, testType: 'word', showHint: true };
+    const navigateState = location.state || {};
+    // { words, info, testType, showHint = true, requestParams: { ... } }
+
+    // Use local state for words to support pagination
+    const [words, setWords] = useState(navigateState.words || []);
+    const [requestParams, setRequestParams] = useState(navigateState.requestParams);
+
+    // Derived state
+    const testType = navigateState.testType || 'word';
+    const initialShowHint = navigateState.showHint !== undefined ? navigateState.showHint : true;
 
     // Use existing styles for layout compatibility
     usePageStyles([
@@ -14,7 +23,7 @@ const ToeicTestResult = () => {
 
     const [showAnswers, setShowAnswers] = useState(false);
     const [wordMode, setWordMode] = useState('jp_to_en');
-    const [showJapaneseHint, setShowJapaneseHint] = useState(showHint); // Initialize with passed setting
+    const [showJapaneseHint, setShowJapaneseHint] = useState(initialShowHint);
 
     // User inputs: { [index]: { value: '', status: 'neutral' | 'correct' | 'incorrect' } }
     const [inputs, setInputs] = useState({});
@@ -30,13 +39,14 @@ const ToeicTestResult = () => {
         return phrase.replace(regex, '_______');
     }
 
-    // Initialize inputs
+    // Initialize inputs when words change
     useEffect(() => {
         const initialInputs = {};
         words.forEach((_, idx) => {
             initialInputs[idx] = { value: '', status: 'neutral' };
         });
         setInputs(initialInputs);
+        setShowAnswers(false); // Reset answers visibility on new data
     }, [words]);
 
     const handleInputChange = (idx, val) => {
@@ -84,13 +94,107 @@ const ToeicTestResult = () => {
         }));
     };
 
+    // --- Pagination Logic ---
+    const fetchNewData = useCallback(async (newStart, newEnd) => {
+        if (!requestParams) return;
+
+        let url = `/toeic/api/generate_test/?material_id=${requestParams.material_id}&count=${requestParams.count}&test_type=${requestParams.test_type}`;
+        if (requestParams.score && requestParams.score !== 'all') {
+            url += `&score=${requestParams.score}`;
+        }
+        url += `&start=${newStart}&end=${newEnd}`;
+        if (requestParams.order_type) {
+            url += `&order_type=${requestParams.order_type}`;
+        }
+
+        try {
+            const res = await fetch(url);
+            if (!res.ok) throw new Error('Failed to fetch');
+            const data = await res.json();
+
+            if (data.words.length === 0) {
+                alert("No more words in this range.");
+                return;
+            }
+
+            setWords(data.words);
+            // Update request params to track current range
+            setRequestParams(prev => ({
+                ...prev,
+                start: newStart,
+                end: newEnd
+            }));
+        } catch (e) {
+            console.error(e);
+            alert("Error fetching data");
+        }
+    }, [requestParams]);
+
+    const handleNext = useCallback(() => {
+        if (!requestParams) return;
+        const count = parseInt(requestParams.count);
+        const currentStart = parseInt(requestParams.start);
+        const currentEnd = parseInt(requestParams.end);
+
+        const newStart = currentStart + count;
+        const newEnd = currentEnd + count;
+
+        fetchNewData(newStart, newEnd);
+    }, [requestParams, fetchNewData]);
+
+    const handlePrev = useCallback(() => {
+        if (!requestParams) return;
+        const count = parseInt(requestParams.count);
+        const currentStart = parseInt(requestParams.start);
+        const currentEnd = parseInt(requestParams.end);
+
+        let newStart = currentStart - count;
+        if (newStart < 1) newStart = 1;
+
+        // Maintain relative window size? Assuming user wants adjacent block
+        // If we move start by -count, we move end by -count
+        let newEnd = currentEnd - count;
+        if (newEnd < newStart) newEnd = newStart + count - 1; // Basic safety
+
+        fetchNewData(newStart, newEnd);
+    }, [requestParams, fetchNewData]);
+
+    // Keyboard Shortcuts
+    useEffect(() => {
+        // Only enable shortcuts if in Sequential Mode
+        if (!requestParams || requestParams.order_type !== 'sequential') return;
+
+        const handleKey = (e) => {
+            // Only trigger if not typing in input (mostly)
+            if (document.activeElement.tagName === 'INPUT') return;
+
+            if (e.key === 'ArrowRight') {
+                handleNext();
+            } else if (e.key === 'ArrowLeft') {
+                handlePrev();
+            }
+        };
+        window.addEventListener('keydown', handleKey);
+        return () => window.removeEventListener('keydown', handleKey);
+    }, [handleNext, handlePrev, requestParams]);
+
+
     return (
         <div className="print-area">
             <div className="header fixed-header">
-                <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
                     <h2 style={{ margin: 0 }}>
                         {testType === 'phrase' ? 'Phrase Test' : 'Word Test'}
                     </h2>
+
+                    {/* Pagination Buttons - Only for Sequential Mode */}
+                    {requestParams && requestParams.order_type === 'sequential' && (
+                        <>
+                            <button onClick={handlePrev} className="button" style={{ minWidth: '80px' }}>&lt; Prev 25</button>
+                            <span>Start: {requestParams.start}</span>
+                            <button onClick={handleNext} className="button" style={{ minWidth: '80px' }}>Next 25 &gt;</button>
+                        </>
+                    )}
 
                     {testType === 'word' && (
                         <select
@@ -112,12 +216,12 @@ const ToeicTestResult = () => {
                                 onChange={e => setShowJapaneseHint(e.target.checked)}
                                 style={{ marginRight: '5px' }}
                             />
-                            Show Japanese Hint
+                            Hint
                         </label>
                     )}
 
                     <button onClick={() => setShowAnswers(!showAnswers)} className="button">
-                        {showAnswers ? 'Hide Answers' : 'Show Answers'}
+                        {showAnswers ? 'Hide' : 'Show Answer'}
                     </button>
                     <button onClick={() => window.print()} className="button">Print</button>
                     <Link to="/toeic/settings/" className="button-link">Back</Link>
@@ -127,7 +231,6 @@ const ToeicTestResult = () => {
             <div className="sheets-container" style={{ marginTop: '60px' }}>
                 <div className="question-sheet">
                     <div className="sheet-size-setting">
-                        {/* <h3>TOEIC Test ({info?.score || '-'} / {info?.range || '-'})</h3> */}
                         <table>
                             <thead>
                                 <tr>
