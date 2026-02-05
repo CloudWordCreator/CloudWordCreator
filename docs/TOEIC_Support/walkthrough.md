@@ -25,10 +25,10 @@ python manage.py runserver
 
 本機能を使用するにはデータが必要です。
 
-1. **Django Admin** (`http://127.0.0.1:8000/admin/`) にアクセスし、ログインします。
-2. `ToeicManager` > `Toeic words` の一覧画面右上の **「IMPORT CSV」** ボタンをクリックします。
-3. `csv_uploads/TOEIC金フレ.csv` を選択してアップロードします。
-4. 成功すると「Successfully imported...」と表示されます。
+1. **ToeicAdmin** (`http://127.0.0.1:8000/toeic_admin/`) にアクセスします。
+2. 画面上部の **「Import CSV」** ボタンをクリックします。
+3. `csv_uploads/TOEIC金フレ.csv` (または任意のCSV) を選択してアップロードします。
+4. 成功するとポップアップメッセージが表示され、単語一覧が更新されます。
 
 ## 4. 機能確認
 

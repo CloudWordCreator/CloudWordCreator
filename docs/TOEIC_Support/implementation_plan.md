@@ -16,6 +16,18 @@ TOEIC単語テスト機能を追加するための実装計画です。既存の
 #### [NEW] `toeicManager` アプリケーション
 既存のロジックと分離するため、新規アプリケーションを作成します。
 
+#### [NEW] [toeicManager/models.py](file:///c%3A/Users/sabax/source/repos/CloudWordCreator/toeicManager/models.py)
+- Create `ToeicMaterial` model (name)
+- Update `ToeicWord` to ForeignKey `ToeicMaterial`
+
+#### [MODIFY] [toeicManager/csv_importer.py](file:///c%3A/Users/sabax/source/repos/CloudWordCreator/toeicManager/csv_importer.py)
+- Accept `material_id` or name to link words.
+
+#### [MODIFY] [toeicManager/views.py](file:///c%3A/Users/sabax/source/repos/CloudWordCreator/toeicManager/views.py)
+- `get_settings`: Return list of materials.
+- `get_words`: Filter by material.
+- `upload_csv`: Accept material selection.
+
 ##### [NEW] `toeicManager/models.py`
 ```python
 class ToeicWord(models.Model):

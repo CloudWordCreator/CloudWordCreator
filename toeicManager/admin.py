@@ -11,10 +11,9 @@ class CsvImportForm(forms.Form):
 
 @admin.register(ToeicWord)
 class ToeicWordAdmin(admin.ModelAdmin):
-    list_display = ('no', 'score', 'english', 'japanese', 'phrase')
-    list_filter = ('score',)
+    list_display = ('no', 'english', 'japanese', 'score', 'material')
+    list_filter = ('score', 'material')
     search_fields = ('english', 'japanese', 'phrase')
-    change_list_template = "admin/toeicManager/change_list.html"
 
     def get_urls(self):
         urls = super().get_urls()
@@ -26,10 +25,6 @@ class ToeicWordAdmin(admin.ModelAdmin):
     def import_csv(self, request):
         if request.method == "POST":
             csv_file = request.FILES["csv_file"]
-            
-            # Save file temporarily or verify it
-            # For simplicity, we can handle in memory or save to temp
-            # csvManager uses a path, so let's save it to a temporary location
             import os
             from django.conf import settings
             

@@ -1,8 +1,8 @@
 import csv
 import chardet
-from .models import ToeicWord
+from .models import ToeicWord, ToeicMaterial
 
-def import_toeic_csv(file_path):
+def import_toeic_csv(file_path, material_name=None):
     """
     Imports TOEIC words from a CSV file.
     Expected CSV columns: No, score, phrase, pharseJP (or phraseJP), 英語, 日本語
@@ -44,15 +44,34 @@ def import_toeic_csv(file_path):
                     raise ValueError(f"Missing column for '{field}'. Expected one of: {candidates}")
                 mapped_headers[field] = found_key
 
+            # Retrieve or Create Material
+            material = None
+            if material_name:
+                material, created = ToeicMaterial.objects.get_or_create(name=material_name)
+
             created_count = 0
-            for row in reader:
+            for i, row in enumerate(reader, start=1):
+                # Helper to safely get value and ensure it's not None
+                def get_val(key):
+                    val = row.get(mapped_headers[key])
+                    return val if val is not None else ''
+
+                # Validate essential fields
+                japanese_val = get_val('japanese')
+                english_val = get_val('english')
+                
+                if not japanese_val:
+                    if row.get(mapped_headers['japanese']) is None:
+                         raise ValueError(f"Line {i}: Missing value for 'Japanese'. Check for missing commas.")
+
                 ToeicWord.objects.create(
-                    no=int(row[mapped_headers['no']]),
-                    score=int(row[mapped_headers['score']]),
-                    phrase=row[mapped_headers['phrase']],
-                    phrase_jp=row[mapped_headers['phrase_jp']],
-                    english=row[mapped_headers['english']],
-                    japanese=row[mapped_headers['japanese']]
+                    material=material,
+                    no=int(get_val('no') or 0),
+                    score=int(get_val('score') or 0),
+                    phrase=get_val('phrase'),
+                    phrase_jp=get_val('phrase_jp'),
+                    english=english_val,
+                    japanese=japanese_val
                 )
                 created_count += 1
                 
