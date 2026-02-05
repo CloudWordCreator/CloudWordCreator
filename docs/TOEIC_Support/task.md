@@ -1,0 +1,21 @@
+# TOEIC Support Implementation Tasks
+
+- [ ] **Backend: Initialize `toeicManager` App**
+    - [ ] Create new Django app `toeicManager`
+    - [ ] Define `ToeicWord` model
+    - [ ] Create migration files
+    - [ ] Register app in `settings.py`
+- [ ] **Backend: Data Import Logic**
+    - [ ] Implement CSV importer for TOEIC format in `toeicManager/csv_importer.py`
+    - [ ] Create management command or admin view for uploading TOEIC CSV
+- [ ] **Backend: API & Permissions**
+    - [ ] Create API endpoints for fetching TOEIC words
+    - [ ] Implement permission check (Group: `toeic_users`)
+- [ ] **Frontend: Word Test Implementation**
+    - [ ] Create `ToeicHome` component (protected route)
+    - [ ] Create `ToeicTest` component (table-based UI)
+    - [ ] Add route `/toeic` in `App.jsx`
+- [ ] **Verification**
+    - [ ] Verify CSV import
+    - [ ] Verify permission restrictions
+    - [ ] Verify test functionality
