@@ -8,6 +8,7 @@ urlpatterns = [
     path('api/save_word/', views.save_word, name='save_word'),
     path('api/delete_word/', views.delete_word, name='delete_word'),
     path('api/upload_csv/', views.upload_csv, name='upload_csv'),
+    path('api/generate_test/', views.generate_test, name='generate_test'),
     # Frontend Routes
     path('', views.toeic_frontend, name='toeic_home'),
     path('settings/', views.toeic_frontend, name='toeic_settings'),

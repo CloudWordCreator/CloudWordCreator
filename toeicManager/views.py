@@ -32,17 +32,49 @@ def toeic_frontend(request):
 @user_passes_test(is_toeic_user)
 def get_settings(request):
     """
-    Returns available scores/categories and total counts.
+    Returns available scores, materials (with stats), and total counts.
     """
     from .models import ToeicMaterial
+    from django.db.models import Min, Max, Count
     
     # Get distinct scores
     scores = ToeicWord.objects.values_list('score', flat=True).distinct().order_by('score')
     
-    # Get materials
-    materials = list(ToeicMaterial.objects.values('id', 'name'))
+    # Get materials with stats
+    materials = []
+    for m in ToeicMaterial.objects.all():
+        stats = ToeicWord.objects.filter(material=m).aggregate(
+            min_no=Min('no'),
+            max_no=Max('no'),
+            count=Count('id')
+        )
+        
+        # Get score breakdown for this material
+        score_stats = ToeicWord.objects.filter(material=m).values('score').annotate(
+            min_no=Min('no'),
+            max_no=Max('no'),
+            count=Count('id')
+        ).order_by('score')
+        
+        m_scores = []
+        for s in score_stats:
+            m_scores.append({
+                'score': s['score'],
+                'min': s['min_no'],
+                'max': s['max_no'],
+                'count': s['count']
+            })
 
-    # Get range info (min/max no)
+        materials.append({
+            'id': m.id,
+            'name': m.name,
+            'min': stats['min_no'] or 0,
+            'max': stats['max_no'] or 0,
+            'count': stats['count'],
+            'scores': m_scores
+        })
+
+    # Get global range
     first_word = ToeicWord.objects.order_by('no').first()
     last_word = ToeicWord.objects.order_by('no').last()
     
@@ -56,6 +88,64 @@ def get_settings(request):
         'count': ToeicWord.objects.count()
     }
     return JsonResponse(data)
+
+@login_required
+@user_passes_test(is_toeic_user)
+def generate_test(request):
+    import random
+    
+    material_id = request.GET.get('material_id')
+    start = request.GET.get('start')
+    end = request.GET.get('end')
+    count = int(request.GET.get('count', 10))
+    test_type = request.GET.get('test_type', 'word') # 'word' or 'phrase'
+    score = request.GET.get('score') # score filter
+    
+    queryset = ToeicWord.objects.all()
+    
+    if material_id and material_id != 'all':
+        queryset = queryset.filter(material_id=material_id)
+
+    if score and score != 'all':
+        queryset = queryset.filter(score=score)
+    
+    # If phrase test, exclude words without phrases
+    if test_type == 'phrase':
+        queryset = queryset.exclude(phrase__isnull=True).exclude(phrase__exact='')
+        
+    if start and end:
+        try:
+            queryset = queryset.filter(no__gte=int(start), no__lte=int(end))
+        except ValueError:
+            pass
+            
+    # Optimize random fetch:
+    # If count is small compared to total, getting IDs first is better
+    pks = list(queryset.values_list('pk', flat=True))
+    
+    if not pks:
+        return JsonResponse({'words': []})
+        
+    selected_pks = random.sample(pks, min(len(pks), count))
+    words_qs = ToeicWord.objects.filter(pk__in=selected_pks)
+    
+    words = []
+    for w in words_qs:
+        words.append({
+            'no': w.no,
+            'score': w.score,
+            'english': w.english,
+            'japanese': w.japanese,
+            'phrase': w.phrase,
+            'phrase_jp': w.phrase_jp,
+            'id': w.id,
+            'material': w.material.name if w.material else None
+        })
+        
+    # Shuffle again because filter(pk__in=...) might not preserve random order (usually PK order)
+    random.shuffle(words)
+        
+    return JsonResponse({'words': words})
 
 @login_required
 @user_passes_test(is_toeic_user)

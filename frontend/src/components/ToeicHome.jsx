@@ -15,7 +15,7 @@ const ToeicHome = () => {
                     <Link to="/home/" className="button">Back to Home</Link>
                 </div>
             </header>
-            
+
             <main className="main-content" style={{ textAlign: 'center', marginTop: '50px' }}>
                 <div className="card-container">
                     <div className="card">
@@ -26,6 +26,9 @@ const ToeicHome = () => {
                         </Link>
                     </div>
                 </div>
+                <Link to="/toeic_admin/" className="button">
+                    管理画面
+                </Link>
             </main>
         </div>
     );

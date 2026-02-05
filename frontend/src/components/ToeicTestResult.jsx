@@ -4,7 +4,7 @@ import { usePageStyles } from '../hooks/usePageStyles';
 
 const ToeicTestResult = () => {
     const location = useLocation();
-    const { words, info } = location.state || { words: [], info: {} };
+    const { words, info, testType, showHint = true } = location.state || { words: [], info: {}, testType: 'word', showHint: true };
 
     // Use existing styles for layout compatibility
     usePageStyles([
@@ -12,14 +12,23 @@ const ToeicTestResult = () => {
         '/static/flatTestMaker/css/generated_sample25_style.css'
     ]);
 
-    const [mode, setMode] = useState('phrase'); // 'phrase', 'meaning'
     const [showAnswers, setShowAnswers] = useState(false);
+    const [wordMode, setWordMode] = useState('jp_to_en');
+    const [showJapaneseHint, setShowJapaneseHint] = useState(showHint); // Initialize with passed setting
 
     // User inputs: { [index]: { value: '', status: 'neutral' | 'correct' | 'incorrect' } }
     const [inputs, setInputs] = useState({});
 
     // Refs for focus management
     const inputRefs = useRef([]);
+
+    // Helper to generate Cloze phrase
+    const getClozePhrase = (phrase, targetWord) => {
+        if (!phrase || !targetWord) return '';
+        const escaped = targetWord.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(escaped, 'gi');
+        return phrase.replace(regex, '_______');
+    }
 
     // Initialize inputs
     useEffect(() => {
@@ -54,13 +63,16 @@ const ToeicTestResult = () => {
         const userVal = inputs[idx].value.trim().toLowerCase();
         let correctVal = '';
 
-        if (mode === 'phrase') {
+        if (testType === 'phrase') {
+            // In Cloze mode, answer is the English WORD
             correctVal = word.english.trim().toLowerCase();
         } else {
-            // For Japanese testing, meaningful comparison is hard. 
-            // Simple match or just manual check? 
-            // Usually 'Enter' checks exact match.
-            correctVal = word.japanese.trim();
+            if (wordMode === 'jp_to_en') {
+                correctVal = word.english.trim().toLowerCase();
+            } else {
+                // Japanese check - strict match might be hard, but let's try strict first
+                correctVal = word.japanese.trim();
+            }
         }
 
         // Exact match check (can be improved with fuzzy later)
@@ -76,10 +88,34 @@ const ToeicTestResult = () => {
         <div className="print-area">
             <div className="header fixed-header">
                 <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                    <select value={mode} onChange={e => setMode(e.target.value)} className="button">
-                        <option value="phrase">Phrase (Fill English)</option>
-                        <option value="meaning">Meaning (Fill Japanese)</option>
-                    </select>
+                    <h2 style={{ margin: 0 }}>
+                        {testType === 'phrase' ? 'Phrase Test' : 'Word Test'}
+                    </h2>
+
+                    {testType === 'word' && (
+                        <select
+                            value={wordMode}
+                            onChange={e => setWordMode(e.target.value)}
+                            className="button"
+                            style={{ padding: '5px' }}
+                        >
+                            <option value="jp_to_en">JP - EN (Type English)</option>
+                            <option value="en_to_jp">EN - JP (Type Japanese)</option>
+                        </select>
+                    )}
+
+                    {testType === 'phrase' && (
+                        <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', background: '#eee', padding: '5px 10px', borderRadius: '4px', marginLeft: '10px' }}>
+                            <input
+                                type="checkbox"
+                                checked={showJapaneseHint}
+                                onChange={e => setShowJapaneseHint(e.target.checked)}
+                                style={{ marginRight: '5px' }}
+                            />
+                            Show Japanese Hint
+                        </label>
+                    )}
+
                     <button onClick={() => setShowAnswers(!showAnswers)} className="button">
                         {showAnswers ? 'Hide Answers' : 'Show Answers'}
                     </button>
@@ -91,14 +127,20 @@ const ToeicTestResult = () => {
             <div className="sheets-container" style={{ marginTop: '60px' }}>
                 <div className="question-sheet">
                     <div className="sheet-size-setting">
-                        <h3>TOEIC Test ({info.score} / {info.range})</h3>
+                        {/* <h3>TOEIC Test ({info?.score || '-'} / {info?.range || '-'})</h3> */}
                         <table>
                             <thead>
                                 <tr>
                                     <th width="5%">No</th>
-                                    <th width="40%">{mode === 'phrase' ? 'Phrase / Japanese' : 'English'}</th>
+                                    <th width="40%">
+                                        {testType === 'phrase' ? 'Question (Phrase Cloze)' :
+                                            wordMode === 'jp_to_en' ? 'Question (Japanese)' : 'Question (English)'}
+                                    </th>
                                     <th width="10%">Result</th>
-                                    <th width="25%">Input</th>
+                                    <th width="25%">
+                                        {testType === 'phrase' ? 'Input (Missing Word)' :
+                                            wordMode === 'jp_to_en' ? 'Input (English)' : 'Input (Japanese)'}
+                                    </th>
                                     <th width="20%">Answer</th>
                                 </tr>
                             </thead>
@@ -106,14 +148,20 @@ const ToeicTestResult = () => {
                                 {words.map((word, idx) => (
                                     <tr key={idx}>
                                         <td>{word.no}</td>
-                                        <td>
-                                            {mode === 'phrase' ? (
+                                        <td style={{ textAlign: 'left', paddingLeft: '10px' }}>
+                                            {testType === 'phrase' ? (
                                                 <>
-                                                    <div style={{ fontWeight: 'bold' }}>{word.phrase}</div>
-                                                    <div style={{ fontSize: '0.9em', color: '#666' }}>{word.phrase_jp}</div>
+                                                    <div style={{ fontWeight: 'bold', fontSize: '1.1em' }}>
+                                                        {getClozePhrase(word.phrase, word.english)}
+                                                    </div>
+                                                    {showJapaneseHint && (
+                                                        <div style={{ fontSize: '0.9em', color: '#666', marginTop: '4px' }}>
+                                                            {word.phrase_jp}
+                                                        </div>
+                                                    )}
                                                 </>
                                             ) : (
-                                                word.english
+                                                wordMode === 'jp_to_en' ? word.japanese : word.english
                                             )}
                                         </td>
                                         <td style={{ textAlign: 'center' }}>
@@ -137,8 +185,9 @@ const ToeicTestResult = () => {
                                         </td>
                                         <td>
                                             {showAnswers && (
-                                                <span style={{ color: 'blue' }}>
-                                                    {mode === 'phrase' ? word.english : word.japanese}
+                                                <span style={{ color: 'blue', fontWeight: 'bold' }}>
+                                                    {testType === 'phrase' ? word.english :
+                                                        (wordMode === 'jp_to_en' ? word.english : word.japanese)}
                                                 </span>
                                             )}
                                         </td>
