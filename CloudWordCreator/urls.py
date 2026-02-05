@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from . import views
+from home_screen import views as home_views
+from toeicManager import views as toeic_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,5 +28,8 @@ urlpatterns = [
     path('admin_screen/', include('admin_screen.urls')),
     path('login/', include('authentication.urls')),
     path('', include('home_screen.urls')),
+    path('login/', include('authentication.urls')),
+    path('toeic_admin/', toeic_views.toeic_frontend, name='toeic_admin'), # Protected Frontend route
+    path('toeic/', include('toeicManager.urls')),
     path('info/', views.info, name='info'),
 ]

@@ -10,6 +10,10 @@ import Home from './components/Home'
 // import Login from './auth/Login'
 import Report from './components/Report'
 import Docs from './components/Docs'
+import ToeicHome from './components/ToeicHome'
+import ToeicTestMaker from './components/ToeicTestMaker'
+import ToeicTestResult from './components/ToeicTestResult'
+import ToeicAdmin from './components/ToeicAdmin'
 
 import { Routes, Route, Navigate } from 'react-router-dom'
 
@@ -28,6 +32,11 @@ function App() {
                 <Route path="/admin_screen/eisai_admin/" element={<Dashboard />} />
                 <Route path="/admin_screen/eisai_admin/edit_text/" element={<EditText />} />
                 <Route path="/edit_text/*" element={<EditText />} />
+                <Route path="/edit_text/*" element={<EditText />} />
+                <Route path="/toeic/" element={<ToeicHome />} />
+                <Route path="/toeic/settings/" element={<ToeicTestMaker />} />
+                <Route path="/toeic/result/" element={<ToeicTestResult />} />
+                <Route path="/toeic_admin/" element={<ToeicAdmin />} />
                 {/* Login is server-side */}
                 {/* Fallback to Home or 404 */}
                 <Route path="*" element={<Home />} />

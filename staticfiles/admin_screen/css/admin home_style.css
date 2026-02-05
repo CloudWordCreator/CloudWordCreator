@@ -1,0 +1,139 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8fafc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    flex-direction: column;
+}
+.searchForm {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.searchForm input[type="text"] {
+    width: 300px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+.searchForm button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.searchForm button:hover {
+    background-color: #0056b3;
+}
+
+.admin-home-container {
+    background-color: #fff;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 80%;
+}
+
+.csvForm {
+    margin-bottom: 30px;
+    text-align: center;
+    justify-content: center;
+    display: flex;
+}
+
+.csvForm a {
+    width: 90%;
+    padding: 10px 10px;
+    background-color: #28a745;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    text-decoration: none;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+.csvForm a:hover {
+    background-color: #218838;
+}
+
+.text-list {
+    display: flex;
+    justify-content: space-around;
+}
+
+.unit-text, .nounit-text {
+    padding: 20px;
+    width: 45%;
+}
+
+.unit-text h2, .nounit-text h2 {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.text-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #ccc;
+}
+
+ul {
+    padding-left: 1.5rem
+}
+
+.text-item span {
+    flex-grow: 1;
+}
+
+.text-item button.edit-button {
+    position: relative;
+    padding: 5px 10px;
+    background: transparent;
+    /* background-color: #007bff; */
+    border: none;
+    border-radius: 4px;
+    color: #5b5b5b;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.text-item button.edit-button:hover {
+    background-color: #00000010;
+}
+
+.text-item button.delete-button {
+    position: relative;
+    padding: 5px 10px;
+    background: transparent;
+    /* background-color: #ff0000; */
+    border: none;
+    border-radius: 4px;
+    color: #5b5b5b;
+    cursor: pointer;
+    margin: 0 10px;
+}
+
+.text-item button.delete-button:hover {
+    background-color: #00000010;
+}
+
+#speeddial{
+    position: fixed;
+    top: 5vh;
+    right: 5vh;
+}

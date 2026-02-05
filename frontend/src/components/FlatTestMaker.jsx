@@ -84,6 +84,11 @@ const FlatTestMaker = () => {
     }
 
     const handleGenerate = async (type) => {
+        if (parseInt(startRange) > parseInt(endRange)) {
+            alert('開始範囲は終了範囲より前の番号にしてください')
+            return
+        }
+
         const url = type === 'words'
             ? '/flatTestMaker/api/generate/words/'
             : '/flatTestMaker/api/generate/sentences/';
@@ -127,7 +132,7 @@ const FlatTestMaker = () => {
         }
     }
 
-    const isFormValid = startRange && endRange;
+    const isFormValid = startRange && endRange && (parseInt(startRange) <= parseInt(endRange));
 
     return (
         <div className="flat-test-maker-container">

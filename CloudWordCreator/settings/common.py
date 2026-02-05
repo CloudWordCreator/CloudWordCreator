@@ -33,16 +33,15 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = False
 
-ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS'), "localhost", "127.0.0.1", "10.0.2.2", "34.56.233.74", "cloudwordcreator.duckdns.org"]
+ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS'), "localhost", "127.0.0.1", "34.56.233.74", "cloudwordcreator.duckdns.org"]
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://cloudwordcreator.duckdns.org',
+    "https://cloudwordcreator.duckdns.org",
 ]
 
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
 
 # 3. Cookieが送信される際の属性を調整（これを追加すると直ることが多いです）
 CSRF_COOKIE_SAMESITE = 'None'  # もしAPIとして別のオリジンから叩くなら 'None'、自サイト内なら 'Lax'
@@ -50,7 +49,6 @@ SESSION_COOKIE_SAMESITE = 'Lax'
 
 # 4. プロキシ（Nginx）越しであることをDjangoに認識させる
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
 
 # Application definition
 
@@ -67,6 +65,7 @@ INSTALLED_APPS = [
     'admin_screen',
     'authentication',
     'home_screen',
+    'toeicManager',
 ]
 
 MIDDLEWARE = [
@@ -151,14 +150,10 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # 静的ファイルのディレクトリ
-#STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-STATICFILES_DIRS = [
-    BASE_DIR / 'static',
-]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 # 静的ファイルの収集先ディレクトリ
-#STATIC_ROOT = "/var/static"
-STATIC_ROOT = BASE_DIR / "staticfiles"
+STATIC_ROOT = "/var/static"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -223,3 +218,4 @@ LOGGING = {
         },
     },
 }
+
