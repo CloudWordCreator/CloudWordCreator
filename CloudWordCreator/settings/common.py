@@ -30,17 +30,15 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 
 #DEBUG = os.getenv('DEBUG')
-DEBUG = True
 
-#ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS'), "localhost", "127.0.0.1", "10.0.2.2", "34.56.233.74", "cloudwordcreator.duckdns.org"]
-ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS'), "localhost", "127.0.0.1", "10.0.2.2", "34.56.233.74"]
+DEBUG = False
 
-"""
+ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS'), "localhost", "127.0.0.1", "10.0.2.2", "34.56.233.74", "cloudwordcreator.duckdns.org"]
+
 CSRF_TRUSTED_ORIGINS = [
     "https://cloudwordcreator.duckdns.org",
 ]
-"""
-"""
+
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
@@ -51,7 +49,7 @@ SESSION_COOKIE_SAMESITE = 'Lax'
 
 # 4. プロキシ（Nginx）越しであることをDjangoに認識させる
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-"""
+
 # Application definition
 
 INSTALLED_APPS = [
