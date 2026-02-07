@@ -65,13 +65,17 @@ def get_settings(request):
                 'count': s['count']
             })
 
+        # Check if material has phrases (at least one word with phrase)
+        has_phrases = ToeicWord.objects.filter(material=m).exclude(phrase__isnull=True).exclude(phrase__exact='').exists()
+
         materials.append({
             'id': m.id,
             'name': m.name,
             'min': stats['min_no'] or 0,
             'max': stats['max_no'] or 0,
             'count': stats['count'],
-            'scores': m_scores
+            'scores': m_scores,
+            'has_phrases': has_phrases
         })
 
     # Get global range

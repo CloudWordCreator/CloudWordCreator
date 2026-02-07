@@ -147,14 +147,16 @@ const ToeicTestMaker = () => {
                 </div>
 
                 <div className="settings-section">
-                    <label className="checkbox-label">
+                    <label className={`checkbox-label ${!stats?.has_phrases ? 'disabled' : ''}`}>
                         <input
                             type="checkbox"
                             checked={showHint}
                             onChange={e => setShowHint(e.target.checked)}
                             className="checkbox-input"
+                            disabled={!stats?.has_phrases}
                         />
                         日本語を表示 (フレーズテスト)
+                        {!stats?.has_phrases && <span style={{ marginLeft: '10px', fontSize: '0.8em', color: '#ff4444' }}>(この教材にはフレーズがありません)</span>}
                     </label>
                 </div>
 
@@ -179,7 +181,8 @@ const ToeicTestMaker = () => {
                             <button
                                 onClick={() => startTest('all', 'phrase')}
                                 className="mode-btn btn-gray"
-                                disabled={loading}
+                                disabled={loading || !stats?.has_phrases}
+                                title={!stats?.has_phrases ? "この教材にはフレーズデータがありません" : ""}
                             >
                                 フレーズテスト
                             </button>
@@ -225,7 +228,8 @@ const ToeicTestMaker = () => {
                             <button
                                 onClick={() => startTest('range', 'phrase')}
                                 className="mode-btn btn-gray"
-                                disabled={loading}
+                                disabled={loading || !stats?.has_phrases}
+                                title={!stats?.has_phrases ? "この教材にはフレーズデータがありません" : ""}
                             >
                                 フレーズテスト
                             </button>
@@ -260,7 +264,8 @@ const ToeicTestMaker = () => {
                             <button
                                 onClick={() => startTest('range', 'phrase', true)}
                                 className="mode-btn btn-dark-orange"
-                                disabled={loading}
+                                disabled={loading || !stats?.has_phrases}
+                                title={!stats?.has_phrases ? "この教材にはフレーズデータがありません" : ""}
                             >
                                 フレーズテスト
                             </button>
