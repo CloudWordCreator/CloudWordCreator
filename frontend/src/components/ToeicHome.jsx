@@ -12,7 +12,7 @@ const ToeicHome = () => {
                 <h1>TOEIC Word Training</h1>
                 <p>Score-based vocabulary tests</p>
                 <div style={{ marginTop: '20px' }}>
-                    <Link to="/home/" className="button">Back to Home</Link>
+                    <Link to="/toeic/" className="button">Back to Home</Link>
                 </div>
             </header>
 
@@ -29,7 +29,7 @@ const ToeicHome = () => {
                 <Link to="/toeic_admin/" className="button">
                     管理画面
                 </Link>
-                <p>機能リクエストやなんかあったら製作者まで</p>
+                <p>機能リクエストやなんかあったら製作者のLINEかDiscordまで</p>
             </main>
         </div>
     );
