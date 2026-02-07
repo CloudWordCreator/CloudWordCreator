@@ -12,7 +12,7 @@ const ToeicHome = () => {
                 <h1>TOEIC Word Training</h1>
                 <p>Score-based vocabulary tests</p>
                 <div style={{ marginTop: '20px' }}>
-                    <Link to="/home/" className="button">Back to Home</Link>
+                    <Link to="/toeic/" className="button">Back to Home</Link>
                 </div>
             </header>
 

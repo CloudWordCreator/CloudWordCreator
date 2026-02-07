@@ -16,6 +16,7 @@ const ToeicAdmin = () => {
     const [showModal, setShowModal] = useState(false)
     const [uploading, setUploading] = useState(false)
     const fileInputRef = useRef(null)
+    const [showMaterialModal, setShowMaterialModal] = useState(false)
 
     const fetchSettings = async () => {
         try {
@@ -206,12 +207,40 @@ const ToeicAdmin = () => {
         fileInputRef.current.click()
     }
 
+    const handleDeleteMaterial = async (id, name) => {
+        if (!confirm(`Delete material "${name}"?\nWARNING: All words in this material will be permanently deleted.`)) return;
+
+        try {
+            const res = await fetch('/toeic/api/delete_material/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+                body: JSON.stringify({ material_id: id })
+            });
+            const data = await res.json();
+
+            if (data.success) {
+                alert(`Material "${name}" deleted.`);
+                fetchSettings(); // Refresh materials list
+                // If the deleted material was filtered, reset filter
+                if (filterMaterial == id) setFilterMaterial('all');
+                fetchWords(); // Refresh word list
+            } else {
+                alert('Error: ' + data.error);
+            }
+        } catch (err) {
+            alert('Error: ' + err);
+        }
+    };
+
     return (
         <div className="container">
             <header className="dashboard-header" style={{ marginBottom: '20px' }}>
                 <h1>TOEIC Admin</h1>
                 <div style={{ display: 'flex', gap: '10px' }}>
-                    <Link to="/home/" className="button">Home</Link>
+                    <Link to="/toeic/" className="button">Home</Link>
+                    <button onClick={() => setShowMaterialModal(true)} className="button" style={{ background: '#607d8b', color: 'white' }}>
+                        Manage Materials
+                    </button>
                     <button onClick={triggerFileUpload} className="button btn-primary" disabled={uploading}>
                         {uploading ? 'Importing...' : 'Import CSV'}
                     </button>
@@ -225,6 +254,7 @@ const ToeicAdmin = () => {
                 </div>
             </header>
 
+            {/* ... (Existing Toolbar and Table) ... */}
             <div className="card toolbar">
                 <div style={{ display: 'flex', gap: '15px', alignItems: 'center', flexWrap: 'wrap' }}>
                     <input
@@ -281,7 +311,62 @@ const ToeicAdmin = () => {
                 </table>
             </div>
 
-            {/* Modal */}
+            {/* Material Management Modal */}
+            {showMaterialModal && (
+                <div style={{
+                    position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+                    background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000
+                }}>
+                    <div className="card" style={{ width: '600px', maxWidth: '90%', maxHeight: '80vh', overflowY: 'auto' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
+                            <h3 style={{ margin: 0 }}>Manage Materials</h3>
+                            <button onClick={() => setShowMaterialModal(false)} style={{ background: 'none', border: 'none', fontSize: '1.5em', cursor: 'pointer' }}>&times;</button>
+                        </div>
+
+                        <p style={{ fontSize: '0.9em', color: '#666', marginBottom: '15px' }}>
+                            Existing materials and their word counts. Deleting a material will delete all words belonging to it.
+                        </p>
+
+                        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                            <thead>
+                                <tr style={{ borderBottom: '2px solid #eee', textAlign: 'left' }}>
+                                    <th style={{ padding: '8px' }}>Name</th>
+                                    <th style={{ padding: '8px' }}>ID</th>
+                                    <th style={{ padding: '8px' }}>Count</th>
+                                    <th style={{ padding: '8px', textAlign: 'right' }}>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {materials.map(m => (
+                                    <tr key={m.id} style={{ borderBottom: '1px solid #eee' }}>
+                                        <td style={{ padding: '8px', fontWeight: 'bold' }}>{m.name}</td>
+                                        <td style={{ padding: '8px', color: '#888' }}>{m.id}</td>
+                                        <td style={{ padding: '8px' }}>{m.count} words</td>
+                                        <td style={{ padding: '8px', textAlign: 'right' }}>
+                                            <button
+                                                onClick={() => handleDeleteMaterial(m.id, m.name)}
+                                                className="btn-small"
+                                                style={{ background: '#ff4444', color: 'white', border: 'none', padding: '5px 10px', borderRadius: '4px', cursor: 'pointer' }}
+                                            >
+                                                Delete
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                                {materials.length === 0 && (
+                                    <tr><td colSpan="4" style={{ padding: '20px', textAlign: 'center', color: '#999' }}>No materials found.</td></tr>
+                                )}
+                            </tbody>
+                        </table>
+
+                        <div style={{ marginTop: '20px', textAlign: 'right' }}>
+                            <button className="button" onClick={() => setShowMaterialModal(false)}>Close</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Word Edit Modal */}
             {showModal && (
                 <div style={{
                     position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
