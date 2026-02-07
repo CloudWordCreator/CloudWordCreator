@@ -16,9 +16,9 @@ class ToeicWord(models.Model):
     # CSVの "score" (グルーピングに使用)
     score = models.IntegerField()
     # CSVの "phrase"
-    phrase = models.CharField(max_length=255)
+    phrase = models.CharField(max_length=255, blank=True, null=True)
     # CSVの "pharseJP" (typo修正 -> phrase_jp)
-    phrase_jp = models.CharField(max_length=255)
+    phrase_jp = models.CharField(max_length=255, blank=True, null=True)
     # CSVの "英語"
     english = models.CharField(max_length=100)
     # CSVの "日本語"

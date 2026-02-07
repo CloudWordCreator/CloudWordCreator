@@ -116,7 +116,7 @@ const ToeicTestMaker = () => {
             <div className="toeic-card">
                 {/* Global Filters */}
                 <div className="settings-section">
-                    <label className="settings-label">Select Material</label>
+                    <label className="settings-label">教材選択</label>
                     <select
                         value={selectedMaterial}
                         onChange={e => setSelectedMaterial(e.target.value)}
@@ -124,20 +124,20 @@ const ToeicTestMaker = () => {
                     >
                         {materials.map(m => (
                             <option key={m.id} value={m.id}>
-                                {m.name} (Count: {m.count}, No: {m.min}-{m.max})
+                                {m.name} (問題数: {m.count}, 範囲: {m.min}-{m.max})
                             </option>
                         ))}
                     </select>
                 </div>
 
                 <div className="settings-section">
-                    <label className="settings-label">Target Score (Optional)</label>
+                    <label className="settings-label">目標Score (任意)</label>
                     <select
                         value={selectedScore}
                         onChange={e => setSelectedScore(e.target.value)}
                         className="settings-select"
                     >
-                        <option value="all">All Scores</option>
+                        <option value="all">全Score</option>
                         {scores.map((s, idx) => {
                             const val = typeof s === 'object' ? s.score : s;
                             const label = typeof s === 'object' ? `${s.score} (No. ${s.min}-${s.max})` : s;
@@ -147,14 +147,16 @@ const ToeicTestMaker = () => {
                 </div>
 
                 <div className="settings-section">
-                    <label className="checkbox-label">
+                    <label className={`checkbox-label ${!stats?.has_phrases ? 'disabled' : ''}`}>
                         <input
                             type="checkbox"
                             checked={showHint}
                             onChange={e => setShowHint(e.target.checked)}
                             className="checkbox-input"
+                            disabled={!stats?.has_phrases}
                         />
-                        Show Japanese Hint (Phrase Test Only)
+                        日本語を表示 (フレーズテスト)
+                        {!stats?.has_phrases && <span style={{ marginLeft: '10px', fontSize: '0.8em', color: '#ff4444' }}>(この教材にはフレーズがありません)</span>}
                     </label>
                 </div>
 
@@ -164,9 +166,9 @@ const ToeicTestMaker = () => {
                 <div className="options-grid">
                     {/* LEFT: Random All */}
                     <div className="option-column">
-                        <h3 className="column-title">All (Random)</h3>
+                        <h3 className="column-title">全範囲 (ランダム)</h3>
                         <p className="column-desc">
-                            Test randomly from the entire material.
+                            指定された教材の全範囲をランダムでテストします。
                         </p>
                         <div className="action-buttons">
                             <button
@@ -174,28 +176,29 @@ const ToeicTestMaker = () => {
                                 className="mode-btn btn-blue"
                                 disabled={loading}
                             >
-                                Word Test
+                                単語テスト
                             </button>
                             <button
                                 onClick={() => startTest('all', 'phrase')}
                                 className="mode-btn btn-gray"
-                                disabled={loading}
+                                disabled={loading || !stats?.has_phrases}
+                                title={!stats?.has_phrases ? "この教材にはフレーズデータがありません" : ""}
                             >
-                                Phrase Test
+                                フレーズテスト
                             </button>
                         </div>
                     </div>
 
                     {/* MIDDLE: Random Range */}
                     <div className="option-column middle">
-                        <h3 className="column-title">Range (Random)</h3>
+                        <h3 className="column-title">範囲指定 (ランダム)</h3>
                         <p className="column-desc">
-                            Test randomly from a specific range.
+                            指定された範囲をランダムでテストします。
                         </p>
 
                         <div className="range-group">
                             <label className="range-label">
-                                Start:
+                                開始範囲:
                                 <input
                                     type="number"
                                     className="range-input"
@@ -204,7 +207,7 @@ const ToeicTestMaker = () => {
                                 />
                             </label>
                             <label className="range-label">
-                                End:
+                                終了範囲:
                                 <input
                                     type="number"
                                     className="range-input"
@@ -220,27 +223,28 @@ const ToeicTestMaker = () => {
                                 className="mode-btn btn-blue"
                                 disabled={loading}
                             >
-                                Word Test
+                                単語テスト
                             </button>
                             <button
                                 onClick={() => startTest('range', 'phrase')}
                                 className="mode-btn btn-gray"
-                                disabled={loading}
+                                disabled={loading || !stats?.has_phrases}
+                                title={!stats?.has_phrases ? "この教材にはフレーズデータがありません" : ""}
                             >
-                                Phrase Test
+                                フレーズテスト
                             </button>
                         </div>
                     </div>
 
                     {/* RIGHT: Sequential Start */}
                     <div className="option-column sequential">
-                        <h3 className="column-title highlight">Sequential</h3>
+                        <h3 className="column-title highlight">順番通り</h3>
                         <p className="column-desc">
-                            Test in order starting from a specific number.
+                            開始範囲から順番にテストします。
                         </p>
 
                         <div className="range-group">
-                            <label className="settings-label" style={{ fontSize: '0.9em' }}>Start No:</label>
+                            <label className="settings-label" style={{ fontSize: '0.9em' }}>開始番号:</label>
                             <input
                                 type="number"
                                 className="full-width-input"
@@ -255,14 +259,15 @@ const ToeicTestMaker = () => {
                                 className="mode-btn btn-orange"
                                 disabled={loading}
                             >
-                                Word Check
+                                単語テスト
                             </button>
                             <button
                                 onClick={() => startTest('range', 'phrase', true)}
                                 className="mode-btn btn-dark-orange"
-                                disabled={loading}
+                                disabled={loading || !stats?.has_phrases}
+                                title={!stats?.has_phrases ? "この教材にはフレーズデータがありません" : ""}
                             >
-                                Phrase Check
+                                フレーズテスト
                             </button>
                         </div>
                     </div>

@@ -38,11 +38,22 @@ def import_toeic_csv(file_path, material_name=None):
             
             # Check if required columns exist
             mapped_headers = {}
-            for field, candidates in field_map.items():
-                found_key = get_key(headers, candidates)
+            # Essential columns
+            essential_fields = ['no', 'score', 'english', 'japanese']
+            for field in essential_fields:
+                found_key = get_key(headers, field_map[field])
                 if not found_key:
-                    raise ValueError(f"Missing column for '{field}'. Expected one of: {candidates}")
+                    raise ValueError(f"Missing column for '{field}'. Expected one of: {field_map[field]}")
                 mapped_headers[field] = found_key
+            
+            # Optional columns (phrase)
+            optional_fields = ['phrase', 'phrase_jp']
+            for field in optional_fields:
+                found_key = get_key(headers, field_map[field])
+                if found_key:
+                    mapped_headers[field] = found_key
+                else:
+                    mapped_headers[field] = None # Mark as missing
 
             # Retrieve or Create Material
             material = None
@@ -53,6 +64,8 @@ def import_toeic_csv(file_path, material_name=None):
             for i, row in enumerate(reader, start=1):
                 # Helper to safely get value and ensure it's not None
                 def get_val(key):
+                    if mapped_headers.get(key) is None:
+                        return '' # Column didn't exist
                     val = row.get(mapped_headers[key])
                     return val if val is not None else ''
 

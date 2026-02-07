@@ -65,13 +65,17 @@ def get_settings(request):
                 'count': s['count']
             })
 
+        # Check if material has phrases (at least one word with phrase)
+        has_phrases = ToeicWord.objects.filter(material=m).exclude(phrase__isnull=True).exclude(phrase__exact='').exists()
+
         materials.append({
             'id': m.id,
             'name': m.name,
             'min': stats['min_no'] or 0,
             'max': stats['max_no'] or 0,
             'count': stats['count'],
-            'scores': m_scores
+            'scores': m_scores,
+            'has_phrases': has_phrases
         })
 
     # Get global range
@@ -274,5 +278,35 @@ def upload_csv(request):
         count = import_toeic_csv(save_path, material_name=material_name)
         
         return JsonResponse({'success': True, 'count': count})
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+@login_required
+@user_passes_test(is_toeic_user)
+def delete_material(request):
+    """
+    Delete a ToeicMaterial and all associated words.
+    """
+    if request.method != 'POST':
+        return JsonResponse({'error': 'POST required'}, status=400)
+    
+    try:
+        from .models import ToeicMaterial
+        data = json.loads(request.body)
+        material_id = data.get('material_id')
+        
+        if not material_id:
+            return JsonResponse({'error': 'material_id is required'}, status=400)
+            
+        # Get material (will 404 if not found, or use try/except)
+        try:
+            material = ToeicMaterial.objects.get(id=material_id)
+        except ToeicMaterial.DoesNotExist:
+            return JsonResponse({'error': 'Material not found'}, status=404)
+            
+        # Delete material (Cascades to words due to on_delete=models.CASCADE in ToeicWord)
+        material.delete()
+        
+        return JsonResponse({'success': True})
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)

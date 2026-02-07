@@ -9,15 +9,42 @@ DEFAULT_COUNT = 25
 
 # Create your views here.
 from django.http import JsonResponse
-import json
 from django.views.decorators.csrf import ensure_csrf_cookie
-
+import json
 
 @ensure_csrf_cookie
 def settings(request):
     """
     Flat Test Maker (React)
     """
+    return render(request, 'flat_test_react_base.html')
+
+def api_get_settings(request):
+    try:
+        texts = Text.objects.filter(no_unit_words__isnull=False).distinct()
+        text_data = []
+        for text in texts:
+             # Get min and max 'no' for this text to help frontend set default range
+            words = text.no_unit_words.all()
+            min_no = words.aggregate(models.Min('no'))['no__min'] or 1
+            max_no = words.aggregate(models.Max('no'))['no__max'] or 100
+            
+            text_data.append({
+                'id': text.id,
+                'name': text.name,
+                'count': words.count(),
+                'min_no': min_no,
+                'max_no': max_no
+            })
+            
+        return JsonResponse({'texts': text_data})
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+
+
+
+def api_generate_words(request):
     return render(request, 'flat_test_react_base.html')
 
 def api_get_settings(request):

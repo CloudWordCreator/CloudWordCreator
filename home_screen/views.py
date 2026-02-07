@@ -3,14 +3,15 @@ import random
 from csvManager.models import UnitWord, NoUnitWord, Text
 from .models import Announcement
 from django.http import JsonResponse
+from django.views.decorators.csrf import ensure_csrf_cookie
 from django.db.models import Q
 import json
 import logging
-from django.views.decorators.csrf import ensure_csrf_cookie
 
 logger = logging.getLogger(__name__)
 
 # Create your views here.
+
 @ensure_csrf_cookie
 def home(request):
     """
@@ -37,6 +38,7 @@ def api_get_home_data(request):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
+	
 def api_global_search(request):
     query = request.GET.get('q', '')
     text_id = request.GET.get('text_id')
