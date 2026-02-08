@@ -10,7 +10,7 @@ body {
 }
 
 .print-area {
-    page-break-after: always;
+    /* page-break-after: always;  <-- This causes trailing blank page */
     border: none;
     width: 100%;
     /* 印刷範囲の幅を設定 */
@@ -99,7 +99,14 @@ td {
 }
 
 .sheet-size-setting {
-    break-before: avoid-page;
+    break-before: always;
+    /* Ensure each sheet starts on new page */
+    page-break-inside: avoid;
+}
+
+/* First sheet should not force a break if it's the start */
+.sheet-size-setting:first-child {
+    break-before: avoid;
 }
 
 p {
@@ -109,4 +116,8 @@ p {
 .question-sheet,
 .answer-sheet {
     margin: 0;
+    width: 100% !important;
+    /* Force full width in print */
+    float: none !important;
+    /* Disable float in print */
 }
