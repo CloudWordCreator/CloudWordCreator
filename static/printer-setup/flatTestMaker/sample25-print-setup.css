@@ -47,7 +47,7 @@ td:nth-child(4) {
 }
 
 .print-area {
-    page-break-after: always;
+    /*page-break-after: always;*/
     border: none;
     width: 100%;
     /* 印刷範囲の幅を設定 */

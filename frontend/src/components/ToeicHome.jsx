@@ -29,7 +29,7 @@ const ToeicHome = () => {
                 <Link to="/toeic_admin/" className="button">
                     管理画面
                 </Link>
-                <p>機能リクエストやなんかあったら製作者のLINEかDiscordまで</p>
+                <p>機能リクエストやなんかあったら気軽に製作者のLINEかDiscordまで</p>
             </main>
         </div>
     );
