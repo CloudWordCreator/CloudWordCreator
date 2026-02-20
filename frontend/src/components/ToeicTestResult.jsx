@@ -22,7 +22,7 @@ const ToeicTestResult = () => {
     ]);
 
     const [showAnswers, setShowAnswers] = useState(false);
-    const [wordMode, setWordMode] = useState('jp_to_en');
+    const [wordMode, setWordMode] = useState('en_to_jp');
     const [showJapaneseHint, setShowJapaneseHint] = useState(initialShowHint);
 
     // User inputs: { [index]: { value: '', status: 'neutral' | 'correct' | 'incorrect' } }
